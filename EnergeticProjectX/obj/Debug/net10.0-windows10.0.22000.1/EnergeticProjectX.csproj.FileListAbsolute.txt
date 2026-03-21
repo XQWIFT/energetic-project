@@ -1,0 +1,14 @@
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\EnergeticProjectX.csproj.AssemblyReference.cache
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\EnergeticProjectX.Forms..resources
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\AdministratorPanelForm.AdministratorPanel.resources
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\EnergeticProjectX.AuthorizationForm.resources
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\ListOfUsersForm.ListOfUsers.resources
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\UserChangePasswordForm.UserChangePassword.resources
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\EnergeticProjectX.csproj.GenerateResource.cache
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\EnergeticProjectX.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\EnergeticProjectX.AssemblyInfoInputs.cache
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\EnergeticProjectX.AssemblyInfo.cs
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\EnergeticProjectX.csproj.CoreCompileInputs.cache
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\EnergeticProjectX.dll
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\refint\EnergeticProjectX.dll
+C:\Users\Huawei\source\repos\EnergeticProjectX\EnergeticProjectX\obj\Debug\net10.0-windows10.0.22000.1\EnergeticProjectX.pdb
