@@ -22,10 +22,6 @@ namespace GeneratedUserCode
                 {
                     break;
                 }
-                else
-                {
-                    return "error";
-                }
             }
        
             return newUserCode!;

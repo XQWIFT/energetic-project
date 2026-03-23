@@ -1,13 +1,12 @@
 ﻿using UserChangePasswordForm;
-using ListOfUsersForm;
 using EnergeticProjectX;
 
-namespace AdministratorPanelForm
+namespace WarehousemanPanelForm
 {
-    public partial class AdministratorPanel : Form
+    public partial class WarehousemanPanel : Form
     {
         string userLogin;
-        public AdministratorPanel(string UserLogin)
+        public WarehousemanPanel(string UserLogin)
         {
             InitializeComponent();
             userLogin = UserLogin;
@@ -16,16 +15,8 @@ namespace AdministratorPanelForm
         private void buttonOfChangePassword_Click(object sender, EventArgs e)
         {
             this.Hide();
-            UserChangePassword changePassword = new UserChangePassword(userLogin);
-            changePassword.ShowDialog();
-            this.Close();
-        }
-
-        private void buttonListOfUsers_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            ListOfUsers listOfUsers = new ListOfUsers(userLogin);
-            listOfUsers.ShowDialog();
+            UserChangePassword userChangePassword = new UserChangePassword(userLogin);
+            userChangePassword.ShowDialog();
             this.Close();
         }
 

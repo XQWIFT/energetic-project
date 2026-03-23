@@ -2,6 +2,7 @@
 using EnergeticProjectX;
 using UserControl;
 using GeneratedUserCode;
+using WarehousemanPanelForm;
 
 namespace Registration
 {
@@ -73,14 +74,19 @@ namespace Registration
                         var user = new User();
                         user.Surname = textBoxOfSurname.Text.Trim();
                         user.Name = textBoxOfName.Text.Trim();
-                        user.Patronymic = textBoxOfPatronymic.Text.Trim() == null ? null: 
+                        user.Patronymic = textBoxOfPatronymic.Text.Trim() == null ? null :
                             textBoxOfPatronymic.Text.Trim();
                         user.Login = textBoxOfLogin.Text.Trim();
                         user.Password = bc.PasswordHash(textBoxOfPassword.Text.Trim());
-                        user.UserRole = "Warehouse";
+                        user.UserRole = "Warehouseman";
                         user.UserCode = generateUniqueUserCode.Generate();
                         db.Users.Add(user);
                         db.SaveChanges();
+
+                        this.Hide();
+                        WarehousemanPanel warehousemanPanel = new WarehousemanPanel(user.Login);
+                        warehousemanPanel.ShowDialog();
+                        this.Close();
                     }
                     else
                     {

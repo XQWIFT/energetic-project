@@ -37,7 +37,7 @@
             labelOfProducts = new Label();
             buttonOfProductCatalog = new Button();
             buttonOfShipmentLog = new Button();
-            label1 = new Label();
+            ShipmentsAndCustomers = new Label();
             buttonOfClients = new Button();
             labelOfLine = new Label();
             buttonOfLogOut = new Button();
@@ -134,15 +134,15 @@
             buttonOfShipmentLog.Text = "Журнал отгрузок";
             buttonOfShipmentLog.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // ShipmentsAndCustomers
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            label1.Location = new Point(292, 459);
-            label1.Name = "label1";
-            label1.Size = new Size(312, 45);
-            label1.TabIndex = 9;
-            label1.Text = "Отгрузки и клиенты";
+            ShipmentsAndCustomers.AutoSize = true;
+            ShipmentsAndCustomers.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            ShipmentsAndCustomers.Location = new Point(292, 459);
+            ShipmentsAndCustomers.Name = "ShipmentsAndCustomers";
+            ShipmentsAndCustomers.Size = new Size(312, 45);
+            ShipmentsAndCustomers.TabIndex = 9;
+            ShipmentsAndCustomers.Text = "Отгрузки и клиенты";
             // 
             // buttonOfClients
             // 
@@ -172,6 +172,7 @@
             buttonOfLogOut.TabIndex = 12;
             buttonOfLogOut.Text = "Выйти из аккаунта";
             buttonOfLogOut.UseVisualStyleBackColor = true;
+            buttonOfLogOut.Click += buttonOfLogOut_Click;
             // 
             // AdministratorPanel
             // 
@@ -181,7 +182,7 @@
             Controls.Add(buttonOfLogOut);
             Controls.Add(labelOfLine);
             Controls.Add(buttonOfClients);
-            Controls.Add(label1);
+            Controls.Add(ShipmentsAndCustomers);
             Controls.Add(buttonOfShipmentLog);
             Controls.Add(buttonOfProductCatalog);
             Controls.Add(labelOfProducts);
@@ -208,7 +209,7 @@
         private Label labelOfProducts;
         private Button buttonOfProductCatalog;
         private Button buttonOfShipmentLog;
-        private Label label1;
+        private Label ShipmentsAndCustomers;
         private Button buttonOfClients;
         private Label labelOfLine;
         private Button buttonOfLogOut;

@@ -1,19 +1,34 @@
 ﻿using AdministratorPanelForm;
 using BCrypt;
+using DbOfUser;
 
 namespace UserChangePasswordForm
 {
     public partial class UserChangePassword : Form
     {
         string userLogin;
+
+        bool isPasswordsEqual;
+        bool isOldPasswordEqualDB;
+        bool isUserFound;
+
         public UserChangePassword(string UserLogin)
         {
-
-            userLogin = UserLogin;
             InitializeComponent();
+            userLogin = UserLogin;
         }
 
         private void buttonOfSaveInfo_Click(object sender, EventArgs e)
+        {
+            ChangePassword(sender, e);
+        }
+
+        private void buttonOfCancel_Click(object sender, EventArgs e)
+        {
+            Cancel(sender, e);
+        }
+
+        private void ChangePassword(object sender, EventArgs e)
         {
             DbOfUser.ApplicationContextOfUser db = new();
             BCryptRealization bc = new();
@@ -21,12 +36,13 @@ namespace UserChangePasswordForm
             var newPassword = textBoxForNewPassword.Text.Trim();
             var confirmationPassword = textBoxOfConfirmation.Text.Trim();
 
+            IsAllPasswordsandLoginValid(oldPassword, newPassword, confirmationPassword, db);
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
-            if (user != null)
+            if (isUserFound && user != null)
             {
-                if (bc.CheckPassword(oldPassword, user.Password))
+                if (isOldPasswordEqualDB)
                 {
-                    if (newPassword == confirmationPassword)
+                    if (isPasswordsEqual)
                     {
                         user.Password = bc.PasswordHash(newPassword);
                         db.SaveChanges();
@@ -63,7 +79,40 @@ namespace UserChangePasswordForm
             db.Dispose();
         }
 
-        private void buttonOfCancel_Click(object sender, EventArgs e)
+        public void IsAllPasswordsandLoginValid(string oldPassword, string newPassword, string confirmationPassword, ApplicationContextOfUser db)
+        {
+            BCryptRealization bc = new();
+            var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
+            if (user != null)
+            {
+                isUserFound = true;
+
+                if (bc.CheckPassword(oldPassword, user.Password))
+                {
+                    isOldPasswordEqualDB = true;
+                    if (newPassword == confirmationPassword)
+                    {
+                        isPasswordsEqual = true;
+                    }
+                    else
+                    {
+                        //Если новые пароли не совпадают
+                        isPasswordsEqual = false;
+                    }
+                }
+                else
+                {
+                    // Если старый пароль введен неправильно
+                    isOldPasswordEqualDB = false;
+                }
+            }
+            else
+            {
+                //Если пользователь не найден
+                isUserFound = false;
+            }
+        }
+        private void Cancel(object sender, EventArgs e)
         {
             AdministratorPanel administratorPanel = new(userLogin);
             this.Hide();

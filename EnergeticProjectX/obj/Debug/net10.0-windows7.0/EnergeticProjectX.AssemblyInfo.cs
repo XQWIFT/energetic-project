@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EnergeticProjectX")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b9162de34598f07559c910ce7f259e2ba21e27c3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+02341301a41ae191ba154b4529ca09d9132f6b30")]
 [assembly: System.Reflection.AssemblyProductAttribute("EnergeticProjectX")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EnergeticProjectX")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

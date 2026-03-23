@@ -1,5 +1,6 @@
 using AdministratorPanelForm;
 using BCrypt;
+using DbOfUser;
 using Registration;
 
 namespace EnergeticProjectX
@@ -27,14 +28,17 @@ namespace EnergeticProjectX
         private void buttonOfInvolve_Click(object sender, EventArgs e)
         {
             DbOfUser.ApplicationContextOfUser db = new();
-            BCryptRealization bc = new();
-            var login = textBoxForLogin.Text.Trim();
 
+            var login = textBoxForLogin.Text.Trim();
             var password = textBoxOfPassword.Text.Trim();
 
-            var user = db.Users.FirstOrDefault(u =>
-            u.Login == login);
-            if (user != null && bc.CheckPassword(password, user.Password))
+            Authorization(login, password, db);
+        }
+
+        public void Authorization(string login, string password, ApplicationContextOfUser db)
+        {
+
+            if (IsLoginAndPasswordValid(login, password, db))
             {
                 Console.WriteLine("W: " +
                     "Access to the app is open as an administrator!");
@@ -57,6 +61,22 @@ namespace EnergeticProjectX
             textBoxOfPassword.Clear();
             Console.WriteLine("E:" +
                     "Access error. Please try again.");
+        }
+
+        public bool IsLoginAndPasswordValid(string login, string password, ApplicationContextOfUser db)
+        {
+            BCryptRealization bc = new();
+
+            var user = db.Users.FirstOrDefault(u =>
+           u.Login == login);
+            if (user != null && bc.CheckPassword(password, user.Password))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void buttonOfRegistration_Click(object sender, EventArgs e)
