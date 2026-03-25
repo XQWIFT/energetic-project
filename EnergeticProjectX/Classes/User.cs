@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UserControl
 {
+    /// <summary>
+    /// Создаётся пользователь
+    /// </summary>
     [Table("Users")]
     public class User
     {

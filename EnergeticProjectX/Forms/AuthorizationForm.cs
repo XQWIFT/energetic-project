@@ -1,6 +1,6 @@
 using AdministratorPanelForm;
 using BCrypt;
-using DbOfUser;
+using WarehousemanPanelForm;
 using Registration;
 
 namespace EnergeticProjectX
@@ -27,7 +27,7 @@ namespace EnergeticProjectX
 
         private void buttonOfInvolve_Click(object sender, EventArgs e)
         {
-            DbOfUser.ApplicationContextOfUser db = new();
+            DBControl.ApplicationContext db = new();
 
             var login = textBoxForLogin.Text.Trim();
             var password = textBoxOfPassword.Text.Trim();
@@ -35,8 +35,10 @@ namespace EnergeticProjectX
             Authorization(login, password, db);
         }
 
-        public void Authorization(string login, string password, ApplicationContextOfUser db)
+        public void Authorization(string login, string password, DBControl.ApplicationContext db)
         {
+            var user = db.Users.FirstOrDefault(u =>
+           u.Login == login);
 
             if (IsLoginAndPasswordValid(login, password, db))
             {
@@ -47,9 +49,19 @@ namespace EnergeticProjectX
                 if (choice == DialogResult.OK)
                 {
                     this.Hide();
-                    AdministratorPanel administratorPanel = new AdministratorPanel(textBoxForLogin.Text);
-                    administratorPanel.ShowDialog();
-                    this.Close();
+                    var administratorPanel = new AdministratorPanel(textBoxForLogin.Text);
+                    var warehousemanPanel = new WarehousemanPanel(textBoxForLogin.Text);
+
+                    if (user != null && user.UserRole == "Admin")
+                    {
+                        administratorPanel.ShowDialog();
+                        this.Close();
+                    }
+                    else if (user != null && user.UserRole == "Warehouseman")
+                    {
+                        warehousemanPanel.ShowDialog();
+                        this.Close();
+                    }
                 }
             }
             else
@@ -63,7 +75,7 @@ namespace EnergeticProjectX
                     "Access error. Please try again.");
         }
 
-        public bool IsLoginAndPasswordValid(string login, string password, ApplicationContextOfUser db)
+        public bool IsLoginAndPasswordValid(string login, string password, DBControl.ApplicationContext db)
         {
             BCryptRealization bc = new();
 
@@ -73,16 +85,13 @@ namespace EnergeticProjectX
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         private void buttonOfRegistration_Click(object sender, EventArgs e)
         {
             this.Hide();
-            RegistrationForm registrationForm = new RegistrationForm();
+            var registrationForm = new RegistrationForm();
             registrationForm.ShowDialog();
             this.Close();
         }

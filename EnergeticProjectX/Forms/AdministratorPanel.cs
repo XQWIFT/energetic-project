@@ -16,7 +16,7 @@ namespace AdministratorPanelForm
         private void buttonOfChangePassword_Click(object sender, EventArgs e)
         {
             this.Hide();
-            UserChangePassword changePassword = new UserChangePassword(userLogin);
+            var changePassword = new UserChangePassword(userLogin);
             changePassword.ShowDialog();
             this.Close();
         }
@@ -24,7 +24,7 @@ namespace AdministratorPanelForm
         private void buttonListOfUsers_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ListOfUsers listOfUsers = new ListOfUsers(userLogin);
+            var listOfUsers = new ListOfUsers(userLogin);
             listOfUsers.ShowDialog();
             this.Close();
         }
@@ -32,7 +32,7 @@ namespace AdministratorPanelForm
         private void buttonOfLogOut_Click(object sender, EventArgs e)
         {
             this.Hide();
-            AuthorizationForm authForm = new AuthorizationForm();
+            var authForm = new AuthorizationForm();
             authForm.ShowDialog();
             this.Close();
         }

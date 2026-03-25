@@ -6,10 +6,16 @@ using WarehousemanPanelForm;
 
 namespace Registration
 {
+    /// <summary>
+    /// Открывается форма регистрации
+    /// </summary>
     public partial class RegistrationForm : Form
     {
-        DbOfUser.ApplicationContextOfUser db = new();
+        DBControl.ApplicationContext db = new();
         GenerateUniqueUserCode generateUniqueUserCode = new GenerateUniqueUserCode();
+        /// <summary>
+        /// Базовый конструктор
+        /// </summary>
         public RegistrationForm()
         {
             InitializeComponent();
@@ -39,7 +45,7 @@ namespace Registration
         private void buttonOfAuthorization_Click(object sender, EventArgs e)
         {
             this.Hide();
-            AuthorizationForm authorizationForm = new AuthorizationForm();
+            var authorizationForm = new AuthorizationForm();
             authorizationForm.ShowDialog();
             this.Close();
         }
@@ -74,8 +80,8 @@ namespace Registration
                         var user = new User();
                         user.Surname = textBoxOfSurname.Text.Trim();
                         user.Name = textBoxOfName.Text.Trim();
-                        user.Patronymic = textBoxOfPatronymic.Text.Trim() == null ? null :
-                            textBoxOfPatronymic.Text.Trim();
+                        user.Patronymic = string.IsNullOrWhiteSpace(textBoxOfPatronymic.Text) ? null :
+                    textBoxOfPatronymic.Text.Trim();
                         user.Login = textBoxOfLogin.Text.Trim();
                         user.Password = bc.PasswordHash(textBoxOfPassword.Text.Trim());
                         user.UserRole = "Warehouseman";
@@ -84,7 +90,7 @@ namespace Registration
                         db.SaveChanges();
 
                         this.Hide();
-                        WarehousemanPanel warehousemanPanel = new WarehousemanPanel(user.Login);
+                        var warehousemanPanel = new WarehousemanPanel(user.Login);
                         warehousemanPanel.ShowDialog();
                         this.Close();
                     }

@@ -1,12 +1,12 @@
 ﻿using AdministratorPanelForm;
-using DbOfUser;
+using DBControl;
 using SelectDataForTable;
 
 namespace ListOfUsersForm
 {
     public partial class ListOfUsers : Form
     {
-        ApplicationContextOfUser contextOfUser = new ApplicationContextOfUser();
+        DBControl.ApplicationContext contextOfUser = new();
         BindingSource bindingSource = new BindingSource();
         string userLogin;
 

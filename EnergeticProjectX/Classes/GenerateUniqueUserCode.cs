@@ -1,12 +1,11 @@
-﻿using DbOfUser;
+﻿using DBControl;
 
 namespace GeneratedUserCode
 {
     public class GenerateUniqueUserCode
     {
-        ApplicationContextOfUser db = new();
+        DBControl.ApplicationContext db = new();
         Random random = new Random();
-        bool isUnique = false;
         string? newUserCode;
 
         public string Generate()

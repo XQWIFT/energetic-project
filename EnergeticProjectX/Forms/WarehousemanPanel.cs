@@ -15,7 +15,7 @@ namespace WarehousemanPanelForm
         private void buttonOfChangePassword_Click(object sender, EventArgs e)
         {
             this.Hide();
-            UserChangePassword userChangePassword = new UserChangePassword(userLogin);
+            var userChangePassword = new UserChangePassword(userLogin);
             userChangePassword.ShowDialog();
             this.Close();
         }
@@ -23,7 +23,7 @@ namespace WarehousemanPanelForm
         private void buttonOfLogOut_Click(object sender, EventArgs e)
         {
             this.Hide();
-            AuthorizationForm authForm = new AuthorizationForm();
+            var authForm = new AuthorizationForm();
             authForm.ShowDialog();
             this.Close();
         }

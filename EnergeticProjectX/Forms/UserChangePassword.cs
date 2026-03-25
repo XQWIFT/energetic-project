@@ -1,6 +1,6 @@
 ﻿using AdministratorPanelForm;
 using BCrypt;
-using DbOfUser;
+using DBControl;
 
 namespace UserChangePasswordForm
 {
@@ -30,7 +30,7 @@ namespace UserChangePasswordForm
 
         private void ChangePassword(object sender, EventArgs e)
         {
-            DbOfUser.ApplicationContextOfUser db = new();
+            DBControl.ApplicationContext db = new();
             BCryptRealization bc = new();
             var oldPassword = textBoxForOldPassword.Text.Trim();
             var newPassword = textBoxForNewPassword.Text.Trim();
@@ -49,7 +49,7 @@ namespace UserChangePasswordForm
                         MessageBox.Show("Вы изменили пароль!", "Успешно",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Hide();
-                        AdministratorPanel administratorPanel = new AdministratorPanel(userLogin);
+                        var administratorPanel = new AdministratorPanel(userLogin);
                         administratorPanel.ShowDialog();
                         this.Close();
                     }
@@ -79,7 +79,7 @@ namespace UserChangePasswordForm
             db.Dispose();
         }
 
-        public void IsAllPasswordsandLoginValid(string oldPassword, string newPassword, string confirmationPassword, ApplicationContextOfUser db)
+        public void IsAllPasswordsandLoginValid(string oldPassword, string newPassword, string confirmationPassword, DBControl.ApplicationContext db)
         {
             BCryptRealization bc = new();
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
