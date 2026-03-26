@@ -1,8 +1,9 @@
 ﻿using BCrypt;
 using EnergeticProjectX;
 using UserControl;
-using GeneratedUserCode;
+using GeneratedCode;
 using WarehousemanPanelForm;
+using DBControl;
 
 namespace Registration
 {
@@ -11,8 +12,16 @@ namespace Registration
     /// </summary>
     public partial class RegistrationForm : Form
     {
-        DBControl.ApplicationContext db = new();
-        GenerateUniqueUserCode generateUniqueUserCode = new GenerateUniqueUserCode();
+        /// <summary>
+        /// Для тестов
+        /// </summary>
+        public bool isLoginFree;
+        public bool isPasswordCorrect;
+        public bool isPasswordsMatch;
+
+
+        DBControl.ApplicationContextDB db = new();
+        GenerateUniqueCode generateUniqueUserCode = new GenerateUniqueCode();
         /// <summary>
         /// Базовый конструктор
         /// </summary>
@@ -53,44 +62,45 @@ namespace Registration
         private void buttonOfRegistration_Click(object sender, EventArgs e)
         {
             var logins = db.Users
-                .Select(u => u.Login)
-                .ToList();
+     .Select(u => u.Login)
+     .ToList();
 
-            if (!logins.Contains(textBoxOfLogin.Text.Trim()))
+            string password = textBoxOfPassword.Text;
+            string login = textBoxOfLogin.Text;
+            string passwordConfirmation = textBoxOfPasswordToo.Text;
+
+            isUserDataValid(login, password, passwordConfirmation, db);
+
+            if (isLoginFree)
             {
-                var charPasswordArray = textBoxOfPassword.Text.Trim().ToCharArray();
-                bool hasDigit = false;
-                bool hasLetter = false;
-                foreach (char c in charPasswordArray)
+                if (isPasswordCorrect == true)
                 {
-                    if (char.IsDigit(c))
-                    {
-                        hasDigit = true;
-                    }
-                    else if (char.IsLetter(c))
-                    {
-                        hasLetter = true;
-                    }
-                }
-                if (hasDigit && hasLetter && charPasswordArray.Length >= 8)
-                {
-                    if (textBoxOfPassword.Text.Trim() == textBoxOfPasswordToo.Text.Trim())
+                    if (isPasswordsMatch == true)
                     {
                         BCryptRealization bc = new();
                         var user = new User();
                         user.Surname = textBoxOfSurname.Text.Trim();
                         user.Name = textBoxOfName.Text.Trim();
-                        user.Patronymic = string.IsNullOrWhiteSpace(textBoxOfPatronymic.Text) ? null :
-                    textBoxOfPatronymic.Text.Trim();
+                        user.Patronymic = textBoxOfPatronymic.Text.Trim() == null ? null :
+                            textBoxOfPatronymic.Text.Trim();
                         user.Login = textBoxOfLogin.Text.Trim();
                         user.Password = bc.PasswordHash(textBoxOfPassword.Text.Trim());
                         user.UserRole = "Warehouseman";
-                        user.UserCode = generateUniqueUserCode.Generate();
+                        for (int i = 0; i < 100; i++)
+                        {
+                            var codes = generateUniqueUserCode.Generate5();
+                            if (!user.UserCode.Contains(codes))
+                            {
+                                break;
+                            }
+
+                            user.UserCode = codes;
+                        }
                         db.Users.Add(user);
                         db.SaveChanges();
 
                         this.Hide();
-                        var warehousemanPanel = new WarehousemanPanel(user.Login);
+                        WarehousemanPanel warehousemanPanel = new WarehousemanPanel(user.Login);
                         warehousemanPanel.ShowDialog();
                         this.Close();
                     }
@@ -109,6 +119,7 @@ namespace Registration
                         "Придумайте новый", "Ошибка",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                     textBoxOfPassword.Clear();
+                    textBoxOfPasswordToo.Clear();
                 }
             }
             else
@@ -116,6 +127,54 @@ namespace Registration
                 MessageBox.Show("Данный логин уже существует!\nПридумайте новый", "Ошибка",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBoxOfLogin.Clear();
+            }
+        }
+
+        public void isUserDataValid(string login, string password, string passwordConfirmation, ApplicationContextDB db)
+        {
+            var logins = db.Users
+                .Select(u => u.Login)
+                .ToList();
+
+            if (!logins.Contains(login))
+            {
+                isLoginFree = true;
+
+                var charPasswordArray = password.Trim().ToCharArray();
+                bool hasDigit = false;
+                bool hasLetter = false;
+                foreach (char c in charPasswordArray)
+                {
+                    if (char.IsDigit(c))
+                    {
+                        hasDigit = true;
+                    }
+                    else if (char.IsLetter(c))
+                    {
+                        hasLetter = true;
+                    }
+                }
+                if (hasDigit && hasLetter && charPasswordArray.Length >= 8)
+                {
+                    isPasswordCorrect = true;
+
+                    if (password.Trim() == passwordConfirmation.Trim())
+                    {
+                        isPasswordsMatch = true;
+                    }
+                    else
+                    {
+                        isPasswordsMatch = false;
+                    }
+                }
+                else
+                {
+                    isPasswordCorrect = false;
+                }
+            }
+            else
+            {
+                isLoginFree = false;
             }
         }
     }

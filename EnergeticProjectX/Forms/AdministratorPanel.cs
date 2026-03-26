@@ -1,16 +1,21 @@
-﻿using UserChangePasswordForm;
+﻿using EnergeticProjectX;
+using ListOfClientsForm;
 using ListOfUsersForm;
-using EnergeticProjectX;
+using ProductCatalogForm;
+using UserChangePasswordForm;
 
 namespace AdministratorPanelForm
 {
+    /// <summary>
+    /// Главное меню администратора
+    /// </summary>
     public partial class AdministratorPanel : Form
     {
         string userLogin;
-        public AdministratorPanel(string UserLogin)
+        public AdministratorPanel(string userLogin)
         {
             InitializeComponent();
-            userLogin = UserLogin;
+            this.userLogin = userLogin;
         }
 
         private void buttonOfChangePassword_Click(object sender, EventArgs e)
@@ -34,6 +39,22 @@ namespace AdministratorPanelForm
             this.Hide();
             var authForm = new AuthorizationForm();
             authForm.ShowDialog();
+            this.Close();
+        }
+
+        private void buttonOfClients_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            var listOfClients = new ListOfClients(userLogin);
+            listOfClients.ShowDialog();
+            this.Close();
+        }
+
+        private void buttonOfProductCatalog_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            var productCatalog = new ProductCatalog(userLogin);
+            productCatalog.ShowDialog();
             this.Close();
         }
     }
