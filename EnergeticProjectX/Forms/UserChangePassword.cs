@@ -12,9 +12,9 @@ namespace UserChangePasswordForm
     {
         string userLogin;
 
-        bool isPasswordsEqual;
-        bool isOldPasswordEqualDB;
-        bool isUserFound;
+        public bool isPasswordsEqual;
+        public bool isOldPasswordEqualDB;
+        public bool isUserFound;
 
         public UserChangePassword(string userLogin)
         {

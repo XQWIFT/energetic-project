@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="EnergeticProjectTests/EnergeticProjectTestt.csproj" />
   <Project Path="EnergeticProjectX/EnergeticProjectX.csproj" />
 </Solution>
