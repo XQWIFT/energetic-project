@@ -1,7 +1,7 @@
 ﻿using BCrypt;
 using EnergeticProjectX;
 using UserControl;
-using GeneratedUserCode;
+using GeneratedCode;
 using WarehousemanPanelForm;
 
 namespace Registration
@@ -11,8 +11,8 @@ namespace Registration
     /// </summary>
     public partial class RegistrationForm : Form
     {
-        DBControl.ApplicationContext db = new();
-        GenerateUniqueUserCode generateUniqueUserCode = new GenerateUniqueUserCode();
+        DBControl.ApplicationContextDB db = new();
+        GenerateUniqueCode generateUniqueUserCode = new GenerateUniqueCode();
         /// <summary>
         /// Базовый конструктор
         /// </summary>
@@ -85,7 +85,17 @@ namespace Registration
                         user.Login = textBoxOfLogin.Text.Trim();
                         user.Password = bc.PasswordHash(textBoxOfPassword.Text.Trim());
                         user.UserRole = "Warehouseman";
-                        user.UserCode = generateUniqueUserCode.Generate();
+                        for (int i = 0; i < 100; i++)
+                        {
+                            var codes = generateUniqueUserCode.Generate5();
+                            if (!user.UserCode.Contains(codes))
+                            {
+                                break;
+                            }
+
+                            user.UserCode = codes;
+                        }
+                        
                         db.Users.Add(user);
                         db.SaveChanges();
 

@@ -66,7 +66,7 @@
             // 
             labelOfRole.AutoSize = true;
             labelOfRole.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfRole.Location = new Point(253, 65);
+            labelOfRole.Location = new Point(263, 65);
             labelOfRole.Name = "labelOfRole";
             labelOfRole.Size = new Size(215, 38);
             labelOfRole.TabIndex = 2;
@@ -123,6 +123,7 @@
             buttonOfProductCatalog.TabIndex = 7;
             buttonOfProductCatalog.Text = "Каталог товаров";
             buttonOfProductCatalog.UseVisualStyleBackColor = true;
+            buttonOfProductCatalog.Click += buttonOfProductCatalog_Click;
             // 
             // buttonOfShipmentLog
             // 
@@ -153,6 +154,7 @@
             buttonOfClients.TabIndex = 10;
             buttonOfClients.Text = "Клиенты";
             buttonOfClients.UseVisualStyleBackColor = true;
+            buttonOfClients.Click += buttonOfClients_Click;
             // 
             // labelOfLine
             // 

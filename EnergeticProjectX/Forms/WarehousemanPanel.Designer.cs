@@ -166,6 +166,7 @@
             Controls.Add(labelOfRole);
             Controls.Add(labelOfLoginAs);
             Controls.Add(labelOfCompanyName);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "WarehousemanPanel";
             Text = "Панель управления (кладовщик)";
             ResumeLayout(false);

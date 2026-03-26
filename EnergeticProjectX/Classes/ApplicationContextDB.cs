@@ -1,13 +1,15 @@
-﻿using ClientControl;
+﻿using CategoryControl;
+using ClientControl;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ProductControl;
 using UserControl;
 namespace DBControl
 {
     /// <summary>
     /// Создаёт среду для подключения к БД
     /// </summary>
-    public class ApplicationContext : DbContext
+    public class ApplicationContextDB : DbContext
     {
         /// <summary>
         /// Создаёт таблицу Users внутри БД
@@ -18,14 +20,22 @@ namespace DBControl
         /// </summary>
         public DbSet<Client> Clients { get; set; } = null!;
         /// <summary>
+        /// Создаёт таблицу Products внутри БД
+        /// </summary>
+        public DbSet<Product> Products { get; set; }
+        /// <summary>
+        /// Создаёт таблицу Categories внутри БД
+        /// </summary>
+        public DbSet<Category> Categories { get; set; }
+        /// <summary>
         /// Является базовым конструктором при создании БД (без параметров)
         /// </summary>
-        public ApplicationContext() => Database.EnsureCreated();
+        public ApplicationContextDB() => Database.EnsureCreated();
 
         /// <summary>
         /// Создаётся перегрузка. Конструктор при передаче параметра options
         /// </summary>
-        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+        public ApplicationContextDB(DbContextOptions<ApplicationContextDB> options)
             : base(options)
         {
 

@@ -1,9 +1,13 @@
 ﻿using AdministratorPanelForm;
 using BCrypt;
 using DBControl;
+using WarehousemanPanelForm;
 
 namespace UserChangePasswordForm
 {
+    /// <summary>
+    /// Работа по изменению пароля пользователя
+    /// </summary>
     public partial class UserChangePassword : Form
     {
         string userLogin;
@@ -12,10 +16,10 @@ namespace UserChangePasswordForm
         bool isOldPasswordEqualDB;
         bool isUserFound;
 
-        public UserChangePassword(string UserLogin)
+        public UserChangePassword(string userLogin)
         {
             InitializeComponent();
-            userLogin = UserLogin;
+            this.userLogin = userLogin;
         }
 
         private void buttonOfSaveInfo_Click(object sender, EventArgs e)
@@ -30,7 +34,7 @@ namespace UserChangePasswordForm
 
         private void ChangePassword(object sender, EventArgs e)
         {
-            DBControl.ApplicationContext db = new();
+            DBControl.ApplicationContextDB db = new();
             BCryptRealization bc = new();
             var oldPassword = textBoxForOldPassword.Text.Trim();
             var newPassword = textBoxForNewPassword.Text.Trim();
@@ -48,10 +52,21 @@ namespace UserChangePasswordForm
                         db.SaveChanges();
                         MessageBox.Show("Вы изменили пароль!", "Успешно",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        this.Hide();
-                        var administratorPanel = new AdministratorPanel(userLogin);
-                        administratorPanel.ShowDialog();
-                        this.Close();
+
+                        if (user.UserRole == "Admin")
+                        {
+                            this.Hide();
+                            var administratorPanel = new AdministratorPanel(userLogin);
+                            administratorPanel.ShowDialog();
+                            this.Close();
+                        }
+                        else if (user.UserRole == "Warehouseman")
+                        {
+                            this.Hide();
+                            var warehousemanPanel = new WarehousemanPanel(userLogin);
+                            warehousemanPanel.ShowDialog();
+                            this.Close();
+                        }
                     }
                     else
                     {
@@ -79,7 +94,10 @@ namespace UserChangePasswordForm
             db.Dispose();
         }
 
-        public void IsAllPasswordsandLoginValid(string oldPassword, string newPassword, string confirmationPassword, DBControl.ApplicationContext db)
+        /// <summary>
+        /// Проверка пароля и логина на наличие и надёжность
+        /// </summary>
+        public void IsAllPasswordsandLoginValid(string oldPassword, string newPassword, string confirmationPassword, DBControl.ApplicationContextDB db)
         {
             BCryptRealization bc = new();
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);

@@ -154,7 +154,7 @@ namespace Registration
             labelOfPasswordToo.Location = new Point(1, 524);
             labelOfPasswordToo.MaximumSize = new Size(250, 0);
             labelOfPasswordToo.Name = "labelOfPasswordToo";
-            labelOfPasswordToo.Size = new Size(184, 81);
+            labelOfPasswordToo.Size = new Size(184, 78);
             labelOfPasswordToo.TabIndex = 11;
             labelOfPasswordToo.Text = "Подтвердите пароль";
             // 
@@ -209,6 +209,7 @@ namespace Registration
             Controls.Add(textBoxOfName);
             Controls.Add(labelOfName);
             Controls.Add(labelOfRegistration);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "RegistrationForm";
             Text = "Регистрация";

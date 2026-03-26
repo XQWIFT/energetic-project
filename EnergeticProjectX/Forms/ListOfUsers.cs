@@ -1,19 +1,22 @@
 ﻿using AdministratorPanelForm;
 using DBControl;
-using SelectDataForTable;
+using SelectUserDataForTable;
 
 namespace ListOfUsersForm
 {
+    /// <summary>
+    /// Работа с таблицей пользователей
+    /// </summary>
     public partial class ListOfUsers : Form
     {
-        DBControl.ApplicationContext contextOfUser = new();
+        DBControl.ApplicationContextDB contextOfUser = new();
         BindingSource bindingSource = new BindingSource();
         string userLogin;
 
-        public ListOfUsers(string UserLogin)
+        public ListOfUsers(string userLogin)
         {
             InitializeComponent();
-            userLogin = UserLogin;
+            this.userLogin = userLogin;
             LoadUsers();
         }
 

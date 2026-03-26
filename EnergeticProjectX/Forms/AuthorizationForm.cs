@@ -5,6 +5,9 @@ using Registration;
 
 namespace EnergeticProjectX
 {
+    /// <summary>
+    /// Форма авторизации (запускается самой первой)
+    /// </summary>
     public partial class AuthorizationForm : Form
     {
         public AuthorizationForm()
@@ -27,7 +30,7 @@ namespace EnergeticProjectX
 
         private void buttonOfInvolve_Click(object sender, EventArgs e)
         {
-            DBControl.ApplicationContext db = new();
+            DBControl.ApplicationContextDB db = new();
 
             var login = textBoxForLogin.Text.Trim();
             var password = textBoxOfPassword.Text.Trim();
@@ -35,15 +38,16 @@ namespace EnergeticProjectX
             Authorization(login, password, db);
         }
 
-        public void Authorization(string login, string password, DBControl.ApplicationContext db)
+        /// <summary>
+        /// Процесс авторизации и проверка роли пользователя
+        /// </summary>
+        public void Authorization(string login, string password, DBControl.ApplicationContextDB db)
         {
             var user = db.Users.FirstOrDefault(u =>
            u.Login == login);
 
             if (IsLoginAndPasswordValid(login, password, db))
             {
-                Console.WriteLine("W: " +
-                    "Access to the app is open as an administrator!");
                 var choice = MessageBox.Show("Успешно!", "Вы вошли в аккаунт",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 if (choice == DialogResult.OK)
@@ -71,11 +75,12 @@ namespace EnergeticProjectX
             }
             textBoxForLogin.Clear();
             textBoxOfPassword.Clear();
-            Console.WriteLine("E:" +
-                    "Access error. Please try again.");
         }
 
-        public bool IsLoginAndPasswordValid(string login, string password, DBControl.ApplicationContext db)
+        /// <summary>
+        /// Сравнение пароля с имеющимся в БД
+        /// </summary>
+        public bool IsLoginAndPasswordValid(string login, string password, DBControl.ApplicationContextDB db)
         {
             BCryptRealization bc = new();
 

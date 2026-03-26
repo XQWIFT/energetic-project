@@ -36,10 +36,14 @@
             // dataGridOfUsers
             // 
             dataGridOfUsers.AllowUserToAddRows = false;
+            dataGridOfUsers.AllowUserToDeleteRows = false;
+            dataGridOfUsers.AllowUserToResizeColumns = false;
+            dataGridOfUsers.AllowUserToResizeRows = false;
             dataGridOfUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridOfUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridOfUsers.Location = new Point(39, 73);
             dataGridOfUsers.Name = "dataGridOfUsers";
+            dataGridOfUsers.ReadOnly = true;
             dataGridOfUsers.RowHeadersVisible = false;
             dataGridOfUsers.RowHeadersWidth = 62;
             dataGridOfUsers.Size = new Size(864, 572);

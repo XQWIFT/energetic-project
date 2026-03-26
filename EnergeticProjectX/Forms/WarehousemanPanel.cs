@@ -3,13 +3,16 @@ using EnergeticProjectX;
 
 namespace WarehousemanPanelForm
 {
+    /// <summary>
+    /// Главное меню кладовщика
+    /// </summary>
     public partial class WarehousemanPanel : Form
     {
         string userLogin;
-        public WarehousemanPanel(string UserLogin)
+        public WarehousemanPanel(string userLogin)
         {
             InitializeComponent();
-            userLogin = UserLogin;
+            this.userLogin = userLogin;
         }
 
         private void buttonOfChangePassword_Click(object sender, EventArgs e)
