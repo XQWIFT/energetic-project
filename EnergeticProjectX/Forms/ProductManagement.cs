@@ -1,16 +1,27 @@
 ﻿using EditProductForms;
 using ProductCatalogForm;
-using DBControl;
+using EnergeticProjectX.Properties;
+using EnergeticProjectX.Classes;
 
 namespace ProductManagementForms
 {
+    /// <summary>
+    /// Форма для изменения товара: изменение и удаление
+    /// </summary>
     public partial class ProductManagement : Form
     {
+        ApplicationContextDB db = new();
+
         string Article;
         string userLogin;
+
+        /// <summary>
+        /// Конструктор для изменения товара
+        /// </summary>
         public ProductManagement(string userLogin, string Article)
         {
             InitializeComponent();
+
             this.userLogin = userLogin;
             this.Article = Article;
         }
@@ -33,16 +44,11 @@ namespace ProductManagementForms
 
         private void buttonOfDeleteProduct_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show(
-                "Вы уверены, что хотите удалить этот товар?",
-                "Подтверждение удаления",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question); 
+            DialogResult result = MessageBox.Show(Resources.AskForDeleteProduct,
+                Resources.ConfirmationDelete, MessageBoxButtons.YesNo, MessageBoxIcon.Question); 
 
             if (result == DialogResult.Yes)
             {
-                var db = new ApplicationContextDB();
-
                 var product = db.Products.FirstOrDefault(u => u.Article == Article);
 
                 if (product != null)
@@ -50,7 +56,7 @@ namespace ProductManagementForms
                     db.Products.Remove(product);
                     db.SaveChanges();
 
-                    MessageBox.Show("Товар успешно удален!", "Успех",
+                    MessageBox.Show(Resources.SuccessDeleteProduct, Resources.TitleSuccess,
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     this.Hide();
@@ -60,7 +66,7 @@ namespace ProductManagementForms
                 }
                 else
                 {
-                    MessageBox.Show("Товар не найден!", "Ошибка",
+                    MessageBox.Show(Resources.ProductNotFound, Resources.TitleError,
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }

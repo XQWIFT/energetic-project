@@ -1,6 +1,6 @@
 ﻿using BC = BCrypt.Net.BCrypt;
 
-namespace BCrypt
+namespace EnergeticProjectX.Classes
 {
     /// <summary>
     /// Класс для реализации шифрования/расшифрования пароля

@@ -28,98 +28,238 @@
         /// </summary>
         private void InitializeComponent()
         {
-            buttonOfCategories = new Button();
-            buttonAddProduct = new Button();
-            buttonOfMainMenu = new Button();
-            buttonOfProductCards = new Button();
-            dataGridOfProducts = new DataGridView();
-            ((System.ComponentModel.ISupportInitialize)dataGridOfProducts).BeginInit();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            ButtonOfAddCategory = new Button();
+            ButtonOfAddProduct = new Button();
+            ButtonOfMainMenu = new Button();
+            ButtonOfProductCard = new Button();
+            DataGridOfProducts = new DataGridView();
+            ButtonOfMakingShipment = new Button();
+            panelSearch = new Panel();
+            LabelOfSearch = new Label();
+            textBoxSearch = new TextBox();
+            ButtonOfSearch = new Button();
+            ButtonOfChangeCaterogies = new Button();
+            ((System.ComponentModel.ISupportInitialize)DataGridOfProducts).BeginInit();
+            panelSearch.SuspendLayout();
             SuspendLayout();
             // 
-            // buttonOfCategories
+            // ButtonOfAddCategory
             // 
-            buttonOfCategories.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonOfCategories.Location = new Point(733, 629);
-            buttonOfCategories.Name = "buttonOfCategories";
-            buttonOfCategories.Size = new Size(231, 51);
-            buttonOfCategories.TabIndex = 6;
-            buttonOfCategories.Text = "Категории";
-            buttonOfCategories.UseVisualStyleBackColor = true;
-            buttonOfCategories.Click += buttonOfCategories_Click;
+            ButtonOfAddCategory.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfAddCategory.FlatAppearance.BorderSize = 4;
+            ButtonOfAddCategory.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfAddCategory.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfAddCategory.FlatStyle = FlatStyle.Flat;
+            ButtonOfAddCategory.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            ButtonOfAddCategory.ForeColor = SystemColors.ControlText;
+            ButtonOfAddCategory.Location = new Point(16, 714);
+            ButtonOfAddCategory.Name = "ButtonOfAddCategory";
+            ButtonOfAddCategory.Size = new Size(352, 58);
+            ButtonOfAddCategory.TabIndex = 6;
+            ButtonOfAddCategory.Text = "Добавить категорию";
+            ButtonOfAddCategory.UseVisualStyleBackColor = true;
+            ButtonOfAddCategory.Click += ButtonOfAddCategory_Click;
             // 
-            // buttonAddProduct
+            // ButtonOfAddProduct
             // 
-            buttonAddProduct.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonAddProduct.Location = new Point(487, 628);
-            buttonAddProduct.Name = "buttonAddProduct";
-            buttonAddProduct.Size = new Size(231, 53);
-            buttonAddProduct.TabIndex = 5;
-            buttonAddProduct.Text = "Добавить товар";
-            buttonAddProduct.UseVisualStyleBackColor = true;
-            buttonAddProduct.Click += buttonAddProduct_Click;
+            ButtonOfAddProduct.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfAddProduct.FlatAppearance.BorderSize = 4;
+            ButtonOfAddProduct.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfAddProduct.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfAddProduct.FlatStyle = FlatStyle.Flat;
+            ButtonOfAddProduct.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            ButtonOfAddProduct.Location = new Point(308, 636);
+            ButtonOfAddProduct.Name = "ButtonOfAddProduct";
+            ButtonOfAddProduct.Size = new Size(369, 66);
+            ButtonOfAddProduct.TabIndex = 5;
+            ButtonOfAddProduct.Text = "Добавить товар";
+            ButtonOfAddProduct.UseVisualStyleBackColor = true;
+            ButtonOfAddProduct.Click += ButtonAddProduct_Click;
             // 
-            // buttonOfMainMenu
+            // ButtonOfMainMenu
             // 
-            buttonOfMainMenu.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonOfMainMenu.Location = new Point(13, 627);
-            buttonOfMainMenu.Name = "buttonOfMainMenu";
-            buttonOfMainMenu.Size = new Size(231, 53);
-            buttonOfMainMenu.TabIndex = 4;
-            buttonOfMainMenu.Text = "Главное меню";
-            buttonOfMainMenu.UseVisualStyleBackColor = true;
-            buttonOfMainMenu.Click += buttonOfMainMenu_Click;
+            ButtonOfMainMenu.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfMainMenu.FlatAppearance.BorderSize = 4;
+            ButtonOfMainMenu.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfMainMenu.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfMainMenu.FlatStyle = FlatStyle.Flat;
+            ButtonOfMainMenu.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            ButtonOfMainMenu.Location = new Point(16, 636);
+            ButtonOfMainMenu.Name = "ButtonOfMainMenu";
+            ButtonOfMainMenu.Size = new Size(286, 66);
+            ButtonOfMainMenu.TabIndex = 4;
+            ButtonOfMainMenu.Text = "Главное меню";
+            ButtonOfMainMenu.UseVisualStyleBackColor = true;
+            ButtonOfMainMenu.Click += ButtonOfMainMenu_Click;
             // 
-            // buttonOfProductCards
+            // ButtonOfProductCard
             // 
-            buttonOfProductCards.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonOfProductCards.Location = new Point(250, 627);
-            buttonOfProductCards.Name = "buttonOfProductCards";
-            buttonOfProductCards.Size = new Size(231, 53);
-            buttonOfProductCards.TabIndex = 7;
-            buttonOfProductCards.Text = "Карточка товара";
-            buttonOfProductCards.UseVisualStyleBackColor = true;
-            buttonOfProductCards.Click += buttonOfProductCards_Click;
+            ButtonOfProductCard.Enabled = false;
+            ButtonOfProductCard.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfProductCard.FlatAppearance.BorderSize = 4;
+            ButtonOfProductCard.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfProductCard.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfProductCard.FlatStyle = FlatStyle.Flat;
+            ButtonOfProductCard.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            ButtonOfProductCard.Location = new Point(683, 636);
+            ButtonOfProductCard.Name = "ButtonOfProductCard";
+            ButtonOfProductCard.Size = new Size(283, 66);
+            ButtonOfProductCard.TabIndex = 7;
+            ButtonOfProductCard.Text = "Карточка товара";
+            ButtonOfProductCard.UseVisualStyleBackColor = true;
+            ButtonOfProductCard.Click += ButtonOfProductCard_Click;
             // 
-            // dataGridOfProducts
+            // DataGridOfProducts
             // 
-            dataGridOfProducts.AllowUserToAddRows = false;
-            dataGridOfProducts.AllowUserToDeleteRows = false;
-            dataGridOfProducts.AllowUserToResizeColumns = false;
-            dataGridOfProducts.AllowUserToResizeRows = false;
-            dataGridOfProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridOfProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridOfProducts.Location = new Point(13, 55);
-            dataGridOfProducts.Name = "dataGridOfProducts";
-            dataGridOfProducts.ReadOnly = true;
-            dataGridOfProducts.RowHeadersVisible = false;
-            dataGridOfProducts.RowHeadersWidth = 62;
-            dataGridOfProducts.Size = new Size(941, 546);
-            dataGridOfProducts.TabIndex = 8;
+            DataGridOfProducts.AllowUserToAddRows = false;
+            DataGridOfProducts.AllowUserToDeleteRows = false;
+            DataGridOfProducts.AllowUserToResizeColumns = false;
+            DataGridOfProducts.AllowUserToResizeRows = false;
+            DataGridOfProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            DataGridOfProducts.BackgroundColor = SystemColors.ControlLight;
+            DataGridOfProducts.BorderStyle = BorderStyle.Fixed3D;
+            DataGridOfProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            DataGridOfProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            DataGridOfProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DataGridOfProducts.EnableHeadersVisualStyles = false;
+            DataGridOfProducts.GridColor = SystemColors.WindowText;
+            DataGridOfProducts.Location = new Point(16, 81);
+            DataGridOfProducts.MultiSelect = false;
+            DataGridOfProducts.Name = "DataGridOfProducts";
+            DataGridOfProducts.ReadOnly = true;
+            DataGridOfProducts.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DataGridOfProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            DataGridOfProducts.RowHeadersVisible = false;
+            DataGridOfProducts.RowHeadersWidth = 62;
+            DataGridOfProducts.Size = new Size(948, 540);
+            DataGridOfProducts.TabIndex = 8;
+            // 
+            // ButtonOfMakingShipment
+            // 
+            ButtonOfMakingShipment.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfMakingShipment.FlatAppearance.BorderSize = 4;
+            ButtonOfMakingShipment.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfMakingShipment.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfMakingShipment.FlatStyle = FlatStyle.Flat;
+            ButtonOfMakingShipment.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            ButtonOfMakingShipment.Location = new Point(308, 636);
+            ButtonOfMakingShipment.Name = "ButtonOfMakingShipment";
+            ButtonOfMakingShipment.Size = new Size(369, 66);
+            ButtonOfMakingShipment.TabIndex = 9;
+            ButtonOfMakingShipment.Text = "Оформление отгрузки";
+            ButtonOfMakingShipment.UseVisualStyleBackColor = true;
+            ButtonOfMakingShipment.Click += ButtonOfMakingShipment_Click;
+            // 
+            // panelSearch
+            // 
+            panelSearch.Controls.Add(LabelOfSearch);
+            panelSearch.Controls.Add(textBoxSearch);
+            panelSearch.Controls.Add(ButtonOfSearch);
+            panelSearch.Location = new Point(13, 12);
+            panelSearch.Name = "panelSearch";
+            panelSearch.Size = new Size(951, 63);
+            panelSearch.TabIndex = 0;
+            panelSearch.Visible = false;
+            // 
+            // LabelOfSearch
+            // 
+            LabelOfSearch.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfSearch.Location = new Point(3, 7);
+            LabelOfSearch.Name = "LabelOfSearch";
+            LabelOfSearch.Size = new Size(150, 46);
+            LabelOfSearch.TabIndex = 0;
+            LabelOfSearch.Text = "Поиск:";
+            LabelOfSearch.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // textBoxSearch
+            // 
+            textBoxSearch.Font = new Font("Segoe UI", 12F);
+            textBoxSearch.Location = new Point(149, 14);
+            textBoxSearch.Name = "textBoxSearch";
+            textBoxSearch.Size = new Size(597, 39);
+            textBoxSearch.TabIndex = 1;
+            // 
+            // ButtonOfSearch
+            // 
+            ButtonOfSearch.FlatStyle = FlatStyle.Flat;
+            ButtonOfSearch.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            ButtonOfSearch.Location = new Point(766, 7);
+            ButtonOfSearch.Name = "ButtonOfSearch";
+            ButtonOfSearch.Size = new Size(171, 50);
+            ButtonOfSearch.TabIndex = 2;
+            ButtonOfSearch.Text = "Найти";
+            ButtonOfSearch.UseVisualStyleBackColor = true;
+            ButtonOfSearch.Click += ButtonOfSearch_Click;
+            // 
+            // ButtonOfChangeCaterogies
+            // 
+            ButtonOfChangeCaterogies.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfChangeCaterogies.FlatAppearance.BorderSize = 4;
+            ButtonOfChangeCaterogies.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfChangeCaterogies.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfChangeCaterogies.FlatStyle = FlatStyle.Flat;
+            ButtonOfChangeCaterogies.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            ButtonOfChangeCaterogies.Location = new Point(374, 714);
+            ButtonOfChangeCaterogies.Name = "ButtonOfChangeCaterogies";
+            ButtonOfChangeCaterogies.Size = new Size(456, 58);
+            ButtonOfChangeCaterogies.TabIndex = 10;
+            ButtonOfChangeCaterogies.Text = "Редактировать категории";
+            ButtonOfChangeCaterogies.UseVisualStyleBackColor = true;
+            ButtonOfChangeCaterogies.Click += ButtonOfChangeCaterogies_Click;
             // 
             // ProductCatalog
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(976, 690);
-            Controls.Add(dataGridOfProducts);
-            Controls.Add(buttonOfProductCards);
-            Controls.Add(buttonOfCategories);
-            Controls.Add(buttonAddProduct);
-            Controls.Add(buttonOfMainMenu);
+            BackColor = Color.Lavender;
+            ClientSize = new Size(976, 795);
+            Controls.Add(ButtonOfChangeCaterogies);
+            Controls.Add(panelSearch);
+            Controls.Add(ButtonOfMakingShipment);
+            Controls.Add(DataGridOfProducts);
+            Controls.Add(ButtonOfProductCard);
+            Controls.Add(ButtonOfAddCategory);
+            Controls.Add(ButtonOfAddProduct);
+            Controls.Add(ButtonOfMainMenu);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "ProductCatalog";
-            Text = "Каталог товаров";
-            ((System.ComponentModel.ISupportInitialize)dataGridOfProducts).EndInit();
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Информация о товаре";
+            ((System.ComponentModel.ISupportInitialize)DataGridOfProducts).EndInit();
+            panelSearch.ResumeLayout(false);
+            panelSearch.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Button buttonOfCategories;
-        private Button buttonAddProduct;
-        private Button buttonOfMainMenu;
-        private Button buttonOfProductCards;
-        private DataGridView dataGridOfProducts;
+        private Button ButtonOfAddCategory;
+        private Button ButtonOfAddProduct;
+        private Button ButtonOfMainMenu;
+        private Button ButtonOfProductCard;
+        private DataGridView DataGridOfProducts;
+        private Button ButtonOfMakingShipment;
+        private Panel panelSearch;
+        private TextBox textBoxSearch;
+        private Label LabelOfSearch;
+        private Button ButtonOfSearch;
+        private Button ButtonOfChangeCaterogies;
     }
 }

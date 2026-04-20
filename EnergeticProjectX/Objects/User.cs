@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UserControl
+namespace EnergeticProjectX.Objects
 {
     /// <summary>
     /// Создаётся пользователь
@@ -14,37 +14,37 @@ namespace UserControl
         /// </summary>
         [Key]
         [Column("Id")]
-        public long User_Id { get; set; }
+        public Guid User_Id { get; set; }
 
         /// <summary>
         /// Уникальный код пользователя (5 цифр)
         /// </summary>
         [Column("UserCode")]
-        public string UserCode { get; set; }
+        public string? UserCode { get; set; }
 
         /// <summary>
         /// Логин пользователя для авторизации
         /// </summary>
         [Column("Login")]
-        public string Login { get; set; }
+        public required string Login { get; set; }
 
         /// <summary>
         /// Хешированный пароль
         /// </summary>
         [Column("PasswordHash")]
-        public string Password { get; set; }
+        public required string Password { get; set; }
 
         /// <summary>
         /// Фамилия пользователя
         /// </summary>
         [Column("LastName")]
-        public string Surname { get; set; }
+        public required string Surname { get; set; }
 
         /// <summary>
         /// Имя пользователя
         /// </summary>
         [Column("FirstName")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         /// <summary>
         /// Отчество пользователя
@@ -56,6 +56,6 @@ namespace UserControl
         /// Роль пользователя в системе
         /// </summary>
         [Column("Role")]
-        public string UserRole { get; set; }
+        public required string UserRole { get; set; }
     }
 }

@@ -30,188 +30,208 @@ namespace Registration
         /// </summary>
         private void InitializeComponent()
         {
-            labelOfRegistration = new Label();
-            labelOfName = new Label();
+            LabelOfRegistration = new Label();
+            LabelOfFirstName = new Label();
             textBoxOfName = new TextBox();
-            labelOfSurname = new Label();
+            LabelOfSurname = new Label();
             textBoxOfSurname = new TextBox();
-            labelOfPatronymic = new Label();
             textBoxOfPatronymic = new TextBox();
-            labelOfLogin = new Label();
+            LabelOfLogin = new Label();
             textBoxOfLogin = new TextBox();
-            labelOfPassword = new Label();
+            LabelOfPassword = new Label();
             textBoxOfPassword = new TextBox();
-            labelOfPasswordToo = new Label();
-            textBoxOfPasswordToo = new TextBox();
-            buttonOfRegistration = new Button();
-            buttonOfAuthorization = new Button();
+            LabelOfPasswordConfirmation = new Label();
+            textBoxOfPasswordConfirmation = new TextBox();
+            ButtonOfRegistration = new Button();
+            LabelOfAuthorization = new Label();
+            LabelOfPatronymicInfo = new Label();
+            LabelOfPatronymic = new Label();
             SuspendLayout();
             // 
-            // labelOfRegistration
+            // LabelOfRegistration
             // 
-            labelOfRegistration.AutoSize = true;
-            labelOfRegistration.Font = new Font("Segoe UI", 22F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfRegistration.Location = new Point(269, 9);
-            labelOfRegistration.Name = "labelOfRegistration";
-            labelOfRegistration.Size = new Size(276, 60);
-            labelOfRegistration.TabIndex = 0;
-            labelOfRegistration.Text = "Регистрация";
+            LabelOfRegistration.AutoSize = true;
+            LabelOfRegistration.Font = new Font("Segoe UI", 22F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfRegistration.Location = new Point(271, 35);
+            LabelOfRegistration.Name = "LabelOfRegistration";
+            LabelOfRegistration.Size = new Size(295, 60);
+            LabelOfRegistration.TabIndex = 0;
+            LabelOfRegistration.Text = "Регистрация";
             // 
-            // labelOfName
+            // LabelOfFirstName
             // 
-            labelOfName.AutoSize = true;
-            labelOfName.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfName.Location = new Point(1, 101);
-            labelOfName.Name = "labelOfName";
-            labelOfName.Size = new Size(72, 38);
-            labelOfName.TabIndex = 1;
-            labelOfName.Text = "Имя";
+            LabelOfFirstName.AutoSize = true;
+            LabelOfFirstName.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            LabelOfFirstName.Location = new Point(114, 128);
+            LabelOfFirstName.Name = "LabelOfFirstName";
+            LabelOfFirstName.Size = new Size(88, 45);
+            LabelOfFirstName.TabIndex = 1;
+            LabelOfFirstName.Text = "Имя";
             // 
             // textBoxOfName
             // 
             textBoxOfName.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfName.Location = new Point(193, 98);
+            textBoxOfName.Location = new Point(366, 128);
             textBoxOfName.Name = "textBoxOfName";
-            textBoxOfName.Size = new Size(603, 45);
+            textBoxOfName.Size = new Size(402, 45);
             textBoxOfName.TabIndex = 2;
             // 
-            // labelOfSurname
+            // LabelOfSurname
             // 
-            labelOfSurname.AutoSize = true;
-            labelOfSurname.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfSurname.Location = new Point(1, 194);
-            labelOfSurname.Name = "labelOfSurname";
-            labelOfSurname.Size = new Size(132, 38);
-            labelOfSurname.TabIndex = 3;
-            labelOfSurname.Text = "Фамилия";
+            LabelOfSurname.AutoSize = true;
+            LabelOfSurname.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            LabelOfSurname.Location = new Point(114, 193);
+            LabelOfSurname.Name = "LabelOfSurname";
+            LabelOfSurname.Size = new Size(166, 45);
+            LabelOfSurname.TabIndex = 3;
+            LabelOfSurname.Text = "Фамилия";
             // 
             // textBoxOfSurname
             // 
             textBoxOfSurname.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfSurname.Location = new Point(193, 191);
+            textBoxOfSurname.Location = new Point(366, 193);
             textBoxOfSurname.Name = "textBoxOfSurname";
-            textBoxOfSurname.Size = new Size(603, 45);
+            textBoxOfSurname.Size = new Size(402, 45);
             textBoxOfSurname.TabIndex = 4;
-            // 
-            // labelOfPatronymic
-            // 
-            labelOfPatronymic.AutoSize = true;
-            labelOfPatronymic.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfPatronymic.Location = new Point(1, 284);
-            labelOfPatronymic.Name = "labelOfPatronymic";
-            labelOfPatronymic.Size = new Size(135, 38);
-            labelOfPatronymic.TabIndex = 5;
-            labelOfPatronymic.Text = "Отчество";
             // 
             // textBoxOfPatronymic
             // 
             textBoxOfPatronymic.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfPatronymic.Location = new Point(193, 284);
+            textBoxOfPatronymic.Location = new Point(366, 263);
             textBoxOfPatronymic.Name = "textBoxOfPatronymic";
-            textBoxOfPatronymic.Size = new Size(603, 45);
+            textBoxOfPatronymic.Size = new Size(402, 45);
             textBoxOfPatronymic.TabIndex = 6;
             // 
-            // labelOfLogin
+            // LabelOfLogin
             // 
-            labelOfLogin.AutoSize = true;
-            labelOfLogin.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfLogin.Location = new Point(1, 370);
-            labelOfLogin.Name = "labelOfLogin";
-            labelOfLogin.Size = new Size(95, 38);
-            labelOfLogin.TabIndex = 7;
-            labelOfLogin.Text = "Логин";
+            LabelOfLogin.AutoSize = true;
+            LabelOfLogin.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            LabelOfLogin.Location = new Point(114, 334);
+            LabelOfLogin.Name = "LabelOfLogin";
+            LabelOfLogin.Size = new Size(116, 45);
+            LabelOfLogin.TabIndex = 7;
+            LabelOfLogin.Text = "Логин";
             // 
             // textBoxOfLogin
             // 
             textBoxOfLogin.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfLogin.Location = new Point(191, 370);
+            textBoxOfLogin.Location = new Point(366, 334);
             textBoxOfLogin.Name = "textBoxOfLogin";
-            textBoxOfLogin.Size = new Size(605, 45);
+            textBoxOfLogin.Size = new Size(402, 45);
             textBoxOfLogin.TabIndex = 8;
             // 
-            // labelOfPassword
+            // LabelOfPassword
             // 
-            labelOfPassword.AutoSize = true;
-            labelOfPassword.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfPassword.Location = new Point(1, 448);
-            labelOfPassword.Name = "labelOfPassword";
-            labelOfPassword.Size = new Size(112, 38);
-            labelOfPassword.TabIndex = 9;
-            labelOfPassword.Text = "Пароль";
+            LabelOfPassword.AutoSize = true;
+            LabelOfPassword.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            LabelOfPassword.Location = new Point(114, 408);
+            LabelOfPassword.Name = "LabelOfPassword";
+            LabelOfPassword.Size = new Size(138, 45);
+            LabelOfPassword.TabIndex = 9;
+            LabelOfPassword.Text = "Пароль";
             // 
             // textBoxOfPassword
             // 
             textBoxOfPassword.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfPassword.Location = new Point(191, 448);
+            textBoxOfPassword.Location = new Point(366, 408);
             textBoxOfPassword.Name = "textBoxOfPassword";
-            textBoxOfPassword.Size = new Size(605, 45);
+            textBoxOfPassword.Size = new Size(402, 45);
             textBoxOfPassword.TabIndex = 10;
             textBoxOfPassword.UseSystemPasswordChar = true;
             // 
-            // labelOfPasswordToo
+            // LabelOfPasswordConfirmation
             // 
-            labelOfPasswordToo.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfPasswordToo.Location = new Point(1, 524);
-            labelOfPasswordToo.MaximumSize = new Size(250, 0);
-            labelOfPasswordToo.Name = "labelOfPasswordToo";
-            labelOfPasswordToo.Size = new Size(184, 78);
-            labelOfPasswordToo.TabIndex = 11;
-            labelOfPasswordToo.Text = "Подтвердите пароль";
+            LabelOfPasswordConfirmation.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+            LabelOfPasswordConfirmation.Location = new Point(118, 470);
+            LabelOfPasswordConfirmation.MaximumSize = new Size(250, 0);
+            LabelOfPasswordConfirmation.Name = "LabelOfPasswordConfirmation";
+            LabelOfPasswordConfirmation.Size = new Size(250, 97);
+            LabelOfPasswordConfirmation.TabIndex = 11;
+            LabelOfPasswordConfirmation.Text = "Пароль повторно";
             // 
-            // textBoxOfPasswordToo
+            // textBoxOfPasswordConfirmation
             // 
-            textBoxOfPasswordToo.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfPasswordToo.Location = new Point(191, 540);
-            textBoxOfPasswordToo.Name = "textBoxOfPasswordToo";
-            textBoxOfPasswordToo.Size = new Size(605, 45);
-            textBoxOfPasswordToo.TabIndex = 12;
-            textBoxOfPasswordToo.UseSystemPasswordChar = true;
+            textBoxOfPasswordConfirmation.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            textBoxOfPasswordConfirmation.Location = new Point(366, 482);
+            textBoxOfPasswordConfirmation.Name = "textBoxOfPasswordConfirmation";
+            textBoxOfPasswordConfirmation.Size = new Size(402, 45);
+            textBoxOfPasswordConfirmation.TabIndex = 12;
+            textBoxOfPasswordConfirmation.UseSystemPasswordChar = true;
             // 
-            // buttonOfRegistration
+            // ButtonOfRegistration
             // 
-            buttonOfRegistration.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonOfRegistration.Location = new Point(247, 722);
-            buttonOfRegistration.Name = "buttonOfRegistration";
-            buttonOfRegistration.Size = new Size(328, 74);
-            buttonOfRegistration.TabIndex = 13;
-            buttonOfRegistration.Text = "Зарегистрироваться";
-            buttonOfRegistration.UseVisualStyleBackColor = true;
-            buttonOfRegistration.Click += buttonOfRegistration_Click;
+            ButtonOfRegistration.Enabled = false;
+            ButtonOfRegistration.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfRegistration.FlatAppearance.BorderSize = 4;
+            ButtonOfRegistration.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfRegistration.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfRegistration.FlatStyle = FlatStyle.Flat;
+            ButtonOfRegistration.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            ButtonOfRegistration.Location = new Point(200, 671);
+            ButtonOfRegistration.Name = "ButtonOfRegistration";
+            ButtonOfRegistration.Size = new Size(413, 74);
+            ButtonOfRegistration.TabIndex = 13;
+            ButtonOfRegistration.Text = "Зарегистрироваться";
+            ButtonOfRegistration.UseVisualStyleBackColor = true;
+            ButtonOfRegistration.Click += ButtonOfRegistration_Click;
             // 
-            // buttonOfAuthorization
+            // LabelOfAuthorization
             // 
-            buttonOfAuthorization.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonOfAuthorization.Location = new Point(12, 650);
-            buttonOfAuthorization.Name = "buttonOfAuthorization";
-            buttonOfAuthorization.Size = new Size(804, 47);
-            buttonOfAuthorization.TabIndex = 14;
-            buttonOfAuthorization.Text = "Есть аккаунт? Пройти авторизацию";
-            buttonOfAuthorization.UseVisualStyleBackColor = true;
-            buttonOfAuthorization.Click += buttonOfAuthorization_Click;
+            LabelOfAuthorization.AutoSize = true;
+            LabelOfAuthorization.Font = new Font("Segoe UI", 16F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 204);
+            LabelOfAuthorization.Location = new Point(153, 583);
+            LabelOfAuthorization.Name = "LabelOfAuthorization";
+            LabelOfAuthorization.Size = new Size(565, 45);
+            LabelOfAuthorization.TabIndex = 14;
+            LabelOfAuthorization.Text = "Уже есть аккаунт? Авторизоваться";
+            LabelOfAuthorization.Click += LabelOfAuthorization_Click;
+            // 
+            // LabelOfPatronymicInfo
+            // 
+            LabelOfPatronymicInfo.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfPatronymicInfo.ForeColor = Color.Gray;
+            LabelOfPatronymicInfo.Location = new Point(200, 641);
+            LabelOfPatronymicInfo.Name = "LabelOfPatronymicInfo";
+            LabelOfPatronymicInfo.Size = new Size(431, 27);
+            LabelOfPatronymicInfo.TabIndex = 15;
+            LabelOfPatronymicInfo.Text = "*Отчество — необязательное поле";
+            // 
+            // LabelOfPatronymic
+            // 
+            LabelOfPatronymic.AutoSize = true;
+            LabelOfPatronymic.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfPatronymic.Location = new Point(114, 263);
+            LabelOfPatronymic.Name = "LabelOfPatronymic";
+            LabelOfPatronymic.Size = new Size(164, 45);
+            LabelOfPatronymic.TabIndex = 16;
+            LabelOfPatronymic.Text = "Отчество";
             // 
             // RegistrationForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(828, 825);
-            Controls.Add(buttonOfAuthorization);
-            Controls.Add(buttonOfRegistration);
-            Controls.Add(textBoxOfPasswordToo);
-            Controls.Add(labelOfPasswordToo);
+            BackColor = Color.Lavender;
+            ClientSize = new Size(828, 782);
+            Controls.Add(LabelOfPatronymic);
+            Controls.Add(LabelOfPatronymicInfo);
+            Controls.Add(LabelOfAuthorization);
+            Controls.Add(ButtonOfRegistration);
+            Controls.Add(textBoxOfPasswordConfirmation);
+            Controls.Add(LabelOfPasswordConfirmation);
             Controls.Add(textBoxOfPassword);
-            Controls.Add(labelOfPassword);
+            Controls.Add(LabelOfPassword);
             Controls.Add(textBoxOfLogin);
-            Controls.Add(labelOfLogin);
+            Controls.Add(LabelOfLogin);
             Controls.Add(textBoxOfPatronymic);
-            Controls.Add(labelOfPatronymic);
             Controls.Add(textBoxOfSurname);
-            Controls.Add(labelOfSurname);
+            Controls.Add(LabelOfSurname);
             Controls.Add(textBoxOfName);
-            Controls.Add(labelOfName);
-            Controls.Add(labelOfRegistration);
+            Controls.Add(LabelOfFirstName);
+            Controls.Add(LabelOfRegistration);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "RegistrationForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Регистрация";
             ResumeLayout(false);
             PerformLayout();
@@ -219,20 +239,21 @@ namespace Registration
 
         #endregion
 
-        private Label labelOfRegistration;
-        private Label labelOfName;
+        private Label LabelOfRegistration;
+        private Label LabelOfFirstName;
         private TextBox textBoxOfName;
-        private Label labelOfSurname;
+        private Label LabelOfSurname;
         private TextBox textBoxOfSurname;
-        private Label labelOfPatronymic;
         private TextBox textBoxOfPatronymic;
-        private Label labelOfLogin;
+        private Label LabelOfLogin;
         private TextBox textBoxOfLogin;
-        private Label labelOfPassword;
+        private Label LabelOfPassword;
         private TextBox textBoxOfPassword;
-        private Label labelOfPasswordToo;
-        private TextBox textBoxOfPasswordToo;
-        private Button buttonOfRegistration;
-        private Button buttonOfAuthorization;
+        private Label LabelOfPasswordConfirmation;
+        private TextBox textBoxOfPasswordConfirmation;
+        private Button ButtonOfRegistration;
+        private Label LabelOfAuthorization;
+        private Label LabelOfPatronymicInfo;
+        private Label LabelOfPatronymic;
     }
 }

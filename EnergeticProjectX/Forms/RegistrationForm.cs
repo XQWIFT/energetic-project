@@ -1,29 +1,25 @@
-﻿using BCrypt;
-using EnergeticProjectX;
-using UserControl;
-using GeneratedCode;
+﻿using EnergeticProjectX;
 using WarehousemanPanelForm;
-using DBControl;
+using EnergeticProjectX.Properties;
+using EnergeticProjectX.Objects;
+using EnergeticProjectX.Classes;
 
 namespace Registration
 {
     /// <summary>
-    /// Открывается форма регистрации
+    /// Форма регистрации нового пользователя. Роль по умолчанию - Кладовщик
     /// </summary>
     public partial class RegistrationForm : Form
     {
-        /// <summary>
-        /// Для тестов
-        /// </summary>
         public bool isLoginFree;
         public bool isPasswordCorrect;
         public bool isPasswordsMatch;
 
+        private readonly BCryptRealization bc = new();
+        private readonly ApplicationContextDB db = new();
 
-        DBControl.ApplicationContextDB db = new();
-        GenerateUniqueCode generateUniqueUserCode = new GenerateUniqueCode();
         /// <summary>
-        /// Базовый конструктор
+        /// Основной конструктор формы регистрации
         /// </summary>
         public RegistrationForm()
         {
@@ -31,151 +27,132 @@ namespace Registration
 
             textBoxOfName.TextChanged += TextBox_TextChanged!;
             textBoxOfSurname.TextChanged += TextBox_TextChanged!;
-            textBoxOfPatronymic.TextChanged += TextBox_TextChanged!;
             textBoxOfLogin.TextChanged += TextBox_TextChanged!;
             textBoxOfPassword.TextChanged += TextBox_TextChanged!;
-            textBoxOfPasswordToo.TextChanged += TextBox_TextChanged!;
-
-            buttonOfRegistration.Enabled = false;
+            textBoxOfPasswordConfirmation.TextChanged += TextBox_TextChanged!;
         }
 
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
             bool allFieldsFilled = !string.IsNullOrWhiteSpace(textBoxOfName.Text) &&
                                    !string.IsNullOrWhiteSpace(textBoxOfSurname.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxOfPatronymic.Text) &&
                                    !string.IsNullOrWhiteSpace(textBoxOfLogin.Text) &&
                                    !string.IsNullOrWhiteSpace(textBoxOfPassword.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxOfPasswordToo.Text);
+                                   !string.IsNullOrWhiteSpace(textBoxOfPasswordConfirmation.Text);
 
-            buttonOfRegistration.Enabled = allFieldsFilled;
+            ButtonOfRegistration.Enabled = allFieldsFilled;
         }
 
-        private void buttonOfAuthorization_Click(object sender, EventArgs e)
+        private void ButtonOfRegistration_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            var authorizationForm = new AuthorizationForm();
-            authorizationForm.ShowDialog();
-            this.Close();
-        }
-
-        private void buttonOfRegistration_Click(object sender, EventArgs e)
-        {
-            var logins = db.Users
-     .Select(u => u.Login)
-     .ToList();
+            var logins = db.Users.Select(u => u.Login).ToList();
 
             string password = textBoxOfPassword.Text;
             string login = textBoxOfLogin.Text;
-            string passwordConfirmation = textBoxOfPasswordToo.Text;
+            string passwordConfirmation = textBoxOfPasswordConfirmation.Text;
 
-            isUserDataValid(login, password, passwordConfirmation, db);
+            IsUserDataValid(login, password, passwordConfirmation, db);
 
-            if (isLoginFree)
+            if (isLoginFree && isPasswordCorrect && isPasswordsMatch)
             {
-                if (isPasswordCorrect == true)
+                var user = new User
                 {
-                    if (isPasswordsMatch == true)
-                    {
-                        BCryptRealization bc = new();
-                        var user = new User();
-                        user.Surname = textBoxOfSurname.Text.Trim();
-                        user.Name = textBoxOfName.Text.Trim();
-                        user.Patronymic = textBoxOfPatronymic.Text.Trim() == null ? null :
-                            textBoxOfPatronymic.Text.Trim();
-                        user.Login = textBoxOfLogin.Text.Trim();
-                        user.Password = bc.PasswordHash(textBoxOfPassword.Text.Trim());
-                        user.UserRole = "Warehouseman";
-                        for (int i = 0; i < 100; i++)
-                        {
-                            var codes = generateUniqueUserCode.Generate5();
-                            if (!user.UserCode.Contains(codes))
-                            {
-                                break;
-                            }
+                    User_Id = Guid.NewGuid(),
+                    Surname = textBoxOfSurname.Text.Trim(),
+                    Name = textBoxOfName.Text.Trim(),
+                    Patronymic = textBoxOfPatronymic.Text.Trim() ?? null,
+                    Login = textBoxOfLogin.Text.Trim(),
+                    Password = bc.PasswordHash(textBoxOfPassword.Text.Trim()),
+                    UserCode = GenerateUniqueCode.GenerateUniqueUserCode(db),
+                    UserRole = Resources.UserRoleWarehousemanEng
+                };
 
-                            user.UserCode = codes;
-                        }
-                        db.Users.Add(user);
-                        db.SaveChanges();
-
-                        this.Hide();
-                        WarehousemanPanel warehousemanPanel = new WarehousemanPanel(user.Login);
-                        warehousemanPanel.ShowDialog();
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Пароли не совпадают!\n" +
-                        "Придумайте снова", "Ошибка",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        textBoxOfPassword.Clear();
-                        textBoxOfPasswordToo.Clear();
-                    }
-                }
-                else
+                try
                 {
-                    MessageBox.Show("Данный пароль не соответствует требованиям безопасности!\n" +
-                        "Придумайте новый", "Ошибка",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    textBoxOfPassword.Clear();
-                    textBoxOfPasswordToo.Clear();
+                    db.Users.Add(user);
+                    db.SaveChanges();
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{Resources.UniversalErrorBD}\n{Resources.TryAgain}\n\n" +
+                                    $"Текст ошибки: {ex.Message}", Resources.TitleErrorBD,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                Hide();
+                var warehousemanPanel = new WarehousemanPanel(user.Login);
+                warehousemanPanel.ShowDialog();
+                Close();
             }
-            else
+            else if (!isLoginFree)
             {
-                MessageBox.Show("Данный логин уже существует!\nПридумайте новый", "Ошибка",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{Resources.ExistsUsername}\n{Resources.InventNewLogin}", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 textBoxOfLogin.Clear();
+                textBoxOfLogin.Focus();
+            }
+            else if (!isPasswordCorrect)
+            {
+                MessageBox.Show($"{Resources.TooSimplePassword}\n{Resources.InventNewPassword}", Resources.TitleWarning,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                textBoxOfPassword.Clear();
+                textBoxOfPasswordConfirmation.Clear();
+                textBoxOfPassword.Focus();
+            }
+            else if (!isPasswordsMatch)
+            {
+                MessageBox.Show($"{Resources.UnmatchedPasswords}\n{Resources.TryAgain}", Resources.TitleWarning,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                textBoxOfPassword.Clear();
+                textBoxOfPasswordConfirmation.Clear();
+                textBoxOfPassword.Focus();
             }
         }
 
-        public void isUserDataValid(string login, string password, string passwordConfirmation, ApplicationContextDB db)
+        /// <summary>
+        /// Проверка регистрации на соответствие условиям
+        /// </summary>
+        /// <param name="login">Логин нового пользователя</param>
+        /// <param name="password">Пароль нового пользователя</param>
+        /// <param name="passwordConfirmation">Подтверждение пароля</param>
+        /// <param name="db">Контекст базы данных</param>
+        public void IsUserDataValid(string login, string password, string passwordConfirmation, ApplicationContextDB db)
         {
-            var logins = db.Users
-                .Select(u => u.Login)
-                .ToList();
-
-            if (!logins.Contains(login))
-            {
-                isLoginFree = true;
+            var logins = db.Users.Select(u => u.Login).ToList();
 
                 var charPasswordArray = password.Trim().ToCharArray();
-                bool hasDigit = false;
-                bool hasLetter = false;
-                foreach (char c in charPasswordArray)
-                {
-                    if (char.IsDigit(c))
-                    {
-                        hasDigit = true;
-                    }
-                    else if (char.IsLetter(c))
-                    {
-                        hasLetter = true;
-                    }
-                }
-                if (hasDigit && hasLetter && charPasswordArray.Length >= 8)
-                {
-                    isPasswordCorrect = true;
 
-                    if (password.Trim() == passwordConfirmation.Trim())
-                    {
-                        isPasswordsMatch = true;
-                    }
-                    else
-                    {
-                        isPasswordsMatch = false;
-                    }
-                }
-                else
+                bool hasDigit = false;
+                bool hasCapitalLetter = false;
+
+                foreach (char symbol in charPasswordArray)
                 {
-                    isPasswordCorrect = false;
+                    if (char.IsDigit(symbol))
+                        hasDigit = true;
+                    else if (char.IsLetter(symbol) && char.IsUpper(symbol))
+                        hasCapitalLetter = true;
+
+                    if (hasDigit && hasCapitalLetter)
+                        break;
                 }
-            }
-            else
-            {
-                isLoginFree = false;
-            }
+                
+                isLoginFree = !logins.Contains(login);
+
+                isPasswordsMatch = password.Trim() == passwordConfirmation.Trim();
+
+                isPasswordCorrect = hasDigit && hasCapitalLetter && charPasswordArray.Length >= 8;
+        }
+
+        private void LabelOfAuthorization_Click(object sender, EventArgs e)
+        {
+            Hide();
+            var authorizationForm = new AuthorizationForm();
+            authorizationForm.ShowDialog();
+            Close();
         }
     }
 }

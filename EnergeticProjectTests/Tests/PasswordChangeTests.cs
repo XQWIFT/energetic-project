@@ -1,5 +1,4 @@
-﻿using BCrypt;
-using DBControl;
+﻿using EnergeticProjectX.Classes;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using UserChangePasswordForm;
@@ -42,7 +41,7 @@ namespace PasswordChangeTests
             db.SaveChanges();
 
             //Act
-            changePasswordForm.IsAllPasswordsandLoginValid("123321dDd", "123321DDd", "123321DDd", db);
+            changePasswordForm.IsAllPasswordsAndLoginValid("123321dDd", "123321DDd", "123321DDd", db);
 
             //Assert
             Debug.Assert(changePasswordForm.isOldPasswordEqualDB);
@@ -71,7 +70,7 @@ namespace PasswordChangeTests
             db.SaveChanges();
 
             //Act
-           changePasswordForm.IsAllPasswordsandLoginValid("qwerty", "123321DDd", "123321DDd", db);
+           changePasswordForm.IsAllPasswordsAndLoginValid("qwerty", "123321DDd", "123321DDd", db);
 
             //Assert
             Assert.IsTrue(changePasswordForm.isUserFound);
@@ -97,7 +96,7 @@ namespace PasswordChangeTests
             db.SaveChanges();
 
             //Act
-            changePasswordForm.IsAllPasswordsandLoginValid("123321dDd", "123321DDd", "123321D", db);
+            changePasswordForm.IsAllPasswordsAndLoginValid("123321dDd", "123321DDd", "123321D", db);
 
             //Assert
             Assert.IsFalse(changePasswordForm.isPasswordsEqual);
@@ -123,7 +122,7 @@ namespace PasswordChangeTests
             db.SaveChanges();
 
             //Act
-            changePasswordForm.IsAllPasswordsandLoginValid("qwerty", "qweqewqeq123", "123321DDd", db);
+            changePasswordForm.IsAllPasswordsAndLoginValid("qwerty", "qweqewqeq123", "123321DDd", db);
 
             //Assert
             Assert.IsFalse(changePasswordForm.isOldPasswordEqualDB);

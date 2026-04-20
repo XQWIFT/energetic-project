@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel;
 
-namespace SelectUserDataForTable
+namespace EnergeticProjectX.Models
 {
     /// <summary>
-    /// Создаёт отображение пользователя 
-    /// и его данных в таблице
+    /// Создаёт отображение пользователя и его данных в таблице
     /// </summary>
     public class UserDisplayModel
     {
@@ -12,31 +11,30 @@ namespace SelectUserDataForTable
         /// Уникальный ID пользователя
         /// </summary>
         [DisplayName("ID")]
-        public long User_Id { get; set; }
+        public required string UserCode { get; set; }
 
         /// <summary>
         /// Имя пользователя
         /// </summary>
         [DisplayName("Имя")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         /// <summary>
         /// Фамилия пользователя
         /// </summary>
         [DisplayName("Фамилия")]
-        public string Surname { get; set; }
+        public required string Surname { get; set; }
 
         /// <summary>
-        /// Отчество пользователя (может быть NULL)
+        /// Отчество пользователя (при наличии)
         /// </summary>
         [DisplayName("Отчество")]
         public string? Patronymic { get; set; }
 
         /// <summary>
-        /// Роль пользователя: 
-        /// Admin (админ) и Warehouseman (Кладовщик)
+        /// Роль пользователя: Администратор или Кладовщик
         /// </summary>
         [DisplayName("Роль")]
-        public string UserRole { get; set; }
+        public required string UserRole { get; set; }
     }
 }

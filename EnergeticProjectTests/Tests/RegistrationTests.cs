@@ -1,5 +1,4 @@
-﻿using BCrypt;
-using DBControl;
+﻿using EnergeticProjectX.Classes;
 using Microsoft.EntityFrameworkCore;
 using Registration;
 using UserControl;
@@ -40,7 +39,7 @@ namespace RegistrationTests
             db.SaveChanges();
 
             //Act
-            registrationForm.isUserDataValid("sigma777", "123321dDd", "123321dDd", db);
+            registrationForm.IsUserDataValid("sigma777", "123321dDd", "123321dDd", db);
 
             //Assert
             Assert.IsTrue(registrationForm.isLoginFree);
@@ -67,7 +66,7 @@ namespace RegistrationTests
             db.SaveChanges();
 
             //Act
-            registrationForm.isUserDataValid("rpakjj7", "123321dDd", "123321dDd", db);
+            registrationForm.IsUserDataValid("rpakjj7", "123321dDd", "123321dDd", db);
 
             //Assert
             Assert.IsFalse(registrationForm.isLoginFree);
@@ -92,7 +91,7 @@ namespace RegistrationTests
             db.SaveChanges();
 
             //Act
-            registrationForm.isUserDataValid("rpakjj7", "123321", "123321", db);
+            registrationForm.IsUserDataValid("rpakjj7", "123321", "123321", db);
 
             //Assert
             Assert.IsFalse(registrationForm.isPasswordCorrect);
@@ -117,7 +116,7 @@ namespace RegistrationTests
             db.SaveChanges();
 
             //Act
-            registrationForm.isUserDataValid("rpakjj7", "123321d", "1233", db);
+            registrationForm.IsUserDataValid("rpakjj7", "123321d", "1233", db);
 
             //Assert
             Assert.IsFalse(registrationForm.isLoginFree);  
@@ -142,7 +141,7 @@ namespace RegistrationTests
             db.SaveChanges();
 
             //Act
-            registrationForm.isUserDataValid("rpakjj7", "123321dDd", "123321dDd", db);
+            registrationForm.IsUserDataValid("rpakjj7", "123321dDd", "123321dDd", db);
 
             //Assert
             Assert.IsFalse(registrationForm.isLoginFree);

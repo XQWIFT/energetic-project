@@ -1,0 +1,393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CategoryDisplayMember" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="CategoryValueMember" xml:space="preserve">
+    <value>Category_Id</value>
+  </data>
+  <data name="ChooseCategoryDelete" xml:space="preserve">
+    <value>Выберите категорию для удаления</value>
+  </data>
+  <data name="ChooseCategoryProduct" xml:space="preserve">
+    <value>Выберите категорию товара!</value>
+  </data>
+  <data name="ChooseUnit" xml:space="preserve">
+    <value>Пожалуйста, выберите единицу измерения</value>
+  </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Редактирование категории</value>
+  </data>
+  <data name="ErrorCategoryUpload" xml:space="preserve">
+    <value>Ошибка загрузки категорий.</value>
+  </data>
+  <data name="ErrorSaveCategory" xml:space="preserve">
+    <value>Ошибка при сохранении категории</value>
+  </data>
+  <data name="ErrorUnitUpload" xml:space="preserve">
+    <value>Ошибка загрузки единиц измерения.</value>
+  </data>
+  <data name="ErrorValidation" xml:space="preserve">
+    <value>Ошибка валидации</value>
+  </data>
+  <data name="InputNewCategoryName" xml:space="preserve">
+    <value>Введите новое название категории:</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Вы вошли в аккаунт</value>
+  </data>
+  <data name="UnitNotFound" xml:space="preserve">
+    <value>Единица измерения не найдена!</value>
+  </data>
+  <data name="ChooseEditCategoryAndNewUnit" xml:space="preserve">
+    <value>Выберите категорию и/или новую единицу измерения для дальнейшего редактирования</value>
+  </data>
+  <data name="SuccessAddCategory" xml:space="preserve">
+    <value>Категория успешно добавлена!</value>
+  </data>
+  <data name="SuccessDeleteCategory" xml:space="preserve">
+    <value>Категория успешно удалена!</value>
+  </data>
+  <data name="SuccessUpdateCategory" xml:space="preserve">
+    <value>Категория успешно обновлена!</value>
+  </data>
+  <data name="TitleAlert" xml:space="preserve">
+    <value>Уведомление</value>
+  </data>
+  <data name="TitleError" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="TitleErrorBD" xml:space="preserve">
+    <value>Ошибка в базе данных</value>
+  </data>
+  <data name="TitleSuccess" xml:space="preserve">
+    <value>Успешно!</value>
+  </data>
+  <data name="TitleWarning" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Пожалуйста, попробуйте ещё раз!</value>
+  </data>
+  <data name="IncorrectLoginOrPassword" xml:space="preserve">
+    <value>Неверный логин или пароль.</value>
+  </data>
+  <data name="UncorrectPrice" xml:space="preserve">
+    <value>Некорректная цена</value>
+  </data>
+  <data name="UnitDisplayMember" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="UnitValueMember" xml:space="preserve">
+    <value>Unit_Id</value>
+  </data>
+  <data name="UserRoleAdmin" xml:space="preserve">
+    <value>Администратор</value>
+  </data>
+  <data name="UserRoleWarehouseman" xml:space="preserve">
+    <value>Кладовщик</value>
+  </data>
+  <data name="AskForDeleteCategory" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить категорию</value>
+  </data>
+  <data name="ConfirmationDelete" xml:space="preserve">
+    <value>Подтверждение удаления</value>
+  </data>
+  <data name="AlertOfDeleteCategory" xml:space="preserve">
+    <value>ВНИМАНИЕ: Если у этой категории есть товары, они могут быть удалены или остаться без категории!</value>
+  </data>
+  <data name="UncorrectIDClient" xml:space="preserve">
+    <value>Неверный ID клиента!</value>
+  </data>
+  <data name="ProductNotFound" xml:space="preserve">
+    <value>Товар не найден!</value>
+  </data>
+  <data name="ErrorUploadData" xml:space="preserve">
+    <value>Ошибка загрузки данных:</value>
+  </data>
+  <data name="SuccessUpdateProduct" xml:space="preserve">
+    <value>Товар успешно обновлён!</value>
+  </data>
+  <data name="UncorrectCategory" xml:space="preserve">
+    <value>Некорректная категория</value>
+  </data>
+  <data name="ConfirmationCancel" xml:space="preserve">
+    <value>Подтверждение отмены</value>
+  </data>
+  <data name="AskOfCancelEdit" xml:space="preserve">
+    <value>Вы уверены, что хотите отменить редактирование?</value>
+  </data>
+  <data name="LostUnsavedChanges" xml:space="preserve">
+    <value>Все несохранённые изменения будут потеряны</value>
+  </data>
+  <data name="TitleInformation" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="HowMuchClientsUploaded" xml:space="preserve">
+    <value>Клиентов загружено:</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>пусто</value>
+  </data>
+  <data name="ClientRowCode" xml:space="preserve">
+    <value>ClientCode</value>
+  </data>
+  <data name="ClientRowName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ClientRowContractor" xml:space="preserve">
+    <value>Contractor</value>
+  </data>
+  <data name="ClientINN" xml:space="preserve">
+    <value>INN</value>
+  </data>
+  <data name="ClientContactInfo" xml:space="preserve">
+    <value>ContactInfo</value>
+  </data>
+  <data name="ChooseClientForEdit" xml:space="preserve">
+    <value>Выберите клиента для редактирования.</value>
+  </data>
+  <data name="HowMuchUsersUploaded" xml:space="preserve">
+    <value>Пользователей загружено:</value>
+  </data>
+  <data name="RecipientDisplayMember" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="RecipientValueMember" xml:space="preserve">
+    <value>Client_Id</value>
+  </data>
+  <data name="ProductDisplayMember" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="ProductValueMember" xml:space="preserve">
+    <value>Article</value>
+  </data>
+  <data name="FillRequiredFields" xml:space="preserve">
+    <value>Заполните все обязательные поля</value>
+  </data>
+  <data name="NotEnoughProductInStock" xml:space="preserve">
+    <value>Недостаточно товара на складе!</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Пользователь не найден.</value>
+  </data>
+  <data name="ErrorSave" xml:space="preserve">
+    <value>Ошибка при сохранении:</value>
+  </data>
+  <data name="ShipmentSuccessfullyProcessed" xml:space="preserve">
+    <value>Отгрузка успешно оформлена!</value>
+  </data>
+  <data name="SuccessDeleteProduct" xml:space="preserve">
+    <value>Товар успешно удален!</value>
+  </data>
+  <data name="AskForDeleteProduct" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить этот товар?</value>
+  </data>
+  <data name="InventNewPassword" xml:space="preserve">
+    <value>Пожалуйста, придумайте новый пароль.</value>
+  </data>
+  <data name="UnmatchedPasswords" xml:space="preserve">
+    <value>Данные пароли не совпадают.</value>
+  </data>
+  <data name="TooSimplePassword" xml:space="preserve">
+    <value>Данный пароль не соответствует требованиям безопасности! Требования: минимум 8 символов, наличие хотя бы одной цифры и заглавной латинской буквы.</value>
+  </data>
+  <data name="InventNewLogin" xml:space="preserve">
+    <value>Пожалуйста, придумайте новый логин.</value>
+  </data>
+  <data name="ExistsUsername" xml:space="preserve">
+    <value>Данный логин уже существует.</value>
+  </data>
+  <data name="ShipmentId" xml:space="preserve">
+    <value>Shipment_Id</value>
+  </data>
+  <data name="InvalidGUIDFormat" xml:space="preserve">
+    <value>Неверный формат GUID</value>
+  </data>
+  <data name="ChangePasswordEvent" xml:space="preserve">
+    <value>Вы изменили пароль!</value>
+  </data>
+  <data name="UnmatchedNewPasswords" xml:space="preserve">
+    <value>Введённый пароль не подтверждён. Пароли не совпадают.</value>
+  </data>
+  <data name="IncorrectOldPassword" xml:space="preserve">
+    <value>Введён некорректный старый пароль.</value>
+  </data>
+  <data name="TitleConfirmation" xml:space="preserve">
+    <value>Подтверждение</value>
+  </data>
+  <data name="ErrorClientDelete" xml:space="preserve">
+    <value>Не удалось удалить данные, так как они необходимы для отгрузки.</value>
+  </data>
+  <data name="ErrorClientSaveChanges" xml:space="preserve">
+    <value>Не удалось сохранить изменения.</value>
+  </data>
+  <data name="ThereIsSuchCategory" xml:space="preserve">
+    <value>Категория с таким наименованием уже имеется в базе данных.</value>
+  </data>
+  <data name="UniversalErrorBD" xml:space="preserve">
+    <value>Ошибка сохранения данных в базу данных.</value>
+  </data>
+  <data name="OldAndNewPasswordsTheSame" xml:space="preserve">
+    <value>Попытка изменить пароль на уже существующий. Пожалуйста, придумайте новый пароль для замены!</value>
+  </data>
+  <data name="TooSimpleNewPassword" xml:space="preserve">
+    <value>Новый пароль не соответствует требованиям безопасности! Требования: минимум 8 символов, наличие хотя бы одной цифры и заглавной латинской буквы.</value>
+  </data>
+  <data name="MaxNumberOfUsers" xml:space="preserve">
+    <value>Ошибка назначения уникального клиентского кода! Превышено допустимое число пользователей.</value>
+  </data>
+  <data name="UserRoleAdminEng" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="UserRoleWarehousemanEng" xml:space="preserve">
+    <value>Warehouseman</value>
+  </data>
+  <data name="MaxNumberOfClients" xml:space="preserve">
+    <value>Ошибка создания уникального клиентского кода! Превышено допустимое число клиентов.</value>
+  </data>
+  <data name="MaxNumberOfProducts" xml:space="preserve">
+    <value>Ошибка создания артикула для товара! Превышено допустимое число товара.</value>
+  </data>
+  <data name="INNRequirementsTenDigits" xml:space="preserve">
+    <value>Идентификационный номер Юр. лица должен содержать 10 символов.</value>
+  </data>
+  <data name="INNRequirementsTwelveDigits" xml:space="preserve">
+    <value>ИНН Физ. лица или ИП должен содержать 12 цифр.</value>
+  </data>
+  <data name="INNFormatError" xml:space="preserve">
+    <value>Неверный формат данных для ИНН.</value>
+  </data>
+  <data name="ClientContractorLegalEntity" xml:space="preserve">
+    <value>Юр. лицо</value>
+  </data>
+  <data name="ClientContractorPhysicalPerson" xml:space="preserve">
+    <value>Физ. лицо</value>
+  </data>
+  <data name="ClientContractorIndEntrepreneur" xml:space="preserve">
+    <value>ИП</value>
+  </data>
+  <data name="HowMuchProductsUploaded" xml:space="preserve">
+    <value>Товара загружено:</value>
+  </data>
+  <data name="ErrorUserDataUpload" xml:space="preserve">
+    <value>Ошибка загрузки данных текущего пользователя.</value>
+  </data>
+</root>

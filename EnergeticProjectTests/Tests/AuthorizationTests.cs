@@ -1,9 +1,8 @@
-﻿using DBControl;
-using EnergeticProjectX;
+﻿using EnergeticProjectX;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using UserControl;
-using BCrypt;
+using EnergeticProjectX.Classes;
 
 namespace AuthorizationTests
 {
