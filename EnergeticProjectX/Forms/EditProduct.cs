@@ -1,4 +1,5 @@
 ﻿using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using ProductCatalogForm;
@@ -6,14 +7,14 @@ using ProductCatalogForm;
 namespace EditProductForms
 {
     /// <summary>
-    /// Форма изменения товаров
+    /// Форма для просмотра и изменения данных товара.
     /// </summary>
     public partial class EditProduct : Form
     {
-        readonly ApplicationContextDB db = new();
+        private readonly ApplicationContextDB db = new();
 
-        readonly string userLogin;
-        readonly string article;
+        private readonly string userLogin;
+        private readonly string article;
         private Product currentProduct;
 
         /// <summary>
@@ -22,20 +23,19 @@ namespace EditProductForms
         public EditProduct(string userLogin, string article)
         {
             InitializeComponent();
+
             this.userLogin = userLogin;
             this.article = article;
 
             LoadProductData();
 
-            textBoxOfName.TextChanged += isTextChanged!;
-            comboBoxOfCategory.TextChanged += isTextChanged!;
-            textBoxOfPrice.TextChanged += isTextChanged!;
-            textBoxOfUnit.TextChanged += isTextChanged!;
-            comboBoxOfCategory.SelectedIndexChanged += isTextChanged!;
+            TextBoxOfName.TextChanged += isTextChanged!;
+            ComboBoxOfCategory.TextChanged += isTextChanged!;
+            TextBoxOfPrice.TextChanged += isTextChanged!;
+            TextBoxOfUnit.TextChanged += isTextChanged!;
+            ComboBoxOfCategory.SelectedIndexChanged += isTextChanged!;
 
             LoadCategories();
-
-            buttonOfSaveChanges.Enabled = false;
         }
 
         /// <summary>
@@ -49,20 +49,23 @@ namespace EditProductForms
 
                 if (currentProduct != null)
                 {
-                    textBoxOfName.Text = currentProduct.Name;
-                    textBoxOfPrice.Text = currentProduct.PurchasePrice.ToString();
+                    TextBoxOfName.Text = currentProduct.Name;
+                    TextBoxOfPrice.Text = currentProduct.PurchasePrice.ToString();
                 }
                 else
                 {
-                    MessageBox.Show(Resources.ProductNotFound, Resources.TitleError,
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Close();
+                    MessageBox.Show($"{Resources.ProductNotFound}\n{Resources.TryAgain}", Resources.TitleError,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    return;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"{Resources.ErrorUploadData} {ex.Message}",
-                    Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}",
+                                Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
             }
         }
 
@@ -73,24 +76,24 @@ namespace EditProductForms
         {
             try
             {
-                comboBoxOfCategory.SelectedIndexChanged -= isComboBoxOfCategoryChanged!;
+                ComboBoxOfCategory.SelectedIndexChanged -= isComboBoxOfCategoryChanged!;
 
-                var categories = db.Categories.Where(u => u.Status == 1).ToList();
+                var categories = db.Categories.Where(u => u.Status == CategoryStatus.Active).ToList();
 
                 /// ???
                 if (categories != null && categories.Any())
                 {
-                    comboBoxOfCategory.DataSource = categories;
-                    comboBoxOfCategory.DisplayMember = Resources.CategoryDisplayMember;
-                    comboBoxOfCategory.ValueMember = Resources.CategoryValueMember;
+                    ComboBoxOfCategory.DataSource = categories;
+                    ComboBoxOfCategory.DisplayMember = Resources.CategoryDisplayMember;
+                    ComboBoxOfCategory.ValueMember = Resources.CategoryValueMember;
 
                     if (currentProduct != null)
                     {
-                        comboBoxOfCategory.SelectedValue = currentProduct.CategoryId;
+                        ComboBoxOfCategory.SelectedValue = currentProduct.CategoryId;
                         UpdateUnitDisplay();
                     }
 
-                    comboBoxOfCategory.SelectedIndexChanged += isComboBoxOfCategoryChanged!;
+                    ComboBoxOfCategory.SelectedIndexChanged += isComboBoxOfCategoryChanged!;
                 }
                 else
                 {
@@ -112,26 +115,26 @@ namespace EditProductForms
 
         private void UpdateUnitDisplay()
         {
-            if (comboBoxOfCategory.SelectedItem is not Category selectedCategory)
+            if (ComboBoxOfCategory.SelectedItem is not Category selectedCategory)
             {
-                textBoxOfUnit.Text = string.Empty;
+                TextBoxOfUnit.Text = string.Empty;
                 return;
             }
 
             var unit = db.Units.FirstOrDefault(u => u.Unit_Id == selectedCategory.Unit_Id);
-            textBoxOfUnit.Text = unit?.Value?.ToString() ?? string.Empty;
+            TextBoxOfUnit.Text = unit?.Name?.ToString() ?? string.Empty;
         }
 
         private bool HasChanges()
         {
             if (currentProduct == null) return false;
 
-            bool nameChanged = textBoxOfName.Text != currentProduct.Name;
+            bool nameChanged = TextBoxOfName.Text != currentProduct.Name;
 
             bool categoryChanged = false;
-            if (comboBoxOfCategory.SelectedItem != null)
+            if (ComboBoxOfCategory.SelectedItem != null)
             {
-                var selectedCategory = comboBoxOfCategory.SelectedItem as Category;
+                var selectedCategory = ComboBoxOfCategory.SelectedItem as Category;
 
                 if (selectedCategory != null)
                 {
@@ -151,18 +154,18 @@ namespace EditProductForms
 
         private void isTextChanged(object sender, EventArgs e)
         {
-            bool allFieldsFilled = !string.IsNullOrWhiteSpace(textBoxOfName.Text) &&
-                                   !string.IsNullOrWhiteSpace(comboBoxOfCategory.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxOfPrice.Text);
+            bool allFieldsFilled = !string.IsNullOrWhiteSpace(TextBoxOfName.Text) &&
+                                   !string.IsNullOrWhiteSpace(ComboBoxOfCategory.Text) &&
+                                   !string.IsNullOrWhiteSpace(TextBoxOfPrice.Text);
 
-            buttonOfSaveChanges.Enabled = allFieldsFilled && HasChanges();
+            ButtonOfSaveChanges.Enabled = allFieldsFilled && HasChanges();
         }
 
         private void buttonOfSave_Click(object sender, EventArgs e)
         {
             try
             {
-                if (comboBoxOfCategory.SelectedValue == null)
+                if (ComboBoxOfCategory.SelectedValue == null)
                 {
                     MessageBox.Show(Resources.ChooseCategoryProduct, Resources.TitleError,
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -173,8 +176,8 @@ namespace EditProductForms
 
                 if (productToUpdate != null)
                 {
-                    productToUpdate.Name = textBoxOfName.Text;
-                    if (Guid.TryParse(comboBoxOfCategory.SelectedValue.ToString(), out Guid categoryId))
+                    productToUpdate.Name = TextBoxOfName.Text;
+                    if (Guid.TryParse(ComboBoxOfCategory.SelectedValue.ToString(), out Guid categoryId))
                     {
                         productToUpdate.CategoryId = categoryId;
                     }
@@ -182,7 +185,7 @@ namespace EditProductForms
                     {
                         MessageBox.Show($"{Resources.UncorrectCategory}\n{Resources.TryAgain}",
                            Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        comboBoxOfCategory.ResetText();
+                        ComboBoxOfCategory.ResetText();
                         return;
                     }
 
@@ -214,14 +217,16 @@ namespace EditProductForms
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Ошибка сохранения данных: {ex.Message}",
-                    Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{Resources.ErrorUploadData}, {Resources.TryAgain}", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
             }
         }
 
-        private void buttonOfCancel_Click(object sender, EventArgs e)
+        private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(
                 $"{Resources.AskOfCancelEdit}\n{Resources.LostUnsavedChanges}",
@@ -229,10 +234,10 @@ namespace EditProductForms
 
             if (result == DialogResult.Yes)
             {
-                this.Hide();
+                Hide();
                 var productCatalog = new ProductCatalog(userLogin);
                 productCatalog.ShowDialog();
-                this.Close();
+                Close();
             }
         }
     }

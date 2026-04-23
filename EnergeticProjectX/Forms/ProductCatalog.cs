@@ -1,13 +1,16 @@
-﻿using AddProductForm;
+﻿using AddCategoryForm;
+using AddProductForm;
 using AdministratorPanelForm;
 using EditCategoriesForm;
+using EditProductForms;
+using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
+using EnergeticProjectX.Models;
 using EnergeticProjectX.Properties;
 using MakingShipmentForm;
-using AddCategoryForm;
+using System.Diagnostics;
+using System.Globalization;
 using WarehousemanPanelForm;
-using EnergeticProjectX.Models;
-using EnergeticProjectX.Classes;
-using EditProductForms;
 
 namespace ProductCatalogForm
 {
@@ -24,8 +27,6 @@ namespace ProductCatalogForm
 
         private string? selectedArticle;
 
-        private readonly Dictionary<Guid, string> _unitMap = [];
-
         /// <summary>
         /// Конструктор для работы с каталогом товаров
         /// </summary>
@@ -36,16 +37,15 @@ namespace ProductCatalogForm
 
             this.userLogin = userLogin;
 
-            DataGridOfProducts.CellFormatting += DGVProductsCellFormatting!;
             DataGridOfProducts.CellDoubleClick += DGVProductsCellDoubleClick!;
             DataGridOfProducts.CellMouseEnter += DGVProductsCellMouseEnter!;
             DataGridOfProducts.CellMouseClick += DGVProductsCellMouseClick!;
             DataGridOfProducts.SelectionChanged += DGVProductsSelectionChanged!;
-            DataGridOfProducts.RowPrePaint += DGVProductsRowIsRed!;
+            DataGridOfProducts.CellFormatting += DGVProductsCellFormatting!;
 
-            var logins = db.Users.FirstOrDefault(u => u.Login == userLogin);
+            var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
 
-            if (logins != null && logins.UserRole == Resources.UserRoleAdminEng)
+            if (user != null && user.UserRole == UserRole.Administrator)
             {
                 ButtonOfAddCategory.Visible = true;
                 ButtonOfChangeCaterogies.Visible = true;
@@ -54,7 +54,7 @@ namespace ProductCatalogForm
                 panelSearch.Visible = true;
                 ButtonOfMakingShipment.Visible = false;
             }
-            else if (logins != null && logins.UserRole == Resources.UserRoleWarehousemanEng)
+            else if (user != null && user.UserRole == UserRole.Warehouseman)
             {
                 isWarehouseman = true;
                 ButtonOfAddCategory.Visible = false;
@@ -83,32 +83,61 @@ namespace ProductCatalogForm
         {
             try
             {
-                var units = db.Units.ToList();
-                _unitMap.Clear();
+                var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
+                if (user == null)
+                {
+                    MessageBox.Show(Resources.ErrorUserDataUpload, Resources.TitleError,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                foreach (var unit in units)
-                    _unitMap[unit.Unit_Id] = unit.Value?.ToString() ?? "—";
-
+                var currency = db.Currencies.FirstOrDefault(c => c.Currency_Id == user.CurrencyId);
+                if (currency == null)
+                {
+                    MessageBox.Show($"{Resources.UserCurrencyNotFound}\n{Resources.TryAgain}", Resources.TitleError,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
                 var query = db.Products.AsQueryable();
+                query = query.Where(p => p.Status == ProductStatus.Active);
 
                 if (!string.IsNullOrWhiteSpace(searchText))
                 {
                     string lower = searchText.ToLower().Trim();
-                    query = query.Where(product => product.Article.ToLower() == lower || product.Name.ToLower().Contains(lower) && product.Status == 1);
+                    query = query.Where(product => product.Article.Equals(lower, StringComparison.OrdinalIgnoreCase) ||
+                                                   product.Name.Contains(lower, StringComparison.OrdinalIgnoreCase));
                 }
 
-                var products = query
-                    .Select(u => new ProductDisplayModel
+                var productsLoaded = query
+                    .Select(p => new
                     {
-                        Article = u.Article,
-                        Name = u.Name,
-                        Category = u.Category.Name,
-                        PurchasePrice = u.PurchasePrice,
-                        StockQuantity = u.StockQuantity,
-                        UnitId = u.Category.Unit_Id
+                        p.Article,
+                        p.Name,
+                        CategoryName = p.Category!.Name,
+                        p.StockQuantity,
+                        UnitName = p.Category.Unit!.Name,
+                        p.SalePrice,
+                        p.DiscountDate
                     })
                     .ToList();
+
+                var products = productsLoaded.Select(p =>
+                {
+                    var priceInChosenCurrency = PriceCurrencyManager.SetPriceToChosenCurrency(db, p.SalePrice, userLogin);
+                    var formattedPrice = PriceCurrencyManager.PriceToCorrectFormat(db, priceInChosenCurrency, userLogin);
+
+                    return new ProductDisplayModel
+                    {
+                        Article = p.Article,
+                        Name = p.Name,
+                        Category = p.CategoryName,
+                        StockQuantity = p.StockQuantity,
+                        Unit = p.UnitName,
+                        SalePrice = formattedPrice,
+                        DiscountDate = DateOnly.FromDateTime(p.DiscountDate)
+                    };
+                }).ToList();
 
                 bindingSource.DataSource = products;
                 DataGridOfProducts.DataSource = bindingSource;
@@ -116,29 +145,40 @@ namespace ProductCatalogForm
 
                 if (!isWarehouseman)
                 {
-                    MessageBox.Show($"{Resources.HowMuchProductsUploaded}: {products.Count}",
+                    MessageBox.Show($"{Resources.HowMuchProductsUploaded} {products.Count}",
                                     Resources.TitleInformation, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                MessageBox.Show($"{Resources.ErrorUploadData} {ex.Message}", Resources.TitleError,
+                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}", Resources.TitleError,
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void DGVProductsRowIsRed(object sender, DataGridViewRowPrePaintEventArgs e)
+        private void DGVProductsCellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (DataGridOfProducts.Rows[e.RowIndex].DataBoundItem is ProductDisplayModel product)
+            if (e.RowIndex < 0 || DataGridOfProducts.Rows[e.RowIndex].DataBoundItem is not ProductDisplayModel product)
+                return;
+
+            string columnName = DataGridOfProducts.Columns[e.ColumnIndex].Name;
+
+            if (columnName == Resources.StockQuantityName)
+                if (product.StockQuantity < 5)
+                    e.CellStyle.BackColor = Color.LightCoral;
+
+            if (columnName == Resources.DiscountDateName)
             {
-                DataGridOfProducts.Rows[e.RowIndex].DefaultCellStyle.BackColor =
-                    product.StockQuantity < 5 ? Color.LightCoral : Color.White;
+                if (product.DiscountDate <= DateOnly.FromDateTime(DateTime.Today))
+                    e.CellStyle.BackColor = Color.LightSalmon;
+                else if (product.DiscountDate <= DateOnly.FromDateTime(DateTime.Today.AddDays(7)))
+                    e.CellStyle.BackColor = Color.LemonChiffon;
             }
-        }   
+        }
 
         private void DGVProductsSelectionChanged(object sender, EventArgs e)
         {
-            bool hasSelectedRow = DataGridOfProducts.SelectedRows.Count > 0;
+            var hasSelectedRow = DataGridOfProducts.SelectedRows.Count > 0;
 
             ButtonOfProductCard.Enabled = hasSelectedRow;
 
@@ -158,11 +198,11 @@ namespace ProductCatalogForm
             {
                 DataGridViewCell cell = DataGridOfProducts.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-                string cellValue = cell.Value?.ToString() ?? Resources.Empty;
+                var cellValue = cell.Value?.ToString() ?? Resources.Empty;
 
-                string columnName = DataGridOfProducts.Columns[e.ColumnIndex].HeaderText;
+                var columnName = DataGridOfProducts.Columns[e.ColumnIndex].HeaderText;
 
-                string tooltipText = $"{columnName}: {cellValue}";
+                var tooltipText = $"{columnName}: {cellValue}";
 
                 cell.ToolTipText = tooltipText;
             }
@@ -191,9 +231,8 @@ namespace ProductCatalogForm
             {
                 DataGridOfProducts.ClearSelection();
                 DataGridOfProducts.Rows[e.RowIndex].Selected = true;
-                var selectedProduct = bindingSource.Current as ProductDisplayModel;
 
-                if (selectedProduct != null)
+                if (bindingSource.Current is ProductDisplayModel selectedProduct)
                 {
                     selectedArticle = selectedProduct.Article;
                 }
@@ -203,16 +242,6 @@ namespace ProductCatalogForm
         private void ButtonOfSearch_Click(object sender, EventArgs e)
         {
             LoadProducts(textBoxSearch.Text.Trim());
-        }
-
-        private void DGVProductsCellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
-        {
-            var column = DataGridOfProducts.Columns[e.ColumnIndex];
-            if (column.Name == "Unit" && e.Value is Guid unitId)
-            {
-                e.Value = _unitMap.TryGetValue(unitId, out var unitText) ? unitText : "—";
-                e.FormattingApplied = true;
-            }
         }
 
         private void ButtonOfMainMenu_Click(object sender, EventArgs e)

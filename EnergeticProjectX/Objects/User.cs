@@ -1,61 +1,133 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EnergeticProjectX.Objects
 {
     /// <summary>
-    /// Создаётся пользователь
+    /// Класс, связанный с базой данных и описывающий пользователя системы.
     /// </summary>
-    [Table("Users")]
+    [Table("users")]
     public class User
     {
         /// <summary>
-        /// Уникальный внутренний ID записи
+        /// ID пользоваля.
         /// </summary>
         [Key]
-        [Column("Id")]
-        public Guid User_Id { get; set; }
+        [Column("id")]
+        public Guid User_Id { get; set; } = Guid.NewGuid();
 
         /// <summary>
-        /// Уникальный код пользователя (5 цифр)
+        /// Логин пользователя.
         /// </summary>
-        [Column("UserCode")]
-        public string? UserCode { get; set; }
-
-        /// <summary>
-        /// Логин пользователя для авторизации
-        /// </summary>
-        [Column("Login")]
+        [Column("login")]
+        [StringLength(50)]
+        [Required]
         public required string Login { get; set; }
 
         /// <summary>
-        /// Хешированный пароль
+        /// Хешированный пароль.
         /// </summary>
-        [Column("PasswordHash")]
+        [Column("password_hash")]
+        [StringLength(100)]
+        [Required]
         public required string Password { get; set; }
 
         /// <summary>
-        /// Фамилия пользователя
+        /// Роль пользователя в системе.
         /// </summary>
-        [Column("LastName")]
+        [Column("user_role")]
+        [StringLength(15)]
+        [Required]
+        public required UserRole UserRole { get; set; }
+
+        /// <summary>
+        /// Фамилия пользователя.
+        /// </summary>
+        [Column("last_name")]
+        [StringLength(15)]
+        [Required]
         public required string Surname { get; set; }
 
         /// <summary>
-        /// Имя пользователя
+        /// Имя пользователя.
         /// </summary>
-        [Column("FirstName")]
+        [Column("first_name")]
+        [StringLength(15)]
+        [Required]
         public required string Name { get; set; }
 
         /// <summary>
-        /// Отчество пользователя
+        /// Отчество пользователя.
         /// </summary>
-        [Column("Patronymic")]
+        [Column("patronymic")]
+        [StringLength(15)]
         public string? Patronymic { get; set; }
 
         /// <summary>
-        /// Роль пользователя в системе
+        /// Ссылка на выбранную пользователем валюту.
         /// </summary>
-        [Column("Role")]
-        public required string UserRole { get; set; }
+        [Column("currency_id")]
+        [ForeignKey(nameof(Currency))]
+        [Required]
+        public required Guid CurrencyId { get; set; }
+
+        /// <summary>
+        /// Навигационное свойство: выбранная валюта.
+        /// </summary>
+        public virtual Currency? Currency { get; set; }
+
+        /// <summary>
+        /// Проверка указанных данных на соответствие: пароль соответствует требованиям безопасности -
+        /// минимум 8 символов, наличие заглавной латинской буквы и цифры и совпадает с паролем для
+        /// подтверждения - повторным вводом пароля.
+        /// </summary>
+        /// <param name="password">Пароль от пользователя</param>
+        /// <param name="passwordConfirmation">Повторный ввод пароля от пользователя</param>
+        /// <returns>Подтверждение соответствия паролей и соответствие требования безопасности</returns>
+        public static (bool, bool) IsPasswordRelevant(string password, string passwordConfirmation)
+        {
+            var charPasswordArray = password.Trim().ToCharArray();
+
+            var hasDigit = false;
+            var hasCapitalLetter = false;
+
+            foreach (char symbol in charPasswordArray)
+            {
+                if (char.IsDigit(symbol))
+                    hasDigit = true;
+                else if (char.IsLetter(symbol) && char.IsUpper(symbol))
+                    hasCapitalLetter = true;
+
+                if (hasDigit && hasCapitalLetter)
+                    break;
+            }
+
+            return (password.Trim() == passwordConfirmation.Trim(),
+                   hasDigit && hasCapitalLetter && charPasswordArray.Length >= 8);
+        }
+
+        /// <summary>
+        /// Проверка указанных личных данных на соответствие: отсутствие цифр.
+        /// </summary>
+        /// <param name="inputData"></param>
+        /// <returns>При успешной проверке выводится строка с заглавным первым элементом и
+        /// строчными остальными, иначе - null</returns>
+        public static string? IsUserPersonalDataRelevant(string inputData)
+        {
+            if (string.IsNullOrWhiteSpace(inputData))
+                return null;
+
+            char[] charInputDataArray = inputData.Trim().ToCharArray();
+
+            foreach (char symbol in charInputDataArray)
+            {
+                if (!char.IsLetter(symbol))
+                    return null;
+            }
+
+            return char.ToUpper(inputData[0]) + inputData[1..].ToLower();
+        }
     }
 }

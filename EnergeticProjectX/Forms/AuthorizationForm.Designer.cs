@@ -31,9 +31,9 @@ namespace EnergeticProjectX
         {
             LabelOfAuthorization = new Label();
             LabelOfLogin = new Label();
-            textBoxForLogin = new TextBox();
+            TextBoxForLogin = new TextBox();
             LabelOfPassword = new Label();
-            textBoxOfPassword = new TextBox();
+            TextBoxOfPassword = new TextBox();
             ButtonOfInvolve = new Button();
             LabelOfRegistration = new Label();
             LabelOfRequiredFieldsInfo = new Label();
@@ -43,7 +43,7 @@ namespace EnergeticProjectX
             // 
             LabelOfAuthorization.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             LabelOfAuthorization.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfAuthorization.Location = new Point(286, 103);
+            LabelOfAuthorization.Location = new Point(306, 106);
             LabelOfAuthorization.Name = "LabelOfAuthorization";
             LabelOfAuthorization.Size = new Size(386, 63);
             LabelOfAuthorization.TabIndex = 0;
@@ -60,16 +60,16 @@ namespace EnergeticProjectX
             LabelOfLogin.Text = "Логин";
             LabelOfLogin.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // textBoxForLogin
+            // TextBoxForLogin
             // 
-            textBoxForLogin.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            textBoxForLogin.BackColor = Color.White;
-            textBoxForLogin.BorderStyle = BorderStyle.FixedSingle;
-            textBoxForLogin.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxForLogin.Location = new Point(363, 220);
-            textBoxForLogin.Name = "textBoxForLogin";
-            textBoxForLogin.Size = new Size(474, 55);
-            textBoxForLogin.TabIndex = 2;
+            TextBoxForLogin.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            TextBoxForLogin.BackColor = Color.White;
+            TextBoxForLogin.BorderStyle = BorderStyle.FixedSingle;
+            TextBoxForLogin.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxForLogin.Location = new Point(363, 220);
+            TextBoxForLogin.Name = "TextBoxForLogin";
+            TextBoxForLogin.Size = new Size(474, 55);
+            TextBoxForLogin.TabIndex = 2;
             // 
             // LabelOfPassword
             // 
@@ -81,16 +81,16 @@ namespace EnergeticProjectX
             LabelOfPassword.Text = "Пароль*";
             LabelOfPassword.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // textBoxOfPassword
+            // TextBoxOfPassword
             // 
-            textBoxOfPassword.BackColor = Color.White;
-            textBoxOfPassword.BorderStyle = BorderStyle.FixedSingle;
-            textBoxOfPassword.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfPassword.Location = new Point(363, 326);
-            textBoxOfPassword.Name = "textBoxOfPassword";
-            textBoxOfPassword.Size = new Size(474, 55);
-            textBoxOfPassword.TabIndex = 4;
-            textBoxOfPassword.UseSystemPasswordChar = true;
+            TextBoxOfPassword.BackColor = Color.White;
+            TextBoxOfPassword.BorderStyle = BorderStyle.FixedSingle;
+            TextBoxOfPassword.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfPassword.Location = new Point(363, 326);
+            TextBoxOfPassword.Name = "TextBoxOfPassword";
+            TextBoxOfPassword.Size = new Size(474, 55);
+            TextBoxOfPassword.TabIndex = 4;
+            TextBoxOfPassword.UseSystemPasswordChar = true;
             // 
             // ButtonOfInvolve
             // 
@@ -102,7 +102,7 @@ namespace EnergeticProjectX
             ButtonOfInvolve.FlatStyle = FlatStyle.Flat;
             ButtonOfInvolve.Font = new Font("Segoe UI", 22F, FontStyle.Bold, GraphicsUnit.Point, 204);
             ButtonOfInvolve.ForeColor = SystemColors.ControlText;
-            ButtonOfInvolve.Location = new Point(256, 511);
+            ButtonOfInvolve.Location = new Point(265, 511);
             ButtonOfInvolve.Name = "ButtonOfInvolve";
             ButtonOfInvolve.Size = new Size(437, 79);
             ButtonOfInvolve.TabIndex = 5;
@@ -114,7 +114,7 @@ namespace EnergeticProjectX
             // 
             LabelOfRegistration.AutoSize = true;
             LabelOfRegistration.Font = new Font("Segoe UI", 16F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 204);
-            LabelOfRegistration.Location = new Point(209, 421);
+            LabelOfRegistration.Location = new Point(215, 421);
             LabelOfRegistration.Name = "LabelOfRegistration";
             LabelOfRegistration.Size = new Size(565, 45);
             LabelOfRegistration.TabIndex = 6;
@@ -126,7 +126,7 @@ namespace EnergeticProjectX
             LabelOfRequiredFieldsInfo.AutoSize = true;
             LabelOfRequiredFieldsInfo.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
             LabelOfRequiredFieldsInfo.ForeColor = Color.DimGray;
-            LabelOfRequiredFieldsInfo.Location = new Point(256, 478);
+            LabelOfRequiredFieldsInfo.Location = new Point(265, 478);
             LabelOfRequiredFieldsInfo.Name = "LabelOfRequiredFieldsInfo";
             LabelOfRequiredFieldsInfo.Size = new Size(276, 30);
             LabelOfRequiredFieldsInfo.TabIndex = 7;
@@ -141,9 +141,9 @@ namespace EnergeticProjectX
             Controls.Add(LabelOfRequiredFieldsInfo);
             Controls.Add(LabelOfRegistration);
             Controls.Add(ButtonOfInvolve);
-            Controls.Add(textBoxOfPassword);
+            Controls.Add(TextBoxOfPassword);
             Controls.Add(LabelOfPassword);
-            Controls.Add(textBoxForLogin);
+            Controls.Add(TextBoxForLogin);
             Controls.Add(LabelOfLogin);
             Controls.Add(LabelOfAuthorization);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -159,9 +159,9 @@ namespace EnergeticProjectX
 
         private Label LabelOfAuthorization;
         private Label LabelOfLogin;
-        private TextBox textBoxForLogin;
+        private TextBox TextBoxForLogin;
         private Label LabelOfPassword;
-        private TextBox textBoxOfPassword;
+        private TextBox TextBoxOfPassword;
         private Button ButtonOfInvolve;
         private Label LabelOfRegistration;
         private Label LabelOfRequiredFieldsInfo;

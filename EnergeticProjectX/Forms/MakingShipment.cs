@@ -10,9 +10,9 @@ namespace MakingShipmentForm
     /// </summary>
     public partial class MakingShipment : Form
     {
-        readonly ApplicationContextDB db = new();
+        private readonly ApplicationContextDB db = new();
 
-        readonly string userLogin;
+        private readonly string userLogin;
 
         private readonly List<ShipmentItemRow> shipmentItems = [];
 
@@ -25,12 +25,8 @@ namespace MakingShipmentForm
 
             this.userLogin = userLogin;
 
-            dataGridOfItems.EnableHeadersVisualStyles = false;
-
             LoadClients();
             LoadProducts();
-
-            buttonMakeShipment.Enabled = false;
         }
 
         private void LoadClients()
@@ -39,9 +35,9 @@ namespace MakingShipmentForm
                 .Select(c => new ClientComboItem { Client_Id = c.Client_Id, Display = c.Name })
                 .ToList();
 
-            comboBoxRecipient.DataSource = clients;
-            comboBoxRecipient.DisplayMember = Resources.RecipientDisplayMember;
-            comboBoxRecipient.ValueMember = Resources.RecipientValueMember;
+            ComboBoxRecipient.DataSource = clients;
+            ComboBoxRecipient.DisplayMember = Resources.RecipientDisplayMember;
+            ComboBoxRecipient.ValueMember = Resources.RecipientValueMember;
         }
 
         private void LoadProducts()
@@ -51,26 +47,25 @@ namespace MakingShipmentForm
                 {
                     Article = p.Article,
                     Display = $"{p.Article} – {p.Name}",
-                    StockQuantity = p.StockQuantity,
-                    PurchasePrice = p.PurchasePrice
+                    StockQuantity = p.StockQuantity
                 })
                 .ToList();
 
-            comboBoxProduct.DataSource = products;
-            comboBoxProduct.DisplayMember = Resources.ProductDisplayMember;
-            comboBoxProduct.ValueMember = Resources.ProductValueMember;
+            ComboBoxProduct.DataSource = products;
+            ComboBoxProduct.DisplayMember = Resources.ProductDisplayMember;
+            ComboBoxProduct.ValueMember = Resources.ProductValueMember;
         }
 
-        private void buttonAddProduct_Click(object sender, EventArgs e)
+        private void ButtonAddProduct_Click(object sender, EventArgs e)
         {
-            if (comboBoxRecipient.SelectedValue == null || comboBoxProduct.SelectedValue == null)
+            if (ComboBoxRecipient.SelectedValue == null || ComboBoxProduct.SelectedValue == null)
             {
                 MessageBox.Show(Resources.FillRequiredFields,
                     Resources.TitleWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string article = comboBoxProduct.SelectedValue.ToString()!;
+            string article = ComboBoxProduct.SelectedValue.ToString()!;
             var product = db.Products.FirstOrDefault(p => p.Article == article);
 
             if (product == null)
@@ -78,7 +73,7 @@ namespace MakingShipmentForm
                 return;
             }
 
-            int quantity = (int)numericQuantity.Value;
+            int quantity = (int)NumericQuantity.Value;
 
             int alreadyAdded = shipmentItems
                 .Where(i => i.Article == article)
@@ -92,7 +87,7 @@ namespace MakingShipmentForm
                 return;
             }
 
-            Guid clientId = Guid.Parse(comboBoxRecipient.SelectedValue.ToString()!);
+            Guid clientId = Guid.Parse(ComboBoxRecipient.SelectedValue.ToString()!);
 
             
             string clientName = db.Clients
@@ -105,17 +100,17 @@ namespace MakingShipmentForm
                 Quantity = quantity,
                 ClientId = clientId,
                 ClientName = clientName,
-                PriceSnapshot = product.PurchasePrice
+                PriceSnapshot = product.PurchasePrice.ToString()
             });
 
             RefreshItemsGrid();
-            buttonMakeShipment.Enabled = true;
+            ButtonOfMakingShipment.Enabled = true;
         }
 
         private void RefreshItemsGrid()
         {
-            dataGridOfItems.DataSource = null;
-            dataGridOfItems.DataSource = shipmentItems
+            DataGridOfItems.DataSource = null;
+            DataGridOfItems.DataSource = shipmentItems
                 .Select(i => new
                 {
                     Артикул = i.Article,
@@ -126,7 +121,7 @@ namespace MakingShipmentForm
                 .ToList();
         }
 
-        private void buttonMakeShipment_Click(object sender, EventArgs e)
+        private void ButtonMakeShipment_Click(object sender, EventArgs e)
         {
             try
             {
@@ -134,8 +129,9 @@ namespace MakingShipmentForm
 
                 if (user == null)
                 {
-                    MessageBox.Show(Resources.UserNotFound,
-                        Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(Resources.UserNotFound, Resources.TitleError,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                     return;
                 }
 
@@ -143,10 +139,11 @@ namespace MakingShipmentForm
 
                 var shipment = new Shipment
                 {
-                    Date = DateTime.Now,
+                    CreationDate = DateTime.Now,
                     Client_Id = clientId,
                     User_Id = user.User_Id
                 };
+
                 db.Shipments.Add(shipment);
 
                 foreach (var item in shipmentItems)
@@ -157,37 +154,37 @@ namespace MakingShipmentForm
                     {
                         Shipment_Id = shipment.Shipment_Id,
                         Product_Id = product.Product_Id,
-                        PriceSnapshot = item.PriceSnapshot,
+                        FixedSalePrice = decimal.Parse(item.PriceSnapshot!),
                         Quantity = item.Quantity
                     });
 
                     product.StockQuantity -= item.Quantity;
                 }
 
-                db.SaveChanges();
+                if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                    return;
 
-                MessageBox.Show(
-                    $"{Resources.ShipmentSuccessfullyProcessed}\nДата: {shipment.Date:dd.MM.yy}",
-                    Resources.TitleSuccess, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"{Resources.ShipmentSuccessfullyProcessed}\nДата: {shipment.CreationDate:dd.MM.yy}",
+                                Resources.TitleSuccess, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                this.Hide();
+                Hide();
                 var warehousemanPanel = new WarehousemanPanel(userLogin);
                 warehousemanPanel.ShowDialog();
-                this.Close();
+                Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"{Resources.ErrorSave} {ex.Message}",
-                    Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{Resources.ErrorSave}", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void ButtonCancel_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Hide();
             var warehousemanPanel = new WarehousemanPanel(userLogin);
             warehousemanPanel.ShowDialog();
-            this.Close();
+            Close();
         }
     }
 

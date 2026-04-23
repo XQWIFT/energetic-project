@@ -45,6 +45,7 @@
             Supplies = new Label();
             ButtonOfSupply = new Button();
             ButtonOfSettings = new Button();
+            label1 = new Label();
             SuspendLayout();
             // 
             // labelOfCompanyName
@@ -206,7 +207,7 @@
             // 
             LabelOfFullName.AutoSize = true;
             LabelOfFullName.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfFullName.Location = new Point(58, 133);
+            LabelOfFullName.Location = new Point(58, 130);
             LabelOfFullName.Name = "LabelOfFullName";
             LabelOfFullName.Size = new Size(0, 45);
             LabelOfFullName.TabIndex = 13;
@@ -261,6 +262,16 @@
             ButtonOfSettings.Text = "Настройки";
             ButtonOfSettings.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label1.Location = new Point(307, 76);
+            label1.Name = "label1";
+            label1.Size = new Size(271, 45);
+            label1.TabIndex = 2;
+            label1.Text = "Администратор";
+            // 
             // AdministratorPanel
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -281,6 +292,7 @@
             Controls.Add(ButtonOfChangePassword);
             Controls.Add(ButtonListOfUsers);
             Controls.Add(labelOfUserControls);
+            Controls.Add(label1);
             Controls.Add(labelOfRole);
             Controls.Add(labelOfLoginAs);
             Controls.Add(labelOfCompanyName);
@@ -311,6 +323,7 @@
         private Label Supplies;
         private Button ButtonOfSupply;
         private Button ButtonOfSettings;
+        private Label label1;
     }
 
         #endregion

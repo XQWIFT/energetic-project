@@ -3,50 +3,56 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EnergeticProjectX.Objects
 {
-    [Table("ShipmentItems")]
+    /// <summary>
+    /// Класс, связанный с базой данных и описывающий товар в отгрузке.
+    /// </summary>
+    [Table("shipment_items")]
     public class ShipmentItems
     {
         /// <summary>
-        /// Уникальный ID отгрузки
+        /// ID предмета отгрузки.
         /// </summary>
         [Key]
-        [Column("Id")]
+        [Column("id")]
         public Guid ShipmentItem_Id { get; set; } = Guid.NewGuid();
 
         /// <summary>
-        /// Ссылка на родительскую (связанную) отгрузку
+        /// Ссылка на связанную отгрузку.
         /// </summary>
+        [Column("shipment_id")]
         [ForeignKey(nameof(Shipment))]
-        [Column("ShipmentId")]
         public Guid Shipment_Id { get; set; }
 
         /// <summary>
         /// Навигационное свойство: отгрузка
         /// </summary>
-        public Shipment? Shipment { get; set; }
+        public virtual Shipment? Shipment { get; set; }
 
         /// <summary>
-        /// Ссылка на родительскую (связанную) отгрузку
+        /// Ссылка на отгруженный товар.
         /// </summary>
+        [Column("product_id")]
         [ForeignKey(nameof(Product))]
-        [Column("ProductId")]
         public Guid Product_Id { get; set; }
 
         /// <summary>
-        /// Навигационное свойство: товар
+        /// Навигационное свойство: товар.
         /// </summary>
-        public Product? Product { get; set; }
+        public virtual Product? Product { get; set; }
 
         /// <summary>
-        /// Количество отгруженного товара
+        /// Количество отгруженного товара.
         /// </summary>
-        [Column("Quantity")]
+        [Column("quantity")]
+        [Range(1, int.MaxValue)]
         public int Quantity { get; set; }
 
         /// <summary>
-        /// Цена товара на момент отгрузки (снимок цены) 
+        /// Цена товара на момент отгрузки.
         /// </summary>
-        [Column("PriceSnapshot")]
-        public string? PriceSnapshot { get; set; }
+        [Column("sale_price", TypeName = "decimal(10,2)")]
+        [Range(0.01, double.MaxValue)]
+        [Required]
+        public required decimal FixedSalePrice { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using EnergeticProjectX.Classes;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
+using EnergeticProjectX.Enums;
 using ListOfClientsForm;
-using System.Text.RegularExpressions;
 
 namespace AddClientForm
 {
@@ -11,9 +11,9 @@ namespace AddClientForm
     /// </summary>
     public partial class AddClient : Form
     {
-        readonly ApplicationContextDB db = new();
+        private readonly ApplicationContextDB db = new();
 
-        readonly string userLogin;
+        private readonly string userLogin;
 
         /// <summary>
         /// Конструктор добавления нового клиента
@@ -25,104 +25,63 @@ namespace AddClientForm
 
             this.userLogin = userLogin;
 
-            textBoxOfName.TextChanged += TextBox_TextChanged!;
-            comboBoxOfContractor.TextChanged += TextBox_TextChanged!;
-            textBoxOfINN.TextChanged += TextBox_TextChanged!;
+            TextBoxOfName.TextChanged += TextBox_TextChanged!;
+            ComboBoxOfContractor.TextChanged += TextBox_TextChanged!;
+            TextBoxOfINN.TextChanged += TextBox_TextChanged!;
         }
 
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
-            bool allFieldsFilled = !string.IsNullOrWhiteSpace(textBoxOfName.Text) &&
-                                   !string.IsNullOrWhiteSpace(comboBoxOfContractor.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxOfINN.Text);
+            var allFieldsFilled = !string.IsNullOrWhiteSpace(TextBoxOfName.Text) &&
+                                  !string.IsNullOrWhiteSpace(ComboBoxOfContractor.Text) &&
+                                  !string.IsNullOrWhiteSpace(TextBoxOfINN.Text);
 
             ButtonOfAddClient.Enabled = allFieldsFilled;
         }
 
-        /// <summary>
-        /// Валидация вводимого пользователем ИНН
-        /// </summary>
-        /// <param name="iNN">Идентификационный номер нового клиента</param>
-        /// <param name="contractorType">Контрагент</param>
-        /// <returns>Подтверждение валидации</returns>
-        public static bool ValidateINN(string iNN, string contractorType)
+        private void ButtonOfAddClient_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(iNN))
-                return false;
+            var name = TextBoxOfName.Text;
+            var contractor = ComboBoxOfContractor.Text;
+            var iNN = TextBoxOfINN.Text.Trim();
+            var contactInfo = TextBoxOfContactInfo.Text;
 
-            iNN = iNN.Replace(" ", "");
+            if (!Client.ValidateINN(iNN, contractor))
+            {
+                MessageBox.Show(Client.GetINNErrorMessage(contractor), Resources.ErrorValidation,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-#pragma warning disable SYSLIB1045 // Преобразовать в "GeneratedRegexAttribute".
-            if (!Regex.IsMatch(iNN, @"^\d+$"))
-                return false;
-#pragma warning restore SYSLIB1045 // Преобразовать в "GeneratedRegexAttribute".
+                return;
+            }
 
-            if (contractorType == Resources.ClientContractorLegalEntity)
-                return iNN.Length == 10;
-            else if (contractorType == Resources.ClientContractorPhysicalPerson ||
-                     contractorType == Resources.ClientContractorIndEntrepreneur)
-                return iNN.Length == 12;
+            if (db.Clients.Any(u => u.INN == iNN))
+            {
+                MessageBox.Show($"{Resources.INNAlreadyInDB}\n{Resources.TryAgain}", Resources.TitleWarning,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            return false;
-        }
+                return;
+            }
 
-        private static string GetINNErrorMessage(string contractorType)
-        {
-            if (contractorType == Resources.ClientContractorLegalEntity)
-                return Resources.INNRequirementsTenDigits;
-            else if (contractorType == Resources.ClientContractorPhysicalPerson ||
-                     contractorType == Resources.ClientContractorIndEntrepreneur)
-                return Resources.INNRequirementsTwelveDigits;
-            else
-                return Resources.INNFormatError;
-        }
+            var client = new Client
+            {
+                Name = name,
+                Contractor = (Contractors)EnumMethod.ParseDescriptionOfPotentialContractorsValue(contractor)!,
+                INN = iNN,
+                ContactInfo = contactInfo
+            };
 
-        private void ButtonOfCancel_Click(object sender, EventArgs e)
-        {
+            db.Clients.Add(client);
+            if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                return;
+
             Hide();
             var listOfClients = new ListOfClients(userLogin);
             listOfClients.ShowDialog();
             Close();
         }
 
-        private void ButtonOfAddClient_Click(object sender, EventArgs e)
+        private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            var name = textBoxOfName.Text;
-            var contractor = comboBoxOfContractor.Text;
-            var iNN = textBoxOfINN.Text;
-            var contactInfo = textBoxOfContactInfo.Text;
-
-            if (!ValidateINN(iNN, contractor))
-            {
-                MessageBox.Show(GetINNErrorMessage(contractor), Resources.ErrorValidation,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            var client = new Client
-            {
-                Client_Id = Guid.NewGuid(),
-                ClientCode = GenerateUniqueCode.GenerateUniqueClientCode(db),
-                Name = name,
-                Contractor = contractor,
-                INN = iNN,
-                ContactInfo = contactInfo
-            };
-
-            try
-            {
-                db.Clients.Add(client);
-                db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{Resources.UniversalErrorBD}\n{Resources.TryAgain}\n\n" +
-                                $"Текст ошибки: {ex.Message}", Resources.TitleErrorBD,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return;
-            }
-
             Hide();
             var listOfClients = new ListOfClients(userLogin);
             listOfClients.ShowDialog();

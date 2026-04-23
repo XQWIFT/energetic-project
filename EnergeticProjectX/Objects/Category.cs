@@ -1,80 +1,51 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics;
 using EnergeticProjectX.Classes;
+using EnergeticProjectX.Properties;
+using EnergeticProjectX.Enums;
 
 namespace EnergeticProjectX.Objects
 {
     /// <summary>
-    /// Создаётся категория
+    /// Класс, связанный с базой данных и описывающий категорию товара.
     /// </summary>
-    [Table("Categories")]
+    [Table("categories")]
     public class Category
     {
         /// <summary>
-        /// Уникальный ID категории
+        /// ID категории.
         /// </summary>
         [Key]
-        [Column("Id")]
-        public Guid Category_Id { get; set; }
+        [Column("id")]
+        public Guid Category_Id { get; set; } = Guid.NewGuid();
 
         /// <summary>
-        /// Название категории (например, «Ноутбуки», «Смартфоны»)
+        /// Название категории. Например, «Ноутбуки», «Смартфоны».
         /// </summary>
-        [Column("Name")]
+        [Column("name")]
+        [StringLength(25)]
+        [Required]
         public required string Name { get; set; }
 
         /// <summary>
-        /// Статус категории (0 - категория скрыта или удалена пользователем; 1 - отображается). 
-        /// Однако если не существует товара, за которым закрепляется категория
-        /// и при этом она скрыта, то данная категория удаляется безвозвратно
+        /// Статус категории: Active - категория активна, Hidden - категория удалена
+        /// пользователем и скрыта для использования. Если не существует товара, за
+        /// которым закрепляется категория и при этом она скрыта, то данная категория
+        /// удаляется безвозвратно.
         /// </summary>
-        [Column("Status")]
-        public int Status { get; set; }
+        [Column("status")]
+        public CategoryStatus Status { get; set; } = CategoryStatus.Active;
 
         /// <summary>
-        /// Ссылка на единицу измерения
+        /// ID закреплённой единицы измерения.
         /// </summary>
+        [Column("unit_id")]
         [ForeignKey(nameof(Unit))]
-        [Column("UnitId")]
         public Guid Unit_Id { get; set; }
 
         /// <summary>
-        /// Навигационное свойство: единица измерения
+        /// Навигационное свойство: единица измерения.
         /// </summary>
         public virtual Unit? Unit { get; set; }
-
-        /// <summary>
-        /// Метод для удаления скрытых категорий, за которыми не закреплено ни одного товара
-        /// </summary>
-        /// <param name="db"></param>
-        public static void DeleteHiddenCategories(ApplicationContextDB db)
-        {
-            var hiddenCategories = db.Categories.Where(u => u.Status == 0).ToList();
-
-            foreach (var hiddenCategory in hiddenCategories)
-            {
-                bool hasProducts = db.Products.Any(product => product.CategoryId == hiddenCategory.Category_Id);
-
-                if (!hasProducts)
-                    db.Categories.Remove(hiddenCategory);
-
-                // Также потенциальная реализация:
-                //var productsRelatedToHiddenCategory = db.Products.Where
-                //    (u => u.CategoryId == hiddenCategory.Category_Id).ToList();
-
-                //if (productsRelatedToHiddenCategory.Count == 0)
-                //    db.Categories.Remove(hiddenCategory);
-            }
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Ошибка очистки скрытых категорий: {ex}");
-            }
-        }
     }
 }

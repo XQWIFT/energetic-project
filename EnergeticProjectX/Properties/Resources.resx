@@ -139,7 +139,7 @@
     <value>Ошибка загрузки категорий.</value>
   </data>
   <data name="ErrorSaveCategory" xml:space="preserve">
-    <value>Ошибка при сохранении категории</value>
+    <value>Ошибка сохранения категории.</value>
   </data>
   <data name="ErrorUnitUpload" xml:space="preserve">
     <value>Ошибка загрузки единиц измерения.</value>
@@ -154,7 +154,7 @@
     <value>Вы вошли в аккаунт</value>
   </data>
   <data name="UnitNotFound" xml:space="preserve">
-    <value>Единица измерения не найдена!</value>
+    <value>Единица измерения для соответствующей категории не найдена.</value>
   </data>
   <data name="ChooseEditCategoryAndNewUnit" xml:space="preserve">
     <value>Выберите категорию и/или новую единицу измерения для дальнейшего редактирования</value>
@@ -193,25 +193,16 @@
     <value>Некорректная цена</value>
   </data>
   <data name="UnitDisplayMember" xml:space="preserve">
-    <value>Value</value>
+    <value>Name</value>
   </data>
   <data name="UnitValueMember" xml:space="preserve">
     <value>Unit_Id</value>
   </data>
-  <data name="UserRoleAdmin" xml:space="preserve">
-    <value>Администратор</value>
-  </data>
-  <data name="UserRoleWarehouseman" xml:space="preserve">
-    <value>Кладовщик</value>
-  </data>
   <data name="AskForDeleteCategory" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить категорию</value>
+    <value>Вы уверены, что хотите удалить категорию:</value>
   </data>
   <data name="ConfirmationDelete" xml:space="preserve">
     <value>Подтверждение удаления</value>
-  </data>
-  <data name="AlertOfDeleteCategory" xml:space="preserve">
-    <value>ВНИМАНИЕ: Если у этой категории есть товары, они могут быть удалены или остаться без категории!</value>
   </data>
   <data name="UncorrectIDClient" xml:space="preserve">
     <value>Неверный ID клиента!</value>
@@ -241,7 +232,7 @@
     <value>Информация</value>
   </data>
   <data name="HowMuchClientsUploaded" xml:space="preserve">
-    <value>Клиентов загружено:</value>
+    <value>Клиентов загружено</value>
   </data>
   <data name="Empty" xml:space="preserve">
     <value>пусто</value>
@@ -298,7 +289,7 @@
     <value>Товар успешно удален!</value>
   </data>
   <data name="AskForDeleteProduct" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить этот товар?</value>
+    <value>Вы уверены, что хотите удалить товар:</value>
   </data>
   <data name="InventNewPassword" xml:space="preserve">
     <value>Пожалуйста, придумайте новый пароль.</value>
@@ -334,7 +325,7 @@
     <value>Подтверждение</value>
   </data>
   <data name="ErrorClientDelete" xml:space="preserve">
-    <value>Не удалось удалить данные, так как они необходимы для отгрузки.</value>
+    <value>Не удалось удалить данные клиента, так как они необходимы для учёта совершённых отгрузок.</value>
   </data>
   <data name="ErrorClientSaveChanges" xml:space="preserve">
     <value>Не удалось сохранить изменения.</value>
@@ -354,12 +345,6 @@
   <data name="MaxNumberOfUsers" xml:space="preserve">
     <value>Ошибка назначения уникального клиентского кода! Превышено допустимое число пользователей.</value>
   </data>
-  <data name="UserRoleAdminEng" xml:space="preserve">
-    <value>Admin</value>
-  </data>
-  <data name="UserRoleWarehousemanEng" xml:space="preserve">
-    <value>Warehouseman</value>
-  </data>
   <data name="MaxNumberOfClients" xml:space="preserve">
     <value>Ошибка создания уникального клиентского кода! Превышено допустимое число клиентов.</value>
   </data>
@@ -367,10 +352,10 @@
     <value>Ошибка создания артикула для товара! Превышено допустимое число товара.</value>
   </data>
   <data name="INNRequirementsTenDigits" xml:space="preserve">
-    <value>Идентификационный номер Юр. лица должен содержать 10 символов.</value>
+    <value>Идентификационный номер юридического лица должен быть представлен комбинацией из 10 цифр.</value>
   </data>
   <data name="INNRequirementsTwelveDigits" xml:space="preserve">
-    <value>ИНН Физ. лица или ИП должен содержать 12 цифр.</value>
+    <value>Идентификационный номер физического лица лица или ИП должен быть представлен комбинацией из 12 цифр.</value>
   </data>
   <data name="INNFormatError" xml:space="preserve">
     <value>Неверный формат данных для ИНН.</value>
@@ -389,5 +374,89 @@
   </data>
   <data name="ErrorUserDataUpload" xml:space="preserve">
     <value>Ошибка загрузки данных текущего пользователя.</value>
+  </data>
+  <data name="WaitingToEnterThePrice" xml:space="preserve">
+    <value>Ожидается закупочная цена товара. Пожалуйста, введите закупочную цену.</value>
+  </data>
+  <data name="IncorrectPurchasePrice" xml:space="preserve">
+    <value>Закупочная цена должна быть числом!</value>
+  </data>
+  <data name="PurchasePriceIsNegative" xml:space="preserve">
+    <value>Закупочная цена должна быть положительным числом!</value>
+  </data>
+  <data name="SureWantToDeleteClient" xml:space="preserve">
+    <value>Вы действительно хотите удалить клиента:</value>
+  </data>
+  <data name="CleanUpHiddenProductsError" xml:space="preserve">
+    <value>Ошибка очистки скрытого товара:</value>
+  </data>
+  <data name="CleanUpHiddenCategoriesError" xml:space="preserve">
+    <value>Ошибка очистки скрытых категорий</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>ФИО</value>
+  </data>
+  <data name="ErrorDefaultCurrencyUpload" xml:space="preserve">
+    <value>Ошибка назначения валюты по умолчанию.</value>
+  </data>
+  <data name="InputPersonalDataIrrelevant" xml:space="preserve">
+    <value>Личные данные должны содержать только буквы. </value>
+  </data>
+  <data name="INNAlreadyInDB" xml:space="preserve">
+    <value>Данный ИНН уже соответствует другому клиенту.</value>
+  </data>
+  <data name="StockQuantityName" xml:space="preserve">
+    <value>StockQuantity</value>
+  </data>
+  <data name="DiscountDateName" xml:space="preserve">
+    <value>DiscountDate</value>
+  </data>
+  <data name="NewCategoryNameExists" xml:space="preserve">
+    <value>Данная категория уже существует.</value>
+  </data>
+  <data name="CategoryGetIdError" xml:space="preserve">
+    <value>Ошибка получения данных о выбранной категории.</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Товар</value>
+  </data>
+  <data name="AddProductSuccess" xml:space="preserve">
+    <value>успешно добавлен! Данные</value>
+  </data>
+  <data name="CreationData" xml:space="preserve">
+    <value>Дата добавления</value>
+  </data>
+  <data name="DiscountDate" xml:space="preserve">
+    <value>Снижение цены</value>
+  </data>
+  <data name="StockQuantityByDefault" xml:space="preserve">
+    <value>Текущий остаток: 0 (по умолчанию)</value>
+  </data>
+  <data name="PurchasePrice" xml:space="preserve">
+    <value>Закупочная цена</value>
+  </data>
+  <data name="SalePrice" xml:space="preserve">
+    <value>Цена продажи</value>
+  </data>
+  <data name="RUB" xml:space="preserve">
+    <value>RUB</value>
+  </data>
+  <data name="ConnectionToDataBaseFailed" xml:space="preserve">
+    <value>Не удалось подключиться к базе данных. Пожалуйста, проверьте настройки подключения.</value>
+  </data>
+  <data name="ConsequencesIfDeleteClient" xml:space="preserve">
+    <value>Если данному клиенту недавно были совершены отгрузки товаров, удалить данные не получится!</value>
+  </data>
+  <data name="NewCategoryExists" xml:space="preserve">
+    <value>Категория, которую Вы хотите добавить, уже существует.</value>
+  </data>
+  <data name="SureWantToSaveCategoryChange" xml:space="preserve">
+    <value>Вы действительно хотите сохранить данные изменения?</value>
+  </data>
+  <data name="ConsequencesSaveCategoryChange" xml:space="preserve">
+    <value>При сохранении изменений данная категория изменится у всех товаров этой категории!</value>
+  </data>
+  <data name="UserCurrencyNotFound" xml:space="preserve">
+    <value>Валюта пользователя не найдена.</value>
   </data>
 </root>

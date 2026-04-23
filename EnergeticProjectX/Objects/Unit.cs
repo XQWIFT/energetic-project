@@ -4,22 +4,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EnergeticProjectX.Objects
 {
     /// <summary>
-    /// Создаётся единица измерения
+    /// Класс, связанный с базой данных и описывающий единицу измерения товара.
     /// </summary>
-    [Table("Units")]
+    [Table("units")]
     public class Unit
     {
         /// <summary>
-        /// ID единицы измерения
+        /// ID единицы измерения.
         /// </summary>
         [Key]
-        [Column("Id")]
-        public Guid Unit_Id { get; set; }
+        [Column("id")]
+        public Guid Unit_Id { get; set; } = Guid.NewGuid();
 
         /// <summary>
-        /// Значение измерения
+        /// Название единицы измерения.
         /// </summary>
-        [Column("Value")]
-        public required string Value { get; set; }
+        [Column("name")]
+        [StringLength(10)]
+        [Required]
+        public required string Name { get; set; }
     }
 }

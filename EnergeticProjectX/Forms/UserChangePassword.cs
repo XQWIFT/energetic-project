@@ -1,6 +1,7 @@
 ﻿using AdministratorPanelForm;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Properties;
+using EnergeticProjectX.Enums;
 using WarehousemanPanelForm;
 
 namespace UserChangePasswordForm
@@ -23,38 +24,38 @@ namespace UserChangePasswordForm
         {
             InitializeComponent();
 
+            this.userLogin = userLogin;
+
             textBoxForOldPassword.TextChanged += IsTextChanged!;
             textBoxForNewPassword.TextChanged += IsTextChanged!;
             textBoxOfConfirmation.TextChanged += IsTextChanged!;
-
-            this.userLogin = userLogin;
         }
 
         private void ButtonOfSaveInfo_Click(object sender, EventArgs e)
-        {
-            ChangePassword();
-        }
-
-        private void ButtonOfCancel_Click(object sender, EventArgs e)
-        {
-            ReturnToTheMainMenu(sender, e);
-        }
-
-        private void IsTextChanged(object sender, EventArgs e)
-        {
-            bool allFieldsFilled = !string.IsNullOrWhiteSpace(textBoxForOldPassword.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxForNewPassword.Text) &&
-                                   !string.IsNullOrEmpty(textBoxOfConfirmation.Text);
-
-            ButtonOfSaveInfo.Enabled = allFieldsFilled;
-        }
-
-        private void ChangePassword()
         {
             var oldPassword = textBoxForOldPassword.Text.Trim();
             var newPassword = textBoxForNewPassword.Text.Trim();
             var confirmationPassword = textBoxOfConfirmation.Text.Trim();
 
+            ChangePassword(oldPassword, newPassword, confirmationPassword);
+        }
+
+        private void ButtonOfCancel_Click(object sender, EventArgs e)
+        {
+            ReturnToTheMainMenu(userLogin);
+        }
+
+        private void IsTextChanged(object sender, EventArgs e)
+        {
+            var allFieldsFilled = !string.IsNullOrWhiteSpace(textBoxForOldPassword.Text) &&
+                                  !string.IsNullOrWhiteSpace(textBoxForNewPassword.Text) &&
+                                  !string.IsNullOrEmpty(textBoxOfConfirmation.Text);
+
+            ButtonOfSaveInfo.Enabled = allFieldsFilled;
+        }
+
+        private void ChangePassword(string oldPassword, string newPassword, string confirmationPassword)
+        {
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
 
             (var loginAndPasswordValid, var messageOfError) = IsAllPasswordsValid(oldPassword,
@@ -62,31 +63,22 @@ namespace UserChangePasswordForm
 
             if (loginAndPasswordValid)
             {
-                user!.Password = bc.PasswordHash(newPassword);
+                user!.Password = BCryptRealization.PasswordHash(newPassword);
 
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{Resources.UniversalErrorBD}\n{Resources.TryAgain}\n\n" +
-                                    $"Текст ошибки: {ex}", Resources.TitleErrorBD,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
                     return;
-                }
+
                 MessageBox.Show(Resources.ChangePasswordEvent, Resources.TitleAlert,
                                             MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                if (user.UserRole == Resources.UserRoleAdminEng)
+                if (user.UserRole == UserRole.Administrator)
                 {
                     Hide();
                     var administratorPanel = new AdministratorPanel(userLogin);
                     administratorPanel.ShowDialog();
                     Close();
                 }
-                else if (user.UserRole == Resources.UserRoleWarehousemanEng)
+                else if (user.UserRole == UserRole.Warehouseman)
                 {
                     Hide();
                     var warehousemanPanel = new WarehousemanPanel(userLogin);
@@ -141,7 +133,7 @@ namespace UserChangePasswordForm
 
         /// <summary>
         /// Проверка на авторизованного пользователя, на корректность ввода старого пароля, нового и повторного
-        /// пароля, на совпадение старого и нового паролей - Валидация.
+        /// пароля, на совпадение старого и нового паролей.
         /// </summary>
         /// <param name="oldPassword">Старый пароль</param>
         /// <param name="newPassword">Новый пароль</param>
@@ -155,7 +147,7 @@ namespace UserChangePasswordForm
             if (user == null)
                 return (false, Resources.UserNotFound);
 
-            if (!bc.CheckPassword(oldPassword, user.Password))
+            if (!BCryptRealization.CheckPassword(oldPassword, user.Password))
                 return (false, Resources.IncorrectOldPassword);
 
             if (newPassword != confirmationPassword)
@@ -175,15 +167,15 @@ namespace UserChangePasswordForm
         /// и одна заглавная латинская буква.
         /// </summary>
         /// <param name="newPassword">Новый пароль</param>
-        /// <returns></returns>
+        /// <returns>Подтверждение соответствия требованиям</returns>
         public static bool IsNewPasswordSatisfyRequirements(string newPassword)
         {
             if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 8)
                 return false;
 
             char[] symbolsInOldPassword = newPassword.ToCharArray();
-            bool hasDigit = false;
-            bool hasCapitalLetter = false;
+            var hasDigit = false;
+            var hasCapitalLetter = false;
             foreach (char symbol in  symbolsInOldPassword)
             {
                 if (char.IsDigit(symbol))
@@ -193,11 +185,12 @@ namespace UserChangePasswordForm
                         hasCapitalLetter = true;
             }
 
-            bool hasAtLeastEightSymbols = symbolsInOldPassword.Length >= 8;
+            var hasAtLeastEightSymbols = symbolsInOldPassword.Length >= 8;
 
             return hasDigit && hasCapitalLetter && hasAtLeastEightSymbols;
         }
-        private void ReturnToTheMainMenu(object sender, EventArgs e)
+
+        private void ReturnToTheMainMenu(string userLogin)
         {
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
 
@@ -208,14 +201,15 @@ namespace UserChangePasswordForm
 
                 return;
             }
-            else if (user.UserRole == Resources.UserRoleWarehousemanEng)
+
+            else if (user.UserRole == UserRole.Warehouseman)
             {
                 Hide();
                 var warehousemanPanel = new WarehousemanPanel(userLogin);
                 warehousemanPanel.ShowDialog();
                 Close();
             }
-            else if (user.UserRole == Resources.UserRoleAdminEng)
+            else if (user.UserRole == UserRole.Administrator)
             {
                 Hide();
                 var administratorPanel = new AdministratorPanel(userLogin);

@@ -1,6 +1,10 @@
-﻿using EnergeticProjectX.Classes;
+﻿using AddCategoryForm;
+using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using ProductCatalogForm;
 
 namespace EditCategoriesForm
@@ -25,7 +29,7 @@ namespace EditCategoriesForm
             this.userLogin = userLogin;
 
             LoadCategories();
-            LoadUnits();
+            AddCategory.LoadUnits(db, ComboBoxOfNewUnitData);
 
             ComboBoxOfCategory.SelectedIndex = -1;
             ComboBoxOfNewUnitData.SelectedIndex = -1;
@@ -50,11 +54,11 @@ namespace EditCategoriesForm
             {
                 var currentUnit = db.Units.FirstOrDefault(u => u.Unit_Id == chosenCategory.Unit_Id);
 
-                textBoxForCurrentUnit.Text = currentUnit!.Value;
+                textBoxForCurrentUnit.Text = currentUnit!.Name;
             }
             else
             {
-                MessageBox.Show($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}", Resources.TitleError,
+                MessageBox.Show($"{Resources.ErrorUnitUpload}\n{Resources.TryAgain}", Resources.TitleError,
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return;
@@ -64,9 +68,9 @@ namespace EditCategoriesForm
         /// <summary>
         /// Загрузка категорий из базы данных
         /// </summary>
-        public void LoadCategories()
+        private void LoadCategories()
         {
-            var categories = db.Categories.Where(u => u.Status == 1).ToList();
+            var categories = db.Categories.Where(u => u.Status == CategoryStatus.Active).ToList();
 
             if (categories != null && categories.Count != 0)
             {
@@ -83,36 +87,6 @@ namespace EditCategoriesForm
             }
         }
 
-        /// <summary>=
-        /// Загрузка единиц измерения из базы данных
-        /// </summary>
-        public void LoadUnits()
-        {
-            var units = db.Units.ToList();
-
-            if (units != null && units.Count != 0)
-            {
-                ComboBoxOfNewUnitData.DataSource = units;
-                ComboBoxOfNewUnitData.DisplayMember = Resources.UnitDisplayMember;
-                ComboBoxOfNewUnitData.ValueMember = Resources.UnitValueMember;
-            }
-            else
-            {
-                MessageBox.Show($"{Resources.ErrorUnitUpload}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return;
-            }
-        }
-
-        private void ButtonOfCancel_Click(object sender, EventArgs e)
-        {
-            Hide();
-            var productCatalog = new ProductCatalog(userLogin);
-            productCatalog.ShowDialog();
-            Close();
-        }
-
         private void ButtonOfSaveChanges_Click(object sender, EventArgs e)
         {
             if (ComboBoxOfCategory.SelectedItem == null || ComboBoxOfNewUnitData.SelectedItem == null)
@@ -122,16 +96,24 @@ namespace EditCategoriesForm
                 return;
             }
 
-            string newCategoryName = Microsoft.VisualBasic.Interaction.InputBox(Resources.InputNewCategoryName,
-                                                                                Resources.EditCategory,
-                                                                                ComboBoxOfCategory.Text);
+            string newCategory = Interaction.InputBox(Resources.InputNewCategoryName,Resources.EditCategory, ComboBoxOfCategory.Text);
 
-            if (!string.IsNullOrWhiteSpace(newCategoryName))
+            if (!string.IsNullOrWhiteSpace(newCategory))
             {
+                if (db.Categories.Any(c => c.Status == CategoryStatus.Active &&
+                                           EF.Functions.ILike(c.Name, newCategory)))
+                {
+                    MessageBox.Show(Resources.NewCategoryExists, Resources.TitleWarning,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    return;
+                }
+
                 if (!Guid.TryParse(ComboBoxOfNewUnitData.SelectedValue!.ToString(), out Guid selectedUnitId))
                 {
                     MessageBox.Show(Resources.ErrorUnitUpload, Resources.TitleError,
                                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                     return;
                 }
 
@@ -141,26 +123,22 @@ namespace EditCategoriesForm
                 if (category != null)
                 {
                     selectedCategory.Unit_Id = selectedUnitId;
-                    selectedCategory.Name = newCategoryName;
+                    selectedCategory.Name = newCategory;
 
-                    try
+                    var question = MessageBox.Show($"{Resources.SureWantToSaveCategoryChange}\n\n{Resources.ConsequencesSaveCategoryChange}",
+                                                   Resources.TitleConfirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (question == DialogResult.Yes)
                     {
-                        db.SaveChanges();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{Resources.UniversalErrorBD}\n{Resources.TryAgain}\n\n" +
-                                        $"Текст ошибки: {ex.Message}", Resources.TitleErrorBD,
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                            return;
 
-                        return;
+                        MessageBox.Show(Resources.SuccessUpdateCategory, Resources.TitleInformation,
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-
-                    MessageBox.Show(Resources.SuccessUpdateCategory, Resources.TitleSuccess,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     LoadCategories();
-                    LoadUnits();
+                    AddCategory.LoadUnits(db, ComboBoxOfNewUnitData);
 
                     Hide();
                     var productCatalog = new ProductCatalog(userLogin);
@@ -187,37 +165,36 @@ namespace EditCategoriesForm
                 return;
             }
 
-            var result = MessageBox.Show($"{Resources.AskForDeleteCategory} \"{ComboBoxOfCategory.Text}\"?\n\n" +
-                                         Resources.AlertOfDeleteCategory, Resources.ConfirmationDelete,
+            var question = MessageBox.Show($"{Resources.AskForDeleteCategory}\n{ComboBoxOfCategory.Text}?", Resources.TitleConfirmation,
                                          MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes)
+            if (question == DialogResult.Yes)
             {
                 var selectedCategory = (Category)ComboBoxOfCategory.SelectedItem;
 
                 var category = db.Categories.Find(selectedCategory.Category_Id);
                 if (category != null)
                 {
-                    category.Status = 0;
+                    category.Status = CategoryStatus.Hidden;
 
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{Resources.UniversalErrorBD}\n{Resources.TryAgain}" +
-                            $"Текст ошибки: {ex.Message}", Resources.TitleErrorBD,
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                        return;
 
-                    MessageBox.Show(Resources.SuccessDeleteCategory, Resources.TitleSuccess,
+                    MessageBox.Show(Resources.SuccessDeleteCategory, Resources.TitleInformation,
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     LoadCategories();
                     ComboBoxOfCategory.SelectedIndex = -1;
                 }
             }
+        }
+
+        private void ButtonOfCancel_Click(object sender, EventArgs e)
+        {
+            Hide();
+            var productCatalog = new ProductCatalog(userLogin);
+            productCatalog.ShowDialog();
+            Close();
         }
     }
 }

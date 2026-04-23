@@ -4,46 +4,47 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EnergeticProjectX.Objects
 {
     /// <summary>
-    /// Создаётся отгрузка
+    /// Класс, связанный с базой данных и описывающий отгрузку товара.
     /// </summary>
-    [Table("Shipments")]
+    [Table("shipments")]
     public class Shipment
     {
         /// <summary>
-        /// Уникальный ID отгрузки
+        /// ID отгрузки товара.
         /// </summary>
         [Key]
-        [Column("Id")]
+        [Column("id")]
         public Guid Shipment_Id { get; set; } = Guid.NewGuid();
 
         /// <summary>
-        /// Дата операции отгрузки
+        /// Дата оформления отгрузки.
         /// </summary>
-        [Column("Date")]
-        public DateTime Date { get; set; }
+        [Column("creation_date")]
+        [Required]
+        public DateTime CreationDate { get; set; } = DateTime.Today;
 
         /// <summary>
-        /// Ссылка на клиента, который получил товар
+        /// Ссылка на клиента, которому отгружен товар.
         /// </summary>
+        [Column("client_id")]
         [ForeignKey(nameof(Client))]
-        [Column("ClientId")]
         public Guid Client_Id { get; set; }
 
         /// <summary>
-        /// Навигационное свойство: клиент
+        /// Навигационное свойство: клиент.
         /// </summary>
-        public Client Client { get; set; } = null!;
+        public virtual Client? Client { get; set; }
 
         /// <summary>
-        /// Ссылка на пользователя, который оформил отгрузку
+        /// Ссылка на пользователя, который оформил отгрузку.
         /// </summary>
+        [Column("user_id")]
         [ForeignKey(nameof(User))]
-        [Column("UserId")]
         public Guid User_Id { get; set; }
 
         /// <summary>
-        /// Навигационное свойство: пользователь
+        /// Навигационное свойство: пользователь.
         /// </summary>
-        public User User { get; set; } = null!;
+        public virtual User? User { get; set; }
     }
 }

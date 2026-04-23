@@ -54,9 +54,9 @@
             ButtonOfAddCategory.FlatStyle = FlatStyle.Flat;
             ButtonOfAddCategory.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
             ButtonOfAddCategory.ForeColor = SystemColors.ControlText;
-            ButtonOfAddCategory.Location = new Point(16, 714);
+            ButtonOfAddCategory.Location = new Point(89, 718);
             ButtonOfAddCategory.Name = "ButtonOfAddCategory";
-            ButtonOfAddCategory.Size = new Size(352, 58);
+            ButtonOfAddCategory.Size = new Size(384, 69);
             ButtonOfAddCategory.TabIndex = 6;
             ButtonOfAddCategory.Text = "Добавить категорию";
             ButtonOfAddCategory.UseVisualStyleBackColor = true;
@@ -105,7 +105,7 @@
             ButtonOfProductCard.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
             ButtonOfProductCard.Location = new Point(683, 636);
             ButtonOfProductCard.Name = "ButtonOfProductCard";
-            ButtonOfProductCard.Size = new Size(283, 66);
+            ButtonOfProductCard.Size = new Size(297, 66);
             ButtonOfProductCard.TabIndex = 7;
             ButtonOfProductCard.Text = "Карточка товара";
             ButtonOfProductCard.UseVisualStyleBackColor = true;
@@ -121,7 +121,7 @@
             DataGridOfProducts.BackgroundColor = SystemColors.ControlLight;
             DataGridOfProducts.BorderStyle = BorderStyle.Fixed3D;
             DataGridOfProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
             dataGridViewCellStyle1.BackColor = SystemColors.HighlightText;
             dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
             dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
@@ -147,7 +147,7 @@
             DataGridOfProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             DataGridOfProducts.RowHeadersVisible = false;
             DataGridOfProducts.RowHeadersWidth = 62;
-            DataGridOfProducts.Size = new Size(948, 540);
+            DataGridOfProducts.Size = new Size(964, 540);
             DataGridOfProducts.TabIndex = 8;
             // 
             // ButtonOfMakingShipment
@@ -173,7 +173,7 @@
             panelSearch.Controls.Add(ButtonOfSearch);
             panelSearch.Location = new Point(13, 12);
             panelSearch.Name = "panelSearch";
-            panelSearch.Size = new Size(951, 63);
+            panelSearch.Size = new Size(967, 63);
             panelSearch.TabIndex = 0;
             panelSearch.Visible = false;
             // 
@@ -192,16 +192,19 @@
             textBoxSearch.Font = new Font("Segoe UI", 12F);
             textBoxSearch.Location = new Point(149, 14);
             textBoxSearch.Name = "textBoxSearch";
-            textBoxSearch.Size = new Size(597, 39);
+            textBoxSearch.Size = new Size(622, 39);
             textBoxSearch.TabIndex = 1;
             // 
             // ButtonOfSearch
             // 
+            ButtonOfSearch.FlatAppearance.BorderSize = 4;
+            ButtonOfSearch.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfSearch.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfSearch.FlatStyle = FlatStyle.Flat;
             ButtonOfSearch.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfSearch.Location = new Point(766, 7);
+            ButtonOfSearch.Location = new Point(793, 3);
             ButtonOfSearch.Name = "ButtonOfSearch";
-            ButtonOfSearch.Size = new Size(171, 50);
+            ButtonOfSearch.Size = new Size(171, 60);
             ButtonOfSearch.TabIndex = 2;
             ButtonOfSearch.Text = "Найти";
             ButtonOfSearch.UseVisualStyleBackColor = true;
@@ -215,9 +218,9 @@
             ButtonOfChangeCaterogies.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfChangeCaterogies.FlatStyle = FlatStyle.Flat;
             ButtonOfChangeCaterogies.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            ButtonOfChangeCaterogies.Location = new Point(374, 714);
+            ButtonOfChangeCaterogies.Location = new Point(479, 718);
             ButtonOfChangeCaterogies.Name = "ButtonOfChangeCaterogies";
-            ButtonOfChangeCaterogies.Size = new Size(456, 58);
+            ButtonOfChangeCaterogies.Size = new Size(422, 69);
             ButtonOfChangeCaterogies.TabIndex = 10;
             ButtonOfChangeCaterogies.Text = "Редактировать категории";
             ButtonOfChangeCaterogies.UseVisualStyleBackColor = true;
@@ -228,7 +231,7 @@
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
-            ClientSize = new Size(976, 795);
+            ClientSize = new Size(992, 811);
             Controls.Add(ButtonOfChangeCaterogies);
             Controls.Add(panelSearch);
             Controls.Add(ButtonOfMakingShipment);

@@ -38,26 +38,24 @@ namespace ListOfClientsForm
             try
             {
                 bindingSource.DataSource = db.Clients
-                    .Select(
-                    u => new ClientDisplayModel
+                    .Select(u => new ClientDisplayModel
                     {
-                        ClientCode = u.ClientCode!,
                         Name = u.Name!,
-                        Contractor = u.Contractor!,
+                        Contractor = u.Contractor!.GetDescriptionOfEnumValue(),
                         INN = u.INN!,
                         ContactInfo = u.ContactInfo,
-                    }
-                    ).ToList();
+                    })
+                    .ToList();
 
                 DataGridOfClients.DataSource = bindingSource;
                 bindingSource.ResetBindings(false);
 
-                MessageBox.Show($"{Resources.HowMuchClientsUploaded} {db.Clients.Count()}", Resources.TitleInformation,
+                MessageBox.Show($"{Resources.HowMuchClientsUploaded}: {db.Clients.Count()}", Resources.TitleInformation,
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"{Resources.ErrorUploadData}\n\nТекст ошибки: {ex.Message}", Resources.TitleError,
+                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}", Resources.TitleError,
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;
@@ -84,12 +82,12 @@ namespace ListOfClientsForm
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                DataGridViewCell cell = DataGridOfClients.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                var cell = DataGridOfClients.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-                string cellValue = cell.Value?.ToString() ?? Resources.Empty;
-                string columnName = DataGridOfClients.Columns[e.ColumnIndex].HeaderText;
+                var cellValue = cell.Value?.ToString() ?? Resources.Empty;
+                var columnName = DataGridOfClients.Columns[e.ColumnIndex].HeaderText;
 
-                string toolTipText = $"{columnName}: {cellValue}";
+                var toolTipText = $"{columnName}: {cellValue}";
                 cell.ToolTipText = toolTipText;
             }
         }
@@ -108,13 +106,13 @@ namespace ListOfClientsForm
 
         private void DataGridOfClients_SelectionChanged(object sender, EventArgs e)
         {
-            bool isFullRowSelected = false;
+            var isFullRowSelected = false;
 
             if (DataGridOfClients.SelectedRows.Count > 0)
             {
-                DataGridViewRow selectedRow = DataGridOfClients.SelectedRows[0];
+                var selectedRow = DataGridOfClients.SelectedRows[0];
 
-                bool allCellsSelected = true;
+                var allCellsSelected = true;
                 foreach (DataGridViewCell cell in selectedRow.Cells)
                 {
                     if (!cell.Selected)
@@ -123,7 +121,6 @@ namespace ListOfClientsForm
                         break;
                     }
                 }
-
                 isFullRowSelected = allCellsSelected;
             }
 
@@ -136,14 +133,14 @@ namespace ListOfClientsForm
             {
                 DataGridViewRow selectedRow = DataGridOfClients.CurrentRow;
 
-                string ClientCode = selectedRow.Cells[Resources.ClientRowCode].Value!.ToString()!;
-                string Name = selectedRow.Cells[Resources.ClientRowName].Value!.ToString()!;
-                string Contractor = selectedRow.Cells[Resources.ClientRowContractor].Value!.ToString()!;
-                string Inn = selectedRow.Cells[Resources.ClientINN].Value!.ToString()!;
-                string ContactInfo = selectedRow.Cells[Resources.ClientContactInfo].Value!.ToString()!;
+                var Name = selectedRow.Cells[Resources.ClientRowName].Value!.ToString()!;
+                var Contractor = selectedRow.Cells[Resources.ClientRowContractor].Value!.ToString()!;
+                var Inn = selectedRow.Cells[Resources.ClientINN].Value!.ToString()!;
+                var ClientId = db.Clients.FirstOrDefault(u => u.INN == Inn)!.Client_Id;
+                var ContactInfo = selectedRow.Cells[Resources.ClientContactInfo].Value!.ToString()!;
 
                 Hide();
-                var editClient = new EditClient(userLogin, ClientCode, Name, Contractor, Inn, ContactInfo);
+                var editClient = new EditClient(userLogin, ClientId, Name, Contractor, Inn, ContactInfo);
                 editClient.ShowDialog();
                 Close();
             }

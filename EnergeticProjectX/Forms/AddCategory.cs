@@ -1,7 +1,9 @@
-﻿using EnergeticProjectX.Objects;
+﻿using EnergeticProjectX.Classes;
+using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
+using EnergeticProjectX.Enums;
+using Microsoft.EntityFrameworkCore;
 using ProductCatalogForm;
-using EnergeticProjectX.Classes;
 
 namespace AddCategoryForm
 {
@@ -30,28 +32,30 @@ namespace AddCategoryForm
             ComboBoxOfUnit.TextChanged += IsTextChanged!;
             ComboBoxOfUnit.SelectedIndexChanged += IsTextChanged!;
 
-            LoadUnits();
+            LoadUnits(db, ComboBoxOfUnit);
 
             ComboBoxOfUnit.SelectedIndex = -1;
         }
 
         /// <summary>
-        /// Загрузка единиц измерения
+        /// Загрузка единиц измерений в выпадающий список
         /// </summary>
-        public void LoadUnits()
+        /// <param name="db">Контекст базы данных</param>
+        /// <param name="comboBoxName">Название выпадающего списка</param>
+        public static void LoadUnits(ApplicationContextDB db, ComboBox comboBoxName)
         {
             var units = db.Units.ToList();
 
             if (units != null && units.Count != 0)
             {
-                ComboBoxOfUnit.DataSource = units;
-                ComboBoxOfUnit.DisplayMember = Resources.UnitDisplayMember;
-                ComboBoxOfUnit.ValueMember = Resources.UnitValueMember;
+                comboBoxName.DataSource = units;
+                comboBoxName.DisplayMember = Resources.UnitDisplayMember;
+                comboBoxName.ValueMember = Resources.UnitValueMember;
             }
             else
             {
-                MessageBox.Show(Resources.ErrorUnitUpload + $"\n{Resources.TryAgain}",
-                                Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{Resources.ErrorUnitUpload}\n{Resources.TryAgain}", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;
             }
@@ -59,18 +63,10 @@ namespace AddCategoryForm
 
         private void IsTextChanged(object sender, EventArgs e)
         {
-            bool allFieldsFilled = !string.IsNullOrWhiteSpace(TextBoxForName.Text) &&
-                             !string.IsNullOrWhiteSpace(ComboBoxOfUnit.Text);
+            var allFieldsFilled = !string.IsNullOrWhiteSpace(TextBoxForName.Text) &&
+                                  !string.IsNullOrWhiteSpace(ComboBoxOfUnit.Text);
 
             ButtonOfAddCategory.Enabled = allFieldsFilled;
-        }
-
-        private void ButtonOfCancel_Click(object sender, EventArgs e)
-        {
-            Hide();
-            var productCatalog = new ProductCatalog(userLogin);
-            productCatalog.ShowDialog();
-            Close();
         }
 
         private void ButtonOfAddCategory_Click(object sender, EventArgs e)
@@ -87,28 +83,34 @@ namespace AddCategoryForm
 
             var newCategory = new Category
             {
-                Category_Id = Guid.NewGuid(),
                 Name = TextBoxForName.Text.Trim(),
-                Status = 1,
                 Unit_Id = selectedUnitId
             };
 
-            try
+            if (db.Categories.Any(c => c.Status == CategoryStatus.Active &&
+                                       EF.Functions.ILike(c.Name, newCategory.Name)))
             {
-                db.Categories.Add(newCategory);
-                db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{Resources.ErrorSaveCategory}\n{Resources.TryAgain}" +
-                                $"Текст ошибки: {ex.Message}",Resources.TitleErrorBD, 
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                MessageBox.Show(Resources.NewCategoryExists, Resources.TitleWarning,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            MessageBox.Show(Resources.SuccessAddCategory, Resources.TitleSuccess,
+
+
+            db.Categories.Add(newCategory);
+            if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                return;
+
+            MessageBox.Show(Resources.SuccessAddCategory, Resources.TitleInformation,
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+            Hide();
+            var productCatalog = new ProductCatalog(userLogin);
+            productCatalog.ShowDialog();
+            Close();
+        }
+
+        private void ButtonOfCancel_Click(object sender, EventArgs e)
+        {
             Hide();
             var productCatalog = new ProductCatalog(userLogin);
             productCatalog.ShowDialog();

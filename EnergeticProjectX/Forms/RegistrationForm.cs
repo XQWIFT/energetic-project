@@ -3,6 +3,7 @@ using WarehousemanPanelForm;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
 
 namespace Registration
 {
@@ -11,10 +12,6 @@ namespace Registration
     /// </summary>
     public partial class RegistrationForm : Form
     {
-        public bool isLoginFree;
-        public bool isPasswordCorrect;
-        public bool isPasswordsMatch;
-
         private readonly BCryptRealization bc = new();
         private readonly ApplicationContextDB db = new();
 
@@ -34,58 +31,81 @@ namespace Registration
 
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
-            bool allFieldsFilled = !string.IsNullOrWhiteSpace(textBoxOfName.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxOfSurname.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxOfLogin.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxOfPassword.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxOfPasswordConfirmation.Text);
+            var allFieldsFilled = !string.IsNullOrWhiteSpace(textBoxOfName.Text) &&
+                                  !string.IsNullOrWhiteSpace(textBoxOfSurname.Text) &&
+                                  !string.IsNullOrWhiteSpace(textBoxOfLogin.Text) &&
+                                  !string.IsNullOrWhiteSpace(textBoxOfPassword.Text) &&
+                                  !string.IsNullOrWhiteSpace(textBoxOfPasswordConfirmation.Text);
 
             ButtonOfRegistration.Enabled = allFieldsFilled;
         }
 
         private void ButtonOfRegistration_Click(object sender, EventArgs e)
         {
+            var firstname = User.IsUserPersonalDataRelevant(textBoxOfName.Text);
+            var surname = User.IsUserPersonalDataRelevant(textBoxOfName.Text);
+            var patronymic = User.IsUserPersonalDataRelevant(textBoxOfName.Text);
+
+            if (firstname == null || surname == null || patronymic == null)
+            {
+                MessageBox.Show($"{Resources.InputPersonalDataIrrelevant}\n{Resources.TryAgain}", Resources.TitleWarning,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                if (firstname == null)
+                {
+                    textBoxOfName.Clear();
+                    textBoxOfName.Focus();
+                }
+                if (surname == null)
+                    textBoxOfSurname.Clear();
+                if (patronymic == null)
+                    textBoxOfPatronymic.Clear();
+
+                return;
+            }
+
             var logins = db.Users.Select(u => u.Login).ToList();
 
-            string password = textBoxOfPassword.Text;
-            string login = textBoxOfLogin.Text;
-            string passwordConfirmation = textBoxOfPasswordConfirmation.Text;
+            var password = textBoxOfPassword.Text;
+            var login = textBoxOfLogin.Text;
+            var passwordConfirmation = textBoxOfPasswordConfirmation.Text;
 
-            IsUserDataValid(login, password, passwordConfirmation, db);
+            var userLoginFree = IsUserLoginFree(login, db);
+            var (passwordsMatch, passwordSatisfyRequirements) = User.IsPasswordRelevant(password, passwordConfirmation);
 
-            if (isLoginFree && isPasswordCorrect && isPasswordsMatch)
+            if (userLoginFree && passwordsMatch && passwordSatisfyRequirements)
             {
+                var currencyByDefault = db.Currencies.FirstOrDefault(u => u.Code == Resources.RUB);
+
+                if (currencyByDefault == null)
+                {
+                    MessageBox.Show($"{Resources.ErrorDefaultCurrencyUpload}\n{Resources.TryAgain}", Resources.TitleError,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    return;
+                }
+
                 var user = new User
                 {
-                    User_Id = Guid.NewGuid(),
                     Surname = textBoxOfSurname.Text.Trim(),
                     Name = textBoxOfName.Text.Trim(),
                     Patronymic = textBoxOfPatronymic.Text.Trim() ?? null,
                     Login = textBoxOfLogin.Text.Trim(),
-                    Password = bc.PasswordHash(textBoxOfPassword.Text.Trim()),
-                    UserCode = GenerateUniqueCode.GenerateUniqueUserCode(db),
-                    UserRole = Resources.UserRoleWarehousemanEng
+                    Password = BCryptRealization.PasswordHash(textBoxOfPassword.Text.Trim()),
+                    UserRole = UserRole.Warehouseman,
+                    CurrencyId = currencyByDefault.Currency_Id
                 };
 
-                try
-                {
-                    db.Users.Add(user);
-                    db.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"{Resources.UniversalErrorBD}\n{Resources.TryAgain}\n\n" +
-                                    $"Текст ошибки: {ex.Message}", Resources.TitleErrorBD,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                db.Users.Add(user);
+                if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
                     return;
-                }
 
                 Hide();
                 var warehousemanPanel = new WarehousemanPanel(user.Login);
                 warehousemanPanel.ShowDialog();
                 Close();
             }
-            else if (!isLoginFree)
+            else if (!userLoginFree)
             {
                 MessageBox.Show($"{Resources.ExistsUsername}\n{Resources.InventNewLogin}", Resources.TitleError,
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -93,7 +113,7 @@ namespace Registration
                 textBoxOfLogin.Clear();
                 textBoxOfLogin.Focus();
             }
-            else if (!isPasswordCorrect)
+            else if (!passwordSatisfyRequirements)
             {
                 MessageBox.Show($"{Resources.TooSimplePassword}\n{Resources.InventNewPassword}", Resources.TitleWarning,
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -102,7 +122,7 @@ namespace Registration
                 textBoxOfPasswordConfirmation.Clear();
                 textBoxOfPassword.Focus();
             }
-            else if (!isPasswordsMatch)
+            else if (!passwordsMatch)
             {
                 MessageBox.Show($"{Resources.UnmatchedPasswords}\n{Resources.TryAgain}", Resources.TitleWarning,
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -114,37 +134,15 @@ namespace Registration
         }
 
         /// <summary>
-        /// Проверка регистрации на соответствие условиям
+        /// Проверка, свободен ли указанный пользователем логин для регистрации.
         /// </summary>
         /// <param name="login">Логин нового пользователя</param>
-        /// <param name="password">Пароль нового пользователя</param>
-        /// <param name="passwordConfirmation">Подтверждение пароля</param>
         /// <param name="db">Контекст базы данных</param>
-        public void IsUserDataValid(string login, string password, string passwordConfirmation, ApplicationContextDB db)
+        public static bool IsUserLoginFree(string login, ApplicationContextDB db)
         {
             var logins = db.Users.Select(u => u.Login).ToList();
 
-                var charPasswordArray = password.Trim().ToCharArray();
-
-                bool hasDigit = false;
-                bool hasCapitalLetter = false;
-
-                foreach (char symbol in charPasswordArray)
-                {
-                    if (char.IsDigit(symbol))
-                        hasDigit = true;
-                    else if (char.IsLetter(symbol) && char.IsUpper(symbol))
-                        hasCapitalLetter = true;
-
-                    if (hasDigit && hasCapitalLetter)
-                        break;
-                }
-                
-                isLoginFree = !logins.Contains(login);
-
-                isPasswordsMatch = password.Trim() == passwordConfirmation.Trim();
-
-                isPasswordCorrect = hasDigit && hasCapitalLetter && charPasswordArray.Length >= 8;
+            return (!logins.Contains(login));
         }
 
         private void LabelOfAuthorization_Click(object sender, EventArgs e)

@@ -38,11 +38,10 @@ namespace ListOfUsersForm
                 bindingSource.DataSource = contextOfUser.Users
                     .Select(u => new UserDisplayModel
                     {
-                        UserCode = u.UserCode!,
-                        Name = u.Name,
                         Surname = u.Surname,
+                        Name = u.Name,
                         Patronymic = u.Patronymic,
-                        UserRole = u.UserRole == Resources.UserRoleAdminEng ? "Администратор" : "Кладовщик"
+                        UserRole = u.UserRole.GetDescriptionOfEnumValue()
                     })
                     .ToList();
 
@@ -52,9 +51,9 @@ namespace ListOfUsersForm
                 MessageBox.Show($"{Resources.HowMuchUsersUploaded} {contextOfUser.Users.Count()}", Resources.TitleInformation,
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"{Resources.ErrorUploadData} {ex.Message}", Resources.TitleError,
+                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}", Resources.TitleError,
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;

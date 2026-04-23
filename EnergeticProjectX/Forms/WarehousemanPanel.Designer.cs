@@ -100,7 +100,7 @@
             // 
             LabelOfRole.AutoSize = true;
             LabelOfRole.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfRole.Location = new Point(310, 65);
+            LabelOfRole.Location = new Point(310, 68);
             LabelOfRole.Name = "LabelOfRole";
             LabelOfRole.Size = new Size(204, 45);
             LabelOfRole.TabIndex = 15;
@@ -110,7 +110,7 @@
             // 
             LabelOfLoginAs.AutoSize = true;
             LabelOfLoginAs.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfLoginAs.Location = new Point(58, 65);
+            LabelOfLoginAs.Location = new Point(58, 68);
             LabelOfLoginAs.Name = "LabelOfLoginAs";
             LabelOfLoginAs.Size = new Size(254, 45);
             LabelOfLoginAs.TabIndex = 14;
@@ -210,7 +210,7 @@
             // 
             labelOfFullName.AutoSize = true;
             labelOfFullName.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelOfFullName.Location = new Point(58, 110);
+            labelOfFullName.Location = new Point(58, 113);
             labelOfFullName.Name = "labelOfFullName";
             labelOfFullName.Size = new Size(20, 90);
             labelOfFullName.TabIndex = 32;

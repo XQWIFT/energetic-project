@@ -3,44 +3,50 @@
 namespace EnergeticProjectX.Models
 {
     /// <summary>
-    /// Создаёт отображение товаров и их данных в таблице
+    /// Отображение товаров и их данных в таблице.
     /// </summary>
     public class ProductDisplayModel
     {
         /// <summary>
-        /// Уникальный артикул товара
+        /// Уникальный артикул товара.
         /// </summary>
-        [DisplayName("Артикул")]
+        [DisplayName("Артикул товара")]
         public required string Article { get; set; }
 
         /// <summary>
-        /// Название товара
+        /// Название товара.
         /// </summary>
-        [DisplayName("Наименование")]
+        [DisplayName("Название товара")]
         public required string Name { get; set; }
 
         /// <summary>
-        /// Категория товара
+        /// Категория товара.
         /// </summary>
-        [DisplayName("Категория")] 
+        [DisplayName("Категория товара")] 
         public required string Category { get; set; }
 
         /// <summary>
-        /// Цена товара
-        /// </summary>
-        [DisplayName("Закупочная цена")]
-        public required string PurchasePrice { get; set; }
-
-        /// <summary>
-        /// Остаток товара
+        /// Остаток товара.
         /// </summary>
         [DisplayName("Текущий остаток")]
         public int StockQuantity { get; set; }
 
         /// <summary>
-        /// Единица измерения товаров
+        /// Единица измерения товаров.
         /// </summary>
         [DisplayName("Единица измерения")]
-        public required Guid UnitId { get; set; }
+        public required string Unit { get; set; }
+
+        /// <summary>
+        /// Цена продажи товара.
+        /// </summary>
+        [DisplayName("Цена продажи")]
+        public required string SalePrice {  get; set; }
+
+        /// <summary>
+        /// Дата снижения цены.
+        /// </summary>
+        [DisplayName("Снижение цены")]
+        public required DateOnly DiscountDate { get; set; }
     }
 }

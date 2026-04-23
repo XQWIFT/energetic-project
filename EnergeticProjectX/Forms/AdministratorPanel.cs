@@ -1,5 +1,6 @@
 ﻿using EnergeticProjectX;
 using EnergeticProjectX.Classes;
+using EnergeticProjectX.Properties;
 using ListOfClientsForm;
 using ListOfUsersForm;
 using ProductCatalogForm;
@@ -13,9 +14,9 @@ namespace AdministratorPanelForm
     /// </summary>
     public partial class AdministratorPanel : Form
     {
-        readonly ApplicationContextDB db = new();
+        private readonly ApplicationContextDB db = new();
 
-        readonly string userLogin;
+        private readonly string userLogin;
 
         /// <summary>
         /// Конструктор для главного меню администратора
@@ -27,9 +28,9 @@ namespace AdministratorPanelForm
 
             this.userLogin = userLogin;
 
-            var DataOfUser = db.Users.FirstOrDefault(u => u.Login == userLogin);
+            var dataOfUser = db.Users.FirstOrDefault(u => u.Login == userLogin);
 
-            LabelOfFullName.Text = $"ФИО: {DataOfUser!.Surname} {DataOfUser.Name} {DataOfUser.Patronymic}";
+            LabelOfFullName.Text = $"{Resources.FullName}: {dataOfUser!.Surname} {dataOfUser.Name} {dataOfUser.Patronymic}";
         }
 
         private void ButtonOfChangePassword_Click(object sender, EventArgs e)

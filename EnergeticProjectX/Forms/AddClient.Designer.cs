@@ -30,15 +30,15 @@
         {
             labelOfAddClient = new Label();
             LabelOfName = new Label();
-            textBoxOfName = new TextBox();
+            TextBoxOfName = new TextBox();
             LabelOfContractor = new Label();
             labelOfINN = new Label();
             LabelOfContactInfo = new Label();
-            textBoxOfINN = new TextBox();
-            textBoxOfContactInfo = new TextBox();
+            TextBoxOfINN = new TextBox();
+            TextBoxOfContactInfo = new TextBox();
             ButtonOfAddClient = new Button();
             ButtonOfCancel = new Button();
-            comboBoxOfContractor = new ComboBox();
+            ComboBoxOfContractor = new ComboBox();
             SuspendLayout();
             // 
             // labelOfAddClient
@@ -60,13 +60,13 @@
             LabelOfName.TabIndex = 1;
             LabelOfName.Text = "Наименование";
             // 
-            // textBoxOfName
+            // TextBoxOfName
             // 
-            textBoxOfName.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfName.Location = new Point(111, 171);
-            textBoxOfName.Name = "textBoxOfName";
-            textBoxOfName.Size = new Size(583, 45);
-            textBoxOfName.TabIndex = 2;
+            TextBoxOfName.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfName.Location = new Point(111, 171);
+            TextBoxOfName.Name = "TextBoxOfName";
+            TextBoxOfName.Size = new Size(583, 45);
+            TextBoxOfName.TabIndex = 2;
             // 
             // LabelOfContractor
             // 
@@ -95,21 +95,21 @@
             LabelOfContactInfo.TabIndex = 5;
             LabelOfContactInfo.Text = "Контактная информация";
             // 
-            // textBoxOfINN
+            // TextBoxOfINN
             // 
-            textBoxOfINN.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfINN.Location = new Point(111, 423);
-            textBoxOfINN.Name = "textBoxOfINN";
-            textBoxOfINN.Size = new Size(583, 45);
-            textBoxOfINN.TabIndex = 7;
+            TextBoxOfINN.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfINN.Location = new Point(111, 423);
+            TextBoxOfINN.Name = "TextBoxOfINN";
+            TextBoxOfINN.Size = new Size(583, 45);
+            TextBoxOfINN.TabIndex = 7;
             // 
-            // textBoxOfContactInfo
+            // TextBoxOfContactInfo
             // 
-            textBoxOfContactInfo.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfContactInfo.Location = new Point(111, 546);
-            textBoxOfContactInfo.Name = "textBoxOfContactInfo";
-            textBoxOfContactInfo.Size = new Size(583, 45);
-            textBoxOfContactInfo.TabIndex = 8;
+            TextBoxOfContactInfo.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfContactInfo.Location = new Point(111, 546);
+            TextBoxOfContactInfo.Name = "TextBoxOfContactInfo";
+            TextBoxOfContactInfo.Size = new Size(583, 45);
+            TextBoxOfContactInfo.TabIndex = 8;
             // 
             // ButtonOfAddClient
             // 
@@ -144,16 +144,16 @@
             ButtonOfCancel.UseVisualStyleBackColor = true;
             ButtonOfCancel.Click += ButtonOfCancel_Click;
             // 
-            // comboBoxOfContractor
+            // ComboBoxOfContractor
             // 
-            comboBoxOfContractor.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxOfContractor.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            comboBoxOfContractor.FormattingEnabled = true;
-            comboBoxOfContractor.Items.AddRange(new object[] { "Физ.лицо", "Юр.лицо", "ИП" });
-            comboBoxOfContractor.Location = new Point(111, 288);
-            comboBoxOfContractor.Name = "comboBoxOfContractor";
-            comboBoxOfContractor.Size = new Size(583, 46);
-            comboBoxOfContractor.TabIndex = 11;
+            ComboBoxOfContractor.DropDownStyle = ComboBoxStyle.DropDownList;
+            ComboBoxOfContractor.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            ComboBoxOfContractor.FormattingEnabled = true;
+            ComboBoxOfContractor.Items.AddRange(new object[] { "Физ. лицо", "Юр. лицо", "ИП" });
+            ComboBoxOfContractor.Location = new Point(111, 288);
+            ComboBoxOfContractor.Name = "ComboBoxOfContractor";
+            ComboBoxOfContractor.Size = new Size(583, 46);
+            ComboBoxOfContractor.TabIndex = 11;
             // 
             // AddClient
             // 
@@ -161,15 +161,15 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
             ClientSize = new Size(800, 774);
-            Controls.Add(comboBoxOfContractor);
+            Controls.Add(ComboBoxOfContractor);
             Controls.Add(ButtonOfCancel);
             Controls.Add(ButtonOfAddClient);
-            Controls.Add(textBoxOfContactInfo);
-            Controls.Add(textBoxOfINN);
+            Controls.Add(TextBoxOfContactInfo);
+            Controls.Add(TextBoxOfINN);
             Controls.Add(LabelOfContactInfo);
             Controls.Add(labelOfINN);
             Controls.Add(LabelOfContractor);
-            Controls.Add(textBoxOfName);
+            Controls.Add(TextBoxOfName);
             Controls.Add(LabelOfName);
             Controls.Add(labelOfAddClient);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -185,14 +185,14 @@
 
         private Label labelOfAddClient;
         private Label LabelOfName;
-        private TextBox textBoxOfName;
+        private TextBox TextBoxOfName;
         private Label LabelOfContractor;
         private Label labelOfINN;
         private Label LabelOfContactInfo;
-        private TextBox textBoxOfINN;
-        private TextBox textBoxOfContactInfo;
+        private TextBox TextBoxOfINN;
+        private TextBox TextBoxOfContactInfo;
         private Button ButtonOfAddClient;
         private Button ButtonOfCancel;
-        private ComboBox comboBoxOfContractor;
+        private ComboBox ComboBoxOfContractor;
     }
 }

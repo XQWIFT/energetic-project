@@ -5,26 +5,24 @@ using EnergeticProjectX.Properties;
 namespace ShipmentJournalForm
 {
     /// <summary>
-    /// Форма для журнала отгрузок
+    /// Форма для реализации журнала отгрузок.
     /// </summary>
     public partial class ShipmentJournal : Form
     {
-        ApplicationContextDB context = new();
+        private readonly ApplicationContextDB db = new();
 
-        string userLogin;
+        private readonly string userLogin;
 
         private Guid? selectedShipmentId = null;
 
         /// <summary>
-        /// Конструктор для журнала отгрузок
+        /// Конструктор для создания журнала отгрузок.
         /// </summary>
         public ShipmentJournal(string userLogin)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
-
-            dataGridOfShipments.EnableHeadersVisualStyles = false;
 
             LoadShipments();
         }
@@ -33,49 +31,49 @@ namespace ShipmentJournalForm
         {
             try
             {
-                var shipments = context.Shipments
+                var shipments = db.Shipments
                     .Select(s => new
                     {
                         s.Shipment_Id,
-                        Оформил = context.Users
+                        Оформил = db.Users
                             .Where(u => u.User_Id == s.User_Id)
                             .Select(u => u.Surname + " " + u.Name)
                             .FirstOrDefault() ?? "—",
-                        Получатель = context.Clients
+                        Получатель = db.Clients
                             .Where(c => c.Client_Id == s.Client_Id)
                             .Select(c => c.Name)
                             .FirstOrDefault() ?? "—",
-                        Дата = s.Date.ToString("dd.MM.yy")
+                        Дата = s.CreationDate.ToString("dd.MM.yy")
                     })
                     .ToList();
 
-                dataGridOfShipments.DataSource = shipments;
+                DataGridOfShipments.DataSource = shipments;
 
-                if (dataGridOfShipments.Columns.Contains(Resources.ShipmentId))
-                    dataGridOfShipments.Columns[Resources.ShipmentId]!.Visible = false;
+                if (DataGridOfShipments.Columns.Contains(Resources.ShipmentId))
+                    DataGridOfShipments.Columns[Resources.ShipmentId]!.Visible = false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Ошибка загрузки: {ex.Message}",
-                    Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка загрузки:", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void DataGridOfShipments_SelectionChanged(object sender, EventArgs e)
         {
-            buttonOfContent.Enabled = dataGridOfShipments.SelectedRows.Count > 0;
+            ButtonOfContent.Enabled = DataGridOfShipments.SelectedRows.Count > 0;
         }
 
-        private void dataGridOfShipments_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void DataGridOfShipments_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridOfShipments.Rows.Count)
+            if (e.RowIndex >= 0 && e.RowIndex < DataGridOfShipments.Rows.Count)
             {
-                dataGridOfShipments.ClearSelection();
-                dataGridOfShipments.Rows[e.RowIndex].Selected = true;
-                dataGridOfShipments.CurrentCell =
-                    dataGridOfShipments.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                DataGridOfShipments.ClearSelection();
+                DataGridOfShipments.Rows[e.RowIndex].Selected = true;
+                DataGridOfShipments.CurrentCell =
+                    DataGridOfShipments.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-                var idCell = dataGridOfShipments.Rows[e.RowIndex].Cells[Resources.ShipmentId];
+                var idCell = DataGridOfShipments.Rows[e.RowIndex].Cells[Resources.ShipmentId];
                 if (idCell.Value != null)
                 {
                     if (Guid.TryParse(idCell.Value.ToString(), out Guid guidIdCell))
@@ -91,17 +89,17 @@ namespace ShipmentJournalForm
             }
         }
 
-        private void buttonOfContent_Click(object sender, EventArgs e)
+        private void ButtonOfContent_Click(object sender, EventArgs e)
         {
             if (selectedShipmentId == null) return;
 
             try
             {
-                var items = context.ShipmentItems
+                var items = db.ShipmentItems
                     .Where(i => i.Shipment_Id == selectedShipmentId)
                     .Select(i => new
                     {
-                        Название = context.Products
+                        Название = db.Products
                             .Where(p => p.Product_Id == i.Product_Id)
                             .Select(p => p.Name)
                             .FirstOrDefault() ?? "—",
@@ -109,21 +107,21 @@ namespace ShipmentJournalForm
                     })
                     .ToList();
 
-                dataGridOfContent.DataSource = items;
+                DataGridOfContent.DataSource = items;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Ошибка загрузки содержимого: {ex.Message}",
-                    Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка загрузки содержимого:", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void buttonOfMainMenu_Click(object sender, EventArgs e)
+        private void ButtonOfMainMenu_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            AdministratorPanel administratorPanel = new(userLogin);
+            Hide();
+            var administratorPanel = new AdministratorPanel(userLogin);
             administratorPanel.ShowDialog();
-            this.Close();
+            Close();
         }
     }
 }

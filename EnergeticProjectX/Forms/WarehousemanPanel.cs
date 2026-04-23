@@ -3,6 +3,7 @@ using EnergeticProjectX;
 using ProductCatalogForm;
 using MakingShipmentForm;
 using EnergeticProjectX.Classes;
+using EnergeticProjectX.Properties;
 
 namespace WarehousemanPanelForm
 {
@@ -11,9 +12,9 @@ namespace WarehousemanPanelForm
     /// </summary>
     public partial class WarehousemanPanel : Form
     {
-        readonly ApplicationContextDB db = new();
+        private readonly ApplicationContextDB db = new();
 
-        readonly string userLogin;
+        private readonly string userLogin;
 
         /// <summary>
         /// Конструктор для главного меню кладовщика
@@ -25,9 +26,9 @@ namespace WarehousemanPanelForm
 
             this.userLogin = userLogin;
 
-            var DataOfUser = db.Users.FirstOrDefault(u => u.Login == userLogin);
+            var dataOfUser = db.Users.FirstOrDefault(u => u.Login == userLogin);
 
-            labelOfFullName.Text = $"ФИО: {DataOfUser!.Surname} {DataOfUser.Name} {DataOfUser.Patronymic}";
+            labelOfFullName.Text = $"{Resources.FullName}: {dataOfUser!.Surname} {dataOfUser.Name} {dataOfUser.Patronymic}";
         }
 
         private void ButtonOfChangePassword_Click(object sender, EventArgs e)
