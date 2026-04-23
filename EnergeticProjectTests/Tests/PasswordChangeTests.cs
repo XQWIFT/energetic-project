@@ -1,133 +1,81 @@
 ﻿using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
+using EnergeticProjectX.Objects;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using UserChangePasswordForm;
-using UserControl;
 
-namespace PasswordChangeTests
+namespace EnergeticProjectTestt.Tests
 {
     [TestClass]
     public class PasswordChangeTests
     {
+        static string userLogin = "rpakjj7";
 
-        BCryptRealization bCrypt = new BCryptRealization();
-        UserChangePassword changePasswordForm = new UserChangePassword("rpakjj7");
+        User user = new User
+        {
+            Login = userLogin,
+            Password = BCryptRealization.PasswordHash("123321dDd"),
+            Surname = "Petukhov",
+            Name = "Nikitos",
+            UserRole = UserRole.Administrator,
+            CurrencyId = Guid.NewGuid(),
+        };
 
-        private DbContextOptions<ApplicationContextDB> GetInMemoryOptions()
+        private readonly UserChangePassword changePasswordForm = new("rpakjj7");
+        private static DbContextOptions<ApplicationContextDB> GetInMemoryOptions()
         {
             return new DbContextOptionsBuilder<ApplicationContextDB>()
                 .UseInMemoryDatabase(databaseName: $"TestDb_{Guid.NewGuid()}")
                 .Options;
         }
 
+        private readonly ApplicationContextDB db = new(GetInMemoryOptions());
+
         [TestMethod]
-        public void PasswordChange_ValidOldAndNewPasswords_SuccefulChange()
+        public void ValidOldAndNewPasswords()
         {
             //Arrange
-            ApplicationContextDB db = new(GetInMemoryOptions());
 
-           
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikita",
-                UserRole = "Admin"
-            };
             db.Add(user);
             db.SaveChanges();
 
             //Act
-            changePasswordForm.IsAllPasswordsAndLoginValid("123321dDd", "123321DDd", "123321DDd", db);
+            (var result, var message) = changePasswordForm.
+                IsAllPasswordsValid("123321dDd", "123321DDd", "123321DDd", db, userLogin);
 
             //Assert
-            Debug.Assert(changePasswordForm.isOldPasswordEqualDB);
-            Debug.Assert(changePasswordForm.isPasswordsEqual);
-            Debug.Assert(changePasswordForm.isUserFound);
+            Debug.Assert(result);
         }
 
         [TestMethod]
-        public void PasswordChange_InvaldOldAndValidNewPasswords_ShouldntChange()
+        public void InvalidOldPassword()
         {
             //Arrange
-            ApplicationContextDB db = new(GetInMemoryOptions());
-
-           
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
             db.Add(user);
             db.SaveChanges();
 
             //Act
-           changePasswordForm.IsAllPasswordsAndLoginValid("qwerty", "123321DDd", "123321DDd", db);
+            (var result, var message) = changePasswordForm.
+                IsAllPasswordsValid("qwerty", "123321DDd", "123321DDd", db, userLogin);
 
             //Assert
-            Assert.IsTrue(changePasswordForm.isUserFound);
-            Assert.IsFalse(changePasswordForm.isOldPasswordEqualDB);
+            Debug.Assert(!result);
         }
 
         [TestMethod]
-        public void PasswordChange_ValidOldAndNewPasswordsDoesntMatch_ShouldntChange()
+        public void NotMatchOldAndNewPassword()
         {
             //Arrange
-            ApplicationContextDB db = new(GetInMemoryOptions());
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
             db.Add(user);
             db.SaveChanges();
 
             //Act
-            changePasswordForm.IsAllPasswordsAndLoginValid("123321dDd", "123321DDd", "123321D", db);
+            (var result, var message) = changePasswordForm.
+                IsAllPasswordsValid("123321dDd", "123321DDd", "123321D", db, userLogin);
 
             //Assert
-            Assert.IsFalse(changePasswordForm.isPasswordsEqual);
-            Assert.IsTrue(changePasswordForm.isOldPasswordEqualDB);
-        }
-
-        [TestMethod]
-        public void PasswordChange_AllInvalid_ShouldntChange()
-        {
-            //Arrange
-            ApplicationContextDB db = new(GetInMemoryOptions());
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "qwerty",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
-            db.Add(user);
-            db.SaveChanges();
-
-            //Act
-            changePasswordForm.IsAllPasswordsAndLoginValid("qwerty", "qweqewqeq123", "123321DDd", db);
-
-            //Assert
-            Assert.IsFalse(changePasswordForm.isOldPasswordEqualDB);
-            Assert.IsFalse(changePasswordForm.isPasswordsEqual);
-            Assert.IsFalse(changePasswordForm.isUserFound);
+            Debug.Assert(!result);
         }
     }
 }

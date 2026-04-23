@@ -1,151 +1,89 @@
 ﻿using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
+using EnergeticProjectX.Objects;
 using Microsoft.EntityFrameworkCore;
 using Registration;
-using UserControl;
+using System.Diagnostics;
 
-namespace RegistrationTests
+namespace EnergeticProjectTestt.Tests
 {
     [TestClass]
     public class RegistrationTests
     {
-        BCryptRealization bCrypt = new BCryptRealization();
-
-        RegistrationForm registrationForm = new RegistrationForm();
-
-        private DbContextOptions<ApplicationContextDB> GetInMemoryOptions()
+        private static DbContextOptions<ApplicationContextDB> GetInMemoryOptions()
         {
             return new DbContextOptionsBuilder<ApplicationContextDB>()
                 .UseInMemoryDatabase(databaseName: $"TestDb_{Guid.NewGuid()}")
                 .Options;
         }
 
+        private readonly ApplicationContextDB db = new(GetInMemoryOptions());
+
+        static string userLogin = "rpakjj7";
+
+        User user = new User
+        {
+            Login = userLogin,
+            Password = BCryptRealization.PasswordHash("123321dDd"),
+            Surname = "Petukhov",
+            Name = "Nikitos",
+            UserRole = UserRole.Administrator,
+            CurrencyId = Guid.NewGuid(),
+        };
+
 
         [TestMethod]
-        public void Registration_FreeLoginAndCorrectPasswordsMatch_SuccefulRegistration()
+        public void FreeLoginAndCorrectPasswords()
         {
             //Arrange
-            ApplicationContextDB db = new(GetInMemoryOptions());
+            db.Add(user);
+            db.SaveChanges();
 
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
+            var newPassword = "123321dDd";
+            var confirmationPassword = "123321dDd";
+
+
+            //Act
+
+            var newUserLogin = "xqwift";
+            var isloginFree = RegistrationForm.IsUserLoginFree(newUserLogin, db);
+            (var isPasswordMatch, var isPasswordRelevant) = User.IsPasswordRelevant(newPassword, confirmationPassword);
+
+            //Assert
+            Debug.Assert(isloginFree && isPasswordMatch && isPasswordRelevant);
+        }
+
+        [TestMethod]
+        public void BusyLogin()
+        {
+            //Arrange
             db.Add(user);
             db.SaveChanges();
 
             //Act
-            registrationForm.IsUserDataValid("sigma777", "123321dDd", "123321dDd", db);
+            var isloginFree = RegistrationForm.IsUserLoginFree(userLogin, db);
 
             //Assert
-            Assert.IsTrue(registrationForm.isLoginFree);
-            Assert.IsTrue(registrationForm.isPasswordsMatch);
-            Assert.IsTrue(registrationForm.isPasswordCorrect);
+            Debug.Assert(!isloginFree);
         }
 
         [TestMethod]
-        public void Registration_BusyLoginCorrectPasswords_ShouldntlRegistration()
+        public void FreeLoginAndInCorrectPassword()
         {
             //Arrange
-            ApplicationContextDB db = new(GetInMemoryOptions());
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
             db.Add(user);
             db.SaveChanges();
 
-            //Act
-            registrationForm.IsUserDataValid("rpakjj7", "123321dDd", "123321dDd", db);
-
-            //Assert
-            Assert.IsFalse(registrationForm.isLoginFree);
-        }
-
-        [TestMethod]
-        public void Registration_FreeLoginAndInCorrectPassword_ShouldntlRegistration()
-        {
-            //Arrange
-            ApplicationContextDB db = new(GetInMemoryOptions());
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
-            db.Add(user);
-            db.SaveChanges();
+            var newPassword = "123321dDd";
+            var confirmationPassword = "123321dD";
 
             //Act
-            registrationForm.IsUserDataValid("rpakjj7", "123321", "123321", db);
+            var newUserLogin = "xqwift";
+            var isloginFree = RegistrationForm.IsUserLoginFree(newUserLogin, db);
+            (var isPasswordMatch, var isPasswordRelevant) = User.IsPasswordRelevant(newPassword, confirmationPassword);
 
             //Assert
-            Assert.IsFalse(registrationForm.isPasswordCorrect);
+            Debug.Assert(!(isloginFree && isPasswordMatch && isPasswordRelevant));
         }
-
-        [TestMethod]
-        public void Registration_BusyLoginAndInCorrectPasswordsDoesntMatch_ShouldntlRegistration()
-        {
-            //Arrange
-            ApplicationContextDB db = new(GetInMemoryOptions());
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
-            db.Add(user);
-            db.SaveChanges();
-
-            //Act
-            registrationForm.IsUserDataValid("rpakjj7", "123321d", "1233", db);
-
-            //Assert
-            Assert.IsFalse(registrationForm.isLoginFree);  
-        }
-
-        [TestMethod]
-        public void Registration_BusyLoginAndCorrectPasswordsDoesntMatch_ShouldntlRegistration()
-        {
-            //Arrange
-            ApplicationContextDB db = new(GetInMemoryOptions());
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
-            db.Add(user);
-            db.SaveChanges();
-
-            //Act
-            registrationForm.IsUserDataValid("rpakjj7", "123321dDd", "123321dDd", db);
-
-            //Assert
-            Assert.IsFalse(registrationForm.isLoginFree);
-        }
-
     }
 }

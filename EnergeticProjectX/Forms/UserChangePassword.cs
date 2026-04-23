@@ -59,7 +59,7 @@ namespace UserChangePasswordForm
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
 
             (var loginAndPasswordValid, var messageOfError) = IsAllPasswordsValid(oldPassword,
-                                                            newPassword, confirmationPassword);
+                                                            newPassword, confirmationPassword, db, userLogin);
 
             if (loginAndPasswordValid)
             {
@@ -140,7 +140,7 @@ namespace UserChangePasswordForm
         /// <param name="confirmationPassword">Повтор нового пароля</param>
         /// <returns></returns>
         public (bool success, string? errorMessage) IsAllPasswordsValid(string oldPassword, string newPassword,
-                                                string confirmationPassword)
+                                                string confirmationPassword, ApplicationContextDB db, string userLogin)
         {
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
 
