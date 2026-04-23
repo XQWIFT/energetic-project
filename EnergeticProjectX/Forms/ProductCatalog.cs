@@ -8,8 +8,7 @@ using EnergeticProjectX.Enums;
 using EnergeticProjectX.Models;
 using EnergeticProjectX.Properties;
 using MakingShipmentForm;
-using System.Diagnostics;
-using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 using WarehousemanPanelForm;
 
 namespace ProductCatalogForm
@@ -104,9 +103,9 @@ namespace ProductCatalogForm
 
                 if (!string.IsNullOrWhiteSpace(searchText))
                 {
-                    string lower = searchText.ToLower().Trim();
-                    query = query.Where(product => product.Article.Equals(lower, StringComparison.OrdinalIgnoreCase) ||
-                                                   product.Name.Contains(lower, StringComparison.OrdinalIgnoreCase));
+                    string search = searchText.Trim();
+                    query = query.Where(product => EF.Functions.ILike(product.Article, search) ||
+                                                   EF.Functions.ILike(product.Name, $"%{search}%"));
                 }
 
                 var productsLoaded = query
@@ -135,7 +134,7 @@ namespace ProductCatalogForm
                         StockQuantity = p.StockQuantity,
                         Unit = p.UnitName,
                         SalePrice = formattedPrice,
-                        DiscountDate = DateOnly.FromDateTime(p.DiscountDate)
+                        DiscountDate = p.DiscountDate
                     };
                 }).ToList();
 

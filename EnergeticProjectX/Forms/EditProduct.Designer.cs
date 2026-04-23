@@ -43,9 +43,9 @@
             LabelOfPriceForSell = new Label();
             LabelOfPriceDecreaseInfo = new Label();
             TextBoxOfCurrentStockQuantity = new TextBox();
-            TextBoxOfCreationData = new TextBox();
+            TextBoxOfCreationDate = new TextBox();
             TextBoxOfPriceForSell = new TextBox();
-            TextBoxForDiscountDate = new TextBox();
+            TextBoxOfDiscountDate = new TextBox();
             ButtonOfProductDelete = new Button();
             TextBoxOfPurchasePrice = new TextBox();
             LabelOfPurchasePrice = new Label();
@@ -92,7 +92,7 @@
             ButtonOfSaveChanges.TabIndex = 31;
             ButtonOfSaveChanges.Text = "Сохранить изменения";
             ButtonOfSaveChanges.UseVisualStyleBackColor = true;
-            ButtonOfSaveChanges.Click += buttonOfSave_Click;
+            ButtonOfSaveChanges.Click += ButtonOfSave_Click;
             // 
             // LabelOfUnit
             // 
@@ -116,9 +116,11 @@
             // 
             // TextBoxOfName
             // 
+            TextBoxOfName.BackColor = Color.White;
             TextBoxOfName.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
             TextBoxOfName.Location = new Point(400, 144);
             TextBoxOfName.Name = "TextBoxOfName";
+            TextBoxOfName.ReadOnly = true;
             TextBoxOfName.Size = new Size(496, 50);
             TextBoxOfName.TabIndex = 26;
             // 
@@ -166,6 +168,7 @@
             ButtonOfChange.TabIndex = 35;
             ButtonOfChange.Text = "Редактировать";
             ButtonOfChange.UseVisualStyleBackColor = true;
+            ButtonOfChange.Click += ButtonOfChange_Click;
             // 
             // LabelOfStockQuantityInfo
             // 
@@ -209,35 +212,43 @@
             // 
             // TextBoxOfCurrentStockQuantity
             // 
+            TextBoxOfCurrentStockQuantity.BackColor = Color.White;
             TextBoxOfCurrentStockQuantity.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
             TextBoxOfCurrentStockQuantity.Location = new Point(400, 402);
             TextBoxOfCurrentStockQuantity.Name = "TextBoxOfCurrentStockQuantity";
+            TextBoxOfCurrentStockQuantity.ReadOnly = true;
             TextBoxOfCurrentStockQuantity.Size = new Size(496, 50);
             TextBoxOfCurrentStockQuantity.TabIndex = 41;
             // 
-            // TextBoxOfCreationData
+            // TextBoxOfCreationDate
             // 
-            TextBoxOfCreationData.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            TextBoxOfCreationData.Location = new Point(400, 653);
-            TextBoxOfCreationData.Name = "TextBoxOfCreationData";
-            TextBoxOfCreationData.Size = new Size(496, 50);
-            TextBoxOfCreationData.TabIndex = 42;
+            TextBoxOfCreationDate.BackColor = Color.White;
+            TextBoxOfCreationDate.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfCreationDate.Location = new Point(400, 653);
+            TextBoxOfCreationDate.Name = "TextBoxOfCreationDate";
+            TextBoxOfCreationDate.ReadOnly = true;
+            TextBoxOfCreationDate.Size = new Size(496, 50);
+            TextBoxOfCreationDate.TabIndex = 42;
             // 
             // TextBoxOfPriceForSell
             // 
+            TextBoxOfPriceForSell.BackColor = Color.White;
             TextBoxOfPriceForSell.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
             TextBoxOfPriceForSell.Location = new Point(400, 569);
             TextBoxOfPriceForSell.Name = "TextBoxOfPriceForSell";
+            TextBoxOfPriceForSell.ReadOnly = true;
             TextBoxOfPriceForSell.Size = new Size(496, 50);
             TextBoxOfPriceForSell.TabIndex = 43;
             // 
-            // TextBoxForDiscountDate
+            // TextBoxOfDiscountDate
             // 
-            TextBoxForDiscountDate.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            TextBoxForDiscountDate.Location = new Point(400, 739);
-            TextBoxForDiscountDate.Name = "TextBoxForDiscountDate";
-            TextBoxForDiscountDate.Size = new Size(496, 50);
-            TextBoxForDiscountDate.TabIndex = 44;
+            TextBoxOfDiscountDate.BackColor = Color.White;
+            TextBoxOfDiscountDate.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfDiscountDate.Location = new Point(400, 739);
+            TextBoxOfDiscountDate.Name = "TextBoxOfDiscountDate";
+            TextBoxOfDiscountDate.ReadOnly = true;
+            TextBoxOfDiscountDate.Size = new Size(496, 50);
+            TextBoxOfDiscountDate.TabIndex = 44;
             // 
             // ButtonOfProductDelete
             // 
@@ -252,12 +263,15 @@
             ButtonOfProductDelete.TabIndex = 45;
             ButtonOfProductDelete.Text = "Удалить товар";
             ButtonOfProductDelete.UseVisualStyleBackColor = true;
+            ButtonOfProductDelete.Click += ButtonOfProductDelete_Click;
             // 
             // TextBoxOfPurchasePrice
             // 
+            TextBoxOfPurchasePrice.BackColor = Color.White;
             TextBoxOfPurchasePrice.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
             TextBoxOfPurchasePrice.Location = new Point(400, 485);
             TextBoxOfPurchasePrice.Name = "TextBoxOfPurchasePrice";
+            TextBoxOfPurchasePrice.ReadOnly = true;
             TextBoxOfPurchasePrice.Size = new Size(496, 50);
             TextBoxOfPurchasePrice.TabIndex = 46;
             // 
@@ -275,7 +289,7 @@
             // 
             LabelOfCurrencySymbolFirst.AutoSize = true;
             LabelOfCurrencySymbolFirst.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            LabelOfCurrencySymbolFirst.Location = new Point(290, 488);
+            LabelOfCurrencySymbolFirst.Location = new Point(276, 488);
             LabelOfCurrencySymbolFirst.Name = "LabelOfCurrencySymbolFirst";
             LabelOfCurrencySymbolFirst.Size = new Size(0, 45);
             LabelOfCurrencySymbolFirst.TabIndex = 48;
@@ -284,7 +298,7 @@
             // 
             LabelOfCurrencySymbolSecond.AutoSize = true;
             LabelOfCurrencySymbolSecond.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            LabelOfCurrencySymbolSecond.Location = new Point(309, 572);
+            LabelOfCurrencySymbolSecond.Location = new Point(290, 572);
             LabelOfCurrencySymbolSecond.Name = "LabelOfCurrencySymbolSecond";
             LabelOfCurrencySymbolSecond.Size = new Size(0, 45);
             LabelOfCurrencySymbolSecond.TabIndex = 49;
@@ -300,9 +314,9 @@
             Controls.Add(LabelOfPurchasePrice);
             Controls.Add(TextBoxOfPurchasePrice);
             Controls.Add(ButtonOfProductDelete);
-            Controls.Add(TextBoxForDiscountDate);
+            Controls.Add(TextBoxOfDiscountDate);
             Controls.Add(TextBoxOfPriceForSell);
-            Controls.Add(TextBoxOfCreationData);
+            Controls.Add(TextBoxOfCreationDate);
             Controls.Add(TextBoxOfCurrentStockQuantity);
             Controls.Add(LabelOfPriceDecreaseInfo);
             Controls.Add(LabelOfPriceForSell);
@@ -331,9 +345,7 @@
         private ComboBox ComboBoxOfCategory;
         private Button ButtonOfCancel;
         private Button ButtonOfSaveChanges;
-        private TextBox TextBoxOfPrice;
         private Label LabelOfUnit;
-        private Label LabelOfPrice;
         private Label LabelOfCategory;
         private TextBox TextBoxOfName;
         private Label LabelOfName;
@@ -344,11 +356,10 @@
         private Label LabelOfCreationDataInfo;
         private Label LabelOfPriceForSell;
         private Label LabelOfPriceDecreaseInfo;
-        private ContextMenuStrip contextMenuStrip1;
         private TextBox TextBoxOfCurrentStockQuantity;
-        private TextBox TextBoxOfCreationData;
+        private TextBox TextBoxOfCreationDate;
         private TextBox TextBoxOfPriceForSell;
-        private TextBox TextBoxForDiscountDate;
+        private TextBox TextBoxOfDiscountDate;
         private Button ButtonOfProductDelete;
         private TextBox TextBoxOfPurchasePrice;
         private Label LabelOfPurchasePrice;

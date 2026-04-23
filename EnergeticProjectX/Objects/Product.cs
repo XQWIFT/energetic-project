@@ -85,7 +85,7 @@ namespace EnergeticProjectX.Objects
         /// Дата назначения скидки для товара.
         /// </summary>
         [Column("discount_date")]
-        public DateTime DiscountDate { get; set; }
+        public DateOnly DiscountDate { get; set; }
 
         /// <summary>
         /// Константа, которая определяет увеличение цены для продажи относительно цены закупки.

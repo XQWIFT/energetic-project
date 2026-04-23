@@ -12,7 +12,6 @@ namespace Registration
     /// </summary>
     public partial class RegistrationForm : Form
     {
-        private readonly BCryptRealization bc = new();
         private readonly ApplicationContextDB db = new();
 
         /// <summary>

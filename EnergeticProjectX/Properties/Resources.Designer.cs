@@ -79,7 +79,7 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Вы уверены, что хотите удалить товар:.
+        ///   Ищет локализованную строку, похожую на Вы уверены, что хотите удалить данный товар?.
         /// </summary>
         internal static string AskForDeleteProduct {
             get {
@@ -93,6 +93,15 @@ namespace EnergeticProjectX.Properties {
         internal static string AskOfCancelEdit {
             get {
                 return ResourceManager.GetString("AskOfCancelEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вам будут доступны следующие поля для редактирования: «Название товара», «Категория товара», «Цена закупки» и «Снижение цены»..
+        /// </summary>
+        internal static string AvailableFieldsToEditProduct {
+            get {
+                return ResourceManager.GetString("AvailableFieldsToEditProduct", resourceCulture);
             }
         }
         
@@ -313,6 +322,15 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Например: 05.05.2005.
+        /// </summary>
+        internal static string CorrectDateFormatExample {
+            get {
+                return ResourceManager.GetString("CorrectDateFormatExample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Дата добавления.
         /// </summary>
         internal static string CreationData {
@@ -354,6 +372,15 @@ namespace EnergeticProjectX.Properties {
         internal static string Empty {
             get {
                 return ResourceManager.GetString("Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на [EnsureCreatedError].
+        /// </summary>
+        internal static string EnsureCreatedError {
+            get {
+                return ResourceManager.GetString("EnsureCreatedError", resourceCulture);
             }
         }
         
@@ -498,6 +525,24 @@ namespace EnergeticProjectX.Properties {
         internal static string HowMuchUsersUploaded {
             get {
                 return ResourceManager.GetString("HowMuchUsersUploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Обратите внимание, что если закупочная цена данного товара изменится, также изменится и цена продажи!.
+        /// </summary>
+        internal static string IfChangePurchaseThenChangeSale {
+            get {
+                return ResourceManager.GetString("IfChangePurchaseThenChangeSale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Неверный формат даты снижения цены, введите: dd.mm.yyyy..
+        /// </summary>
+        internal static string IncorrectDateFormat {
+            get {
+                return ResourceManager.GetString("IncorrectDateFormat", resourceCulture);
             }
         }
         
@@ -858,6 +903,15 @@ namespace EnergeticProjectX.Properties {
         internal static string SuccessUpdateProduct {
             get {
                 return ResourceManager.GetString("SuccessUpdateProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вы действительно хотите редактировать карточку данного товара?.
+        /// </summary>
+        internal static string SureWantToChangeProductData {
+            get {
+                return ResourceManager.GetString("SureWantToChangeProductData", resourceCulture);
             }
         }
         

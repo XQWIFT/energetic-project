@@ -1,6 +1,8 @@
 ﻿using EnergeticProjectX.Objects;
+using EnergeticProjectX.Properties;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace EnergeticProjectX.Classes
 {
@@ -52,7 +54,19 @@ namespace EnergeticProjectX.Classes
         /// <summary>
         /// Является базовым конструктором при создании БД (без параметров).
         /// </summary>
-        public ApplicationContextDB() => Database.EnsureCreated();
+        public ApplicationContextDB()
+        {
+            {
+                try
+                {
+                    Database.EnsureCreated();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"{Resources.EnsureCreatedError}:\n{ex.Message}");
+                }
+            }
+        }
 
         /// <summary>
         /// Конструктор при передаче параметра options.

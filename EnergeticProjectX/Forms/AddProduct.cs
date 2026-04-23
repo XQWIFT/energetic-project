@@ -148,7 +148,7 @@ namespace AddProductForm
                 PurchasePrice = PriceCurrencyManager.SetPriceToDefaultCurrency(db, (decimal)purchasePrice, userLogin),
                 SalePrice = PriceCurrencyManager.GetSalePriceInDefaultCurrency(PriceCurrencyManager.SetPriceToDefaultCurrency(db, (decimal)purchasePrice, userLogin)),
                 CreationDate = DateTime.UtcNow,
-                DiscountDate = DateTime.UtcNow.AddMonths(2).Date
+                DiscountDate = DateOnly.FromDateTime(DateTime.UtcNow).AddMonths(2)
             };
             
             db.Products.Add(product);

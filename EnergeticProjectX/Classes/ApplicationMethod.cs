@@ -1,6 +1,5 @@
 ﻿using EnergeticProjectX.Enums;
 using EnergeticProjectX.Properties;
-using System.Runtime.CompilerServices;
 
 namespace EnergeticProjectX.Classes
 {
@@ -21,7 +20,7 @@ namespace EnergeticProjectX.Classes
         /// <summary>
         /// Метод для проверки подключения пользователя к базе данных.
         /// </summary>
-        private static void CheckConnectionDB()
+        public static void CheckConnectionDB()
         {
             var db = new ApplicationContextDB();
 

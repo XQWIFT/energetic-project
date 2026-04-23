@@ -100,7 +100,7 @@ namespace EnergeticProjectX.Classes
         }
 
         /// <summary>
-        /// Метод для переопределния цены в рублях в эквивалент в выбранной пользователем валюте.
+        /// Метод для переопределения цены в рублях в эквивалент в выбранной пользователем валюте.
         /// </summary>
         /// <param name="db"></param>
         /// <param name="priceInDefaultCurrency"></param>
