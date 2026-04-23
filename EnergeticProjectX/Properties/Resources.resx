@@ -258,14 +258,14 @@
   <data name="HowMuchUsersUploaded" xml:space="preserve">
     <value>Пользователей загружено:</value>
   </data>
-  <data name="RecipientDisplayMember" xml:space="preserve">
-    <value>Display</value>
+  <data name="ClientDisplayMember" xml:space="preserve">
+    <value>ClientName</value>
   </data>
-  <data name="RecipientValueMember" xml:space="preserve">
+  <data name="ClientValueMember" xml:space="preserve">
     <value>Client_Id</value>
   </data>
   <data name="ProductDisplayMember" xml:space="preserve">
-    <value>Display</value>
+    <value>Description</value>
   </data>
   <data name="ProductValueMember" xml:space="preserve">
     <value>Article</value>
@@ -280,7 +280,7 @@
     <value>Пользователь не найден.</value>
   </data>
   <data name="ErrorSave" xml:space="preserve">
-    <value>Ошибка при сохранении:</value>
+    <value>Ошибка при сохранении</value>
   </data>
   <data name="ShipmentSuccessfullyProcessed" xml:space="preserve">
     <value>Отгрузка успешно оформлена!</value>
@@ -476,5 +476,131 @@
   </data>
   <data name="EnsureCreatedError" xml:space="preserve">
     <value>[EnsureCreatedError]</value>
+  </data>
+  <data name="MessageForLogging" xml:space="preserve">
+    <value>{Message}</value>
+  </data>
+  <data name="SLContextDBCreated" xml:space="preserve">
+    <value>Контекст базы данных создан.</value>
+  </data>
+  <data name="SLApplicationRun" xml:space="preserve">
+    <value>Приложение запущено!</value>
+  </data>
+  <data name="SLApplicationEnd" xml:space="preserve">
+    <value>Приложение завершено!</value>
+  </data>
+  <data name="LSCriticalErrorInLaunching" xml:space="preserve">
+    <value>Необработанное исключение при запуске</value>
+  </data>
+  <data name="SLCriticalErrorInLaunchingProgram" xml:space="preserve">
+    <value>Необработанное исключение при запуске</value>
+  </data>
+  <data name="CriticalError" xml:space="preserve">
+    <value>Критическая ошибка! Работа приостановлена.</value>
+  </data>
+  <data name="ProgramInitializationEnd" xml:space="preserve">
+    <value>Инициализация приложения завершена!</value>
+  </data>
+  <data name="UnhandledExceptionMessage" xml:space="preserve">
+    <value>Необработанное исключение:</value>
+  </data>
+  <data name="SLMakingShipmentFormIsOpened" xml:space="preserve">
+    <value>Форма оформления отгрузки открыта пользователем:</value>
+  </data>
+  <data name="ClientsLoadError" xml:space="preserve">
+    <value>Ошибка при загрузке клиентов</value>
+  </data>
+  <data name="ProductLoadError" xml:space="preserve">
+    <value>Ошибка при загрузке товаров</value>
+  </data>
+  <data name="ProductIsChosen" xml:space="preserve">
+    <value>Выбран товар:</value>
+  </data>
+  <data name="InWhatAmount" xml:space="preserve">
+    <value>В количестве:</value>
+  </data>
+  <data name="StringO" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="Client" xml:space="preserve">
+    <value>Получатель</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Количество</value>
+  </data>
+  <data name="NotFoundInDB" xml:space="preserve">
+    <value>не найден в базе данных.</value>
+  </data>
+  <data name="TryToAdd" xml:space="preserve">
+    <value>Попытка добавления товара.</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Доступно на складе</value>
+  </data>
+  <data name="AddedToShipment" xml:space="preserve">
+    <value>добавлен в отгрузку</value>
+  </data>
+  <data name="ProductAddToShipmentError" xml:space="preserve">
+    <value>Ошибка при добавлении товара в отгрузку!</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="ShipmentUploaded" xml:space="preserve">
+    <value>Обновлена таблица отгрузки, всего позиций:</value>
+  </data>
+  <data name="ShipmentCreationCancelledByUser" xml:space="preserve">
+    <value>Создание отгрузки отменено пользователем.</value>
+  </data>
+  <data name="CriticalErrorWhenMakingShipment" xml:space="preserve">
+    <value>Критическая ошибка при создании отгрузки</value>
+  </data>
+  <data name="NoProductsInShipment" xml:space="preserve">
+    <value>В текущей отгрузке отсутствуют товары.</value>
+  </data>
+  <data name="ProductNumber" xml:space="preserve">
+    <value>Количество товара</value>
+  </data>
+  <data name="SureWantToMakeShipment" xml:space="preserve">
+    <value>Вы действительно хотите оформить отгрузку?</value>
+  </data>
+  <data name="StartOfMakingShipment" xml:space="preserve">
+    <value>Начало оформления отгрузки. Товаров:</value>
+  </data>
+  <data name="NotManagedToSaveShipment" xml:space="preserve">
+    <value>Не удалось сохранить отгрузку в базу данных</value>
+  </data>
+  <data name="ShipmentSuccessfullyCreated" xml:space="preserve">
+    <value>Отгрузка успешно оформлена, ID:</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Товаров:</value>
+  </data>
+  <data name="RecordOfShipmentCreated" xml:space="preserve">
+    <value>Создана запись ID отгрузки:</value>
+  </data>
+  <data name="NewStockQuantity" xml:space="preserve">
+    <value>Новый остаток:</value>
+  </data>
+  <data name="ProductRowSelected" xml:space="preserve">
+    <value>Строка с товаром выделена.</value>
+  </data>
+  <data name="ErrorProductDelete" xml:space="preserve">
+    <value>Ошибка удаления товара.</value>
+  </data>
+  <data name="ProductRemoveFromShipmentError" xml:space="preserve">
+    <value>Ошибка удаления товара из отгрузки</value>
+  </data>
+  <data name="ProductRemovedFromShipment" xml:space="preserve">
+    <value>Товар успешно удалён из отгрузки!</value>
+  </data>
+  <data name="SelectProductToDelete" xml:space="preserve">
+    <value>Выделите товар для удаления.</value>
+  </data>
+  <data name="Article" xml:space="preserve">
+    <value>Артикул</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Название</value>
   </data>
 </root>

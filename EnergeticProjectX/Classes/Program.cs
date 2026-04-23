@@ -1,3 +1,5 @@
+using EnergeticProjectX.Properties;
+
 namespace EnergeticProjectX.Classes
 {
     internal static class Program
@@ -8,13 +10,25 @@ namespace EnergeticProjectX.Classes
         [STAThread]
         static void Main()
         {
-            ApplicationConfiguration.Initialize();
+            LoggerService.Info(Resources.SLApplicationRun);
 
-            var db = new ApplicationContextDB();
+            try
+            {
+                ApplicationConfiguration.Initialize();
 
-            ApplicationMethod.Initialize(db);
+                var db = new ApplicationContextDB();
+                LoggerService.Debug(Resources.SLContextDBCreated);
 
-            Application.Run(new AuthorizationForm());
+                ApplicationMethod.Initialize(db);
+                LoggerService.Info(Resources.ProgramInitializationEnd);
+
+                Application.Run(new AuthorizationForm());
+            }
+            catch (Exception ex)
+            {
+                LoggerService.Fatal($"{Resources.UnhandledExceptionMessage}, {ex}");
+                MessageBox.Show(Resources.CriticalError, Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

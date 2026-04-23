@@ -10,7 +10,7 @@ namespace EnergeticProjectX.Classes
     {
         public static void Initialize(ApplicationContextDB db)
         {
-            CheckConnectionDB();
+            CheckConnectionDB(db);
 
             DeleteHiddenProducts(db);
 
@@ -20,10 +20,8 @@ namespace EnergeticProjectX.Classes
         /// <summary>
         /// Метод для проверки подключения пользователя к базе данных.
         /// </summary>
-        public static void CheckConnectionDB()
+        public static void CheckConnectionDB(this ApplicationContextDB db)
         {
-            var db = new ApplicationContextDB();
-
             if (!db.Database.CanConnect())
             {
                 MessageBox.Show(Resources.ConnectionToDataBaseFailed, Resources.TitleErrorBD,
