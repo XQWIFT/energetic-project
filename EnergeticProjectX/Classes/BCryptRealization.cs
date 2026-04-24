@@ -1,6 +1,6 @@
 ﻿using BC = BCrypt.Net.BCrypt;
 
-namespace BCrypt
+namespace EnergeticProjectX.Classes
 {
     /// <summary>
     /// Класс для реализации шифрования/расшифрования пароля
@@ -10,7 +10,7 @@ namespace BCrypt
         /// <summary>
         /// Метод позволяющий зашифровать пароль
         /// </summary>
-        public string PasswordHash(string password)
+        public static string PasswordHash(string password)
         {
             var passwordHash = BC.HashPassword(password);
             return passwordHash;
@@ -19,10 +19,10 @@ namespace BCrypt
         /// <summary>
         /// Метод позволяющий расшифровать пароль
         /// </summary>
-        public bool CheckPassword(string password, string passwordHash)
+        public static bool CheckPassword(string password, string passwordHash)
         {
             var isChecked = BC.Verify(password, passwordHash);
-            return passwordHash != null ? isChecked: false;
+            return passwordHash != null && isChecked;
         }
     }
 }

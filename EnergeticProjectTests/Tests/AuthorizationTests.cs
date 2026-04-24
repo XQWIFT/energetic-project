@@ -1,46 +1,46 @@
-﻿using DBControl;
-using EnergeticProjectX;
+﻿using EnergeticProjectX;
+using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
+using EnergeticProjectX.Objects;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using UserControl;
-using BCrypt;
 
-namespace AuthorizationTests
+namespace EnergeticProjectTestt.Tests
 {
     [TestClass]
     public class Authorization_Tests
     {
-        BCryptRealization bCrypt = new BCryptRealization();
-        AuthorizationForm authorizationForm = new AuthorizationForm();
-
-        private DbContextOptions<ApplicationContextDB> GetInMemoryOptions()
+        private static DbContextOptions<ApplicationContextDB> GetInMemoryOptions()
         {
             return new DbContextOptionsBuilder<ApplicationContextDB>()
                 .UseInMemoryDatabase(databaseName: $"TestDb_{Guid.NewGuid()}")
                 .Options;
         }
 
+        private readonly ApplicationContextDB db = new(GetInMemoryOptions());
+
+        static string userLogin = "rpakjj7";
+
+        User user = new User
+        {
+            Login = userLogin,
+            Password = BCryptRealization.PasswordHash("123321dDd"),
+            Surname = "Petukhov",
+            Name = "Nikitos",
+            UserRole = UserRole.Administrator,
+            CurrencyId = Guid.NewGuid(),
+        };
+
         [TestMethod]
         public void Authorization_ValidLoginAndPassword_SuccefulAuthorization()
         {
 
             //Arrange
-            ApplicationContextDB db = new(GetInMemoryOptions());
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
             db.Add(user);
             db.SaveChanges();
 
             //Act
-            bool result = authorizationForm.IsLoginAndPasswordValid("rpakjj7", "123321dDd", db);
+            bool result = AuthorizationForm.IsLoginAndPasswordValid("rpakjj7", "123321dDd", db);
 
             //Assert
             Debug.Assert(result == true);
@@ -50,22 +50,11 @@ namespace AuthorizationTests
         public void Authorization_InvalidLogin_ValidPassword_ShouldnotAuthorization()
         {
             //Arrange
-            ApplicationContextDB db = new(GetInMemoryOptions());
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
             db.Add(user);
             db.SaveChanges();
 
             //Act
-            bool result = authorizationForm.IsLoginAndPasswordValid("qwerty", "123321dDd", db);
+            bool result = AuthorizationForm.IsLoginAndPasswordValid("qwerty", "123321dDd", db);
 
             //Assert
             Debug.Assert(result == false);
@@ -74,22 +63,12 @@ namespace AuthorizationTests
         [TestMethod]
         public void Authorization_ValidLogin_AndInvalidPassword_ShouldnotAuthorization()
         {
-            ApplicationContextDB db = new(GetInMemoryOptions());
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
+            //Arrange
             db.Add(user);
             db.SaveChanges();
 
             //Act
-            bool result = authorizationForm.IsLoginAndPasswordValid("rpakjj7", "qwerty", db);
+            bool result = AuthorizationForm.IsLoginAndPasswordValid("rpakjj7", "qwerty", db);
 
             //Assert
             Debug.Assert(result == false);
@@ -98,22 +77,12 @@ namespace AuthorizationTests
         [TestMethod]
         public void Authorization_InvaliddLogin_AndInvalidPassword_ShouldnotAuthorization()
         {
-            ApplicationContextDB db = new(GetInMemoryOptions());
-
-            var user = new User
-            {
-                UserCode = "47534",
-                Login = "rpakjj7",
-                Password = bCrypt.PasswordHash("123321dDd"),
-                Surname = "Petukhov",
-                Name = "Nikitos",
-                UserRole = "Admin"
-            };
+            //Arrange
             db.Add(user);
             db.SaveChanges();
 
             //Act
-            bool result = authorizationForm.IsLoginAndPasswordValid("login", "qwerty", db);
+            bool result = AuthorizationForm.IsLoginAndPasswordValid("login", "qwerty", db);
 
             //Assert
             Debug.Assert(result == false);

@@ -1,109 +1,118 @@
 ﻿using AdministratorPanelForm;
-using SelectClientDataForTable;
 using System.Data;
 using AddClientForm;
-using ClientManagementForm;
+using EnergeticProjectX.Properties;
+using EnergeticProjectX.Models;
+using EditClientForm;
+using EnergeticProjectX.Classes;
 
 namespace ListOfClientsForm
 {
     /// <summary>
-    /// Работа с таблицей клиентов
+    /// Класс для работы с таблицей клиентов
     /// </summary>
     public partial class ListOfClients : Form
     {
-        DBControl.ApplicationContextDB context = new();
-        BindingSource bindingSource = new BindingSource();
-        string userLogin;
+        private readonly ApplicationContextDB db = new();
+        private readonly BindingSource bindingSource = [];
+
+        private readonly string userLogin;
+
+        /// <summary>
+        /// Конструктор для работы с таблицей клиентов
+        /// </summary>
+        /// <param name="userLogin">Логин авторизованного пользователя</param>
         public ListOfClients(string userLogin)
         {
             InitializeComponent();
+
             this.userLogin = userLogin;
+
             LoadUsers();
 
-            dataGridOfClients.MultiSelect = false;
-            dataGridOfClients.EnableHeadersVisualStyles = false;
-            dataGridOfClients.SelectionChanged += DataGridOfClients_SelectionChanged!;
-            buttonOfClient.Enabled = false;
+            DataGridOfClients.SelectionChanged += DataGridOfClients_SelectionChanged!;
         }
 
         private void LoadUsers()
         {
             try
             {
-                bindingSource.DataSource = context.Clients
+                bindingSource.DataSource = db.Clients
                     .Select(u => new ClientDisplayModel
                     {
-                        Client_Id = u.Client_Id,
-                        Name = u.Name,
-                        Contractor = u.Contractor,
-                        INN = u.INN,
+                        Name = u.Name!,
+                        Contractor = u.Contractor!.GetDescriptionOfEnumValue(),
+                        INN = u.INN!,
                         ContactInfo = u.ContactInfo,
                     })
                     .ToList();
-                dataGridOfClients.DataSource = bindingSource;
+
+                DataGridOfClients.DataSource = bindingSource;
                 bindingSource.ResetBindings(false);
 
-                MessageBox.Show($"Загружено {context.Clients.Count()} клиентов",
-                    "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"{Resources.HowMuchClientsUploaded}: {db.Clients.Count()}", Resources.TitleInformation,
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
             }
         }
 
-        private void buttonOfMainMenu_Click(object sender, EventArgs e)
+        private void ButtonOfMainMenu_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            AdministratorPanel administratorPanel = new(userLogin);
+            Hide();
+            var administratorPanel = new AdministratorPanel(userLogin);
             administratorPanel.ShowDialog();
-            this.Close();
+            Close();
         }
 
-        private void buttonAddClient_Click(object sender, EventArgs e)
+        private void ButtonOfAddClient_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Hide();
             var addClient = new AddClient(userLogin);
             addClient.ShowDialog();
-            this.Close();
+            Close();
         }
 
-        private void dataGridOfClients_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        private void DataGridOfClients_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                DataGridViewCell cell = dataGridOfClients.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                var cell = DataGridOfClients.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-                string cellValue = cell.Value?.ToString() ?? "пусто";
-                string columnName = dataGridOfClients.Columns[e.ColumnIndex].HeaderText;
+                var cellValue = cell.Value?.ToString() ?? Resources.Empty;
+                var columnName = DataGridOfClients.Columns[e.ColumnIndex].HeaderText;
 
-                string tooltipText = $"{columnName}: {cellValue}";
-                cell.ToolTipText = tooltipText;
+                var toolTipText = $"{columnName}: {cellValue}";
+                cell.ToolTipText = toolTipText;
             }
         }
 
-        private void dataGridOfClients_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void DataGridOfClients_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridOfClients.Rows.Count)
+            if (e.RowIndex >= 0 && e.RowIndex < DataGridOfClients.Rows.Count)
             {
-                dataGridOfClients.ClearSelection();
+                DataGridOfClients.ClearSelection();
 
-                dataGridOfClients.Rows[e.RowIndex].Selected = true;
+                DataGridOfClients.Rows[e.RowIndex].Selected = true;
 
-                dataGridOfClients.CurrentCell = dataGridOfClients.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                DataGridOfClients.CurrentCell = DataGridOfClients.Rows[e.RowIndex].Cells[e.ColumnIndex];
             }
         }
 
         private void DataGridOfClients_SelectionChanged(object sender, EventArgs e)
         {
-            bool isFullRowSelected = false;
+            var isFullRowSelected = false;
 
-            if (dataGridOfClients.SelectedRows.Count > 0)
+            if (DataGridOfClients.SelectedRows.Count > 0)
             {
-                DataGridViewRow selectedRow = dataGridOfClients.SelectedRows[0];
+                var selectedRow = DataGridOfClients.SelectedRows[0];
 
-                bool allCellsSelected = true;
+                var allCellsSelected = true;
                 foreach (DataGridViewCell cell in selectedRow.Cells)
                 {
                     if (!cell.Selected)
@@ -112,34 +121,32 @@ namespace ListOfClientsForm
                         break;
                     }
                 }
-
                 isFullRowSelected = allCellsSelected;
             }
 
-            buttonOfClient.Enabled = isFullRowSelected;
+            ButtonOfClient.Enabled = isFullRowSelected;
         }
 
-        private void buttonOfClient_Click(object sender, EventArgs e)
+        private void ButtonOfClient_Click(object sender, EventArgs e)
         {
-            if (dataGridOfClients.CurrentRow != null)
+            if (DataGridOfClients.CurrentRow != null)
             {
-                DataGridViewRow selectedRow = dataGridOfClients.CurrentRow;
+                DataGridViewRow selectedRow = DataGridOfClients.CurrentRow;
 
-                string Client_Id = selectedRow.Cells["Client_Id"].Value!.ToString()!;
-                string Name = selectedRow.Cells["Name"].Value!.ToString()!;
-                string Contractor = selectedRow.Cells["Contractor"].Value!.ToString()!;
-                string Inn = selectedRow.Cells["INN"].Value!.ToString()!;
-                string ContactInfo = selectedRow.Cells["ContactInfo"].Value!.ToString()!;
+                var Name = selectedRow.Cells[Resources.ClientRowName].Value!.ToString()!;
+                var Contractor = selectedRow.Cells[Resources.ClientRowContractor].Value!.ToString()!;
+                var Inn = selectedRow.Cells[Resources.ClientINN].Value!.ToString()!;
+                var ClientId = db.Clients.FirstOrDefault(u => u.INN == Inn)!.Client_Id;
+                var ContactInfo = selectedRow.Cells[Resources.ClientContactInfo].Value!.ToString()!;
 
-                this.Hide();
-                СlientManagement сlientManagement = new СlientManagement(userLogin, Client_Id, Name,
-                     Contractor, Inn, ContactInfo);
-                сlientManagement.ShowDialog();
-                this.Close();
+                Hide();
+                var editClient = new EditClient(userLogin, ClientId, Name, Contractor, Inn, ContactInfo);
+                editClient.ShowDialog();
+                Close();
             }
             else
             {
-                MessageBox.Show("Выберите клиента для редактирования");
+                MessageBox.Show(Resources.ChooseClientForEdit);
             }
         }
     }

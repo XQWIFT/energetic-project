@@ -1,41 +1,34 @@
 ﻿using System.ComponentModel;
 
-namespace SelectClientDataForTable
+namespace EnergeticProjectX.Models
 {
     /// <summary>
-    /// Создаёт отображение клиента 
-    /// и его данных в таблице
+    /// Отображение клиента и его данных в таблице.
     /// </summary>
     public class ClientDisplayModel
     {
         /// <summary>
-        /// Уникальный ID клиента
+        /// Имя клиента: организация, компания, частное лицо.
         /// </summary>
-        [DisplayName("Id")]
-        public long Client_Id { get; set; }
+        [DisplayName("Клиент")]
+        public required string Name { get; set; }
 
         /// <summary>
-        /// Имя клиента (компании)
-        /// </summary>
-        [DisplayName("Название")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Физ.лицо, юр.лицо или ИП
+        /// Контрагент: Физ. лицо, Юр. лицо или ИП.
         /// </summary>
         [DisplayName("Контрагент")]
-        public string Contractor { get; set; }
+        public required string Contractor { get; set; }
 
         /// <summary>
-        /// ИНН клиента
+        /// ИНН клиента.
         /// </summary>
         [DisplayName("ИНН")]
-        public string? INN { get; set; }
+        public required string INN { get; set; }
 
         /// <summary>
-        /// Контактная информация (телефон, email, адрес) 
+        /// Контактная информация: телефон, email, адрес.
         /// </summary>
-        [DisplayName("Контактная информация")]
+        [DisplayName("Контактные данные")]
         public string? ContactInfo { get; set; }
     }
 }

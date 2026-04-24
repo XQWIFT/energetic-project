@@ -1,82 +1,91 @@
-﻿using ClientControl;
-using DBControl;
+﻿using EnergeticProjectX.Classes;
+using EnergeticProjectX.Objects;
+using EnergeticProjectX.Properties;
+using EnergeticProjectX.Enums;
 using ListOfClientsForm;
-using GeneratedCode;
 
 namespace AddClientForm
 {
     /// <summary>
-    /// Добавление клиента в БД
+    /// Класс для добавления нового клиента
     /// </summary>
     public partial class AddClient : Form
     {
-        string userLogin;
-        public AddClient(string UserLogin)
+        private readonly ApplicationContextDB db = new();
+
+        private readonly string userLogin;
+
+        /// <summary>
+        /// Конструктор добавления нового клиента
+        /// </summary>
+        /// <param name="userLogin">Логин авторизованного пользователя</param>
+        public AddClient(string userLogin)
         {
             InitializeComponent();
 
-            userLogin = UserLogin;
+            this.userLogin = userLogin;
 
-            textBoxOfName.TextChanged += TextBox_TextChanged!;
-            comboBoxOfContractor.TextChanged += TextBox_TextChanged!;
-            textBoxOfINN.TextChanged += TextBox_TextChanged!;
-            textBoxOfContactInfo.TextChanged += TextBox_TextChanged!;
-
-            buttonOfAdd.Enabled = false;
+            TextBoxOfName.TextChanged += TextBox_TextChanged!;
+            ComboBoxOfContractor.TextChanged += TextBox_TextChanged!;
+            TextBoxOfINN.TextChanged += TextBox_TextChanged!;
         }
 
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
-            bool allFieldsFilled = !string.IsNullOrWhiteSpace(textBoxOfName.Text) &&
-                                   !string.IsNullOrWhiteSpace(comboBoxOfContractor.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxOfINN.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxOfContactInfo.Text);
+            var allFieldsFilled = !string.IsNullOrWhiteSpace(TextBoxOfName.Text) &&
+                                  !string.IsNullOrWhiteSpace(ComboBoxOfContractor.Text) &&
+                                  !string.IsNullOrWhiteSpace(TextBoxOfINN.Text);
 
-            buttonOfAdd.Enabled = allFieldsFilled;
+            ButtonOfAddClient.Enabled = allFieldsFilled;
         }
 
-        private void buttonOfCancel_Click(object sender, EventArgs e)
+        private void ButtonOfAddClient_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            var listOfClients = new ListOfClients(userLogin);
-            listOfClients.ShowDialog();
-            this.Close();
-        }
+            var name = TextBoxOfName.Text;
+            var contractor = ComboBoxOfContractor.Text;
+            var iNN = TextBoxOfINN.Text.Trim();
+            var contactInfo = TextBoxOfContactInfo.Text;
 
-        private void buttonOfAdd_Click(object sender, EventArgs e)
-        {
-            var name = textBoxOfName.Text;
-            var contractor = comboBoxOfContractor.Text;
-            var inn = textBoxOfINN.Text;
-            var contactInfo = textBoxOfContactInfo.Text;
-
-            var db = new ApplicationContextDB();
-            var client = new Client();
-            var generateUniqueCode = new GenerateUniqueCode();
-
-            client.Name = name;
-            for (int i = 0; i < 100; i++)
+            if (!Client.ValidateINN(iNN, contractor))
             {
-                var codes = "K" + generateUniqueCode.Generate6();
-                if (!client.ClientCode.Contains(codes))
-                {
-                    break;
-                }
+                MessageBox.Show(Client.GetINNErrorMessage(contractor), Resources.ErrorValidation,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                client.ClientCode = codes;
+                return;
             }
-            
-            client.Contractor = contractor;
-            client.INN = inn;
-            client.ContactInfo = contactInfo;
+
+            if (db.Clients.Any(u => u.INN == iNN))
+            {
+                MessageBox.Show($"{Resources.INNAlreadyInDB}\n{Resources.TryAgain}", Resources.TitleWarning,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            var client = new Client
+            {
+                Name = name,
+                Contractor = (Contractors)EnumMethod.ParseDescriptionOfPotentialContractorsValue(contractor)!,
+                INN = iNN,
+                ContactInfo = contactInfo
+            };
 
             db.Clients.Add(client);
-            db.SaveChanges();
+            if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                return;
 
-            this.Hide();
+            Hide();
             var listOfClients = new ListOfClients(userLogin);
             listOfClients.ShowDialog();
-            this.Close();
+            Close();
+        }
+
+        private void ButtonOfCancel_Click(object sender, EventArgs e)
+        {
+            Hide();
+            var listOfClients = new ListOfClients(userLogin);
+            listOfClients.ShowDialog();
+            Close();
         }
     }
 }

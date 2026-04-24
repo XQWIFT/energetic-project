@@ -1,139 +1,201 @@
-﻿using CategoryControl;
-using DBControl;
+﻿using AddCategoryForm;
+using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
+using EnergeticProjectX.Objects;
+using EnergeticProjectX.Properties;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using ProductCatalogForm;
-using Windows.UI.Xaml.Controls.Primitives;
 
 namespace EditCategoriesForm
 {
+    /// <summary>
+    /// Класс для изменения существующей категории
+    /// </summary>
     public partial class EditCategories : Form
     {
-        string userLogin;
+        private readonly ApplicationContextDB db = new();
+
+        private readonly string userLogin;
+
+        /// <summary>
+        /// Конструктор изменения существующей категорий
+        /// </summary>
+        /// <param name="userLogin">Логин авторизованного пользователя</param>
         public EditCategories(string userLogin)
         {
             InitializeComponent();
+
             this.userLogin = userLogin;
 
-            buttonOfSaveChanges.Enabled = false;
-            buttonOfDelete.Enabled = false;
-
             LoadCategories();
+            AddCategory.LoadUnits(db, ComboBoxOfNewUnitData);
 
-            comboBoxOfCategory.SelectedIndex = -1;
+            ComboBoxOfCategory.SelectedIndex = -1;
+            ComboBoxOfNewUnitData.SelectedIndex = -1;
+
+            ComboBoxOfNewUnitData.SelectedIndexChanged += ComboBoxes_SelectedIndexChanged!;
+            ComboBoxOfCategory.SelectedIndexChanged += ComboBoxes_SelectedIndexChanged!;
         }
 
-        private void comboBoxOfCategory_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            buttonOfSaveChanges.Enabled = comboBoxOfCategory.SelectedIndex != -1 &&
-                                  comboBoxOfCategory.SelectedItem != null;
-            buttonOfDelete.Enabled = comboBoxOfCategory.SelectedIndex != -1 &&
-                                   comboBoxOfCategory.SelectedItem != null;
-        }
+            ButtonOfDelete.Enabled = ComboBoxOfCategory.SelectedIndex != -1 &&
+                                     ComboBoxOfCategory.SelectedItem != null;
 
-        public void LoadCategories()
-        {
-            using (var context = new ApplicationContextDB())
+            ButtonOfSaveChanges.Enabled = ComboBoxOfCategory.SelectedIndex != -1 &&
+                                          ComboBoxOfCategory.SelectedItem != null &&
+                                          ComboBoxOfNewUnitData.SelectedIndex != -1 &&
+                                          ComboBoxOfNewUnitData.SelectedItem != null;
+
+            if (ComboBoxOfCategory.SelectedIndex != -1 && 
+                ComboBoxOfCategory.SelectedItem != null &&
+                ComboBoxOfCategory.SelectedItem is Category chosenCategory)
             {
+                var currentUnit = db.Units.FirstOrDefault(u => u.Unit_Id == chosenCategory.Unit_Id);
 
-                var db = new ApplicationContextDB();
-                var categories = db.Categories.ToList();
+                textBoxForCurrentUnit.Text = currentUnit!.Name;
+            }
+            else
+            {
+                MessageBox.Show($"{Resources.ErrorUnitUpload}\n{Resources.TryAgain}", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                if (categories != null)
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Загрузка категорий из базы данных
+        /// </summary>
+        private void LoadCategories()
+        {
+            var categories = db.Categories.Where(u => u.Status == CategoryStatus.Active).ToList();
+
+            if (categories != null && categories.Count != 0)
+            {
+                ComboBoxOfCategory.DataSource = categories;
+                ComboBoxOfCategory.DisplayMember = Resources.CategoryDisplayMember;
+                ComboBoxOfCategory.ValueMember = Resources.CategoryValueMember;
+            }
+            else
+            {
+                MessageBox.Show($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+        }
+
+        private void ButtonOfSaveChanges_Click(object sender, EventArgs e)
+        {
+            if (ComboBoxOfCategory.SelectedItem == null || ComboBoxOfNewUnitData.SelectedItem == null)
+            {
+                MessageBox.Show(Resources.ChooseEditCategoryAndNewUnit, Resources.TitleAlert,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var chosenCategory = (Category)ComboBoxOfCategory.SelectedItem;
+
+            var newCategory = Interaction.InputBox(Resources.InputNewCategoryName, Resources.EditCategory, ComboBoxOfCategory.Text);
+
+            if (db.Categories.Any(c => c.Category_Id != chosenCategory.Category_Id && c.Status == CategoryStatus.Active && EF.Functions.ILike(c.Name, newCategory)))
+            {
+                MessageBox.Show(Resources.NewCategoryExists, Resources.TitleWarning,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(newCategory))
+            {
+                if (!Guid.TryParse(ComboBoxOfNewUnitData.SelectedValue!.ToString(), out var selectedUnitId))
                 {
-                    comboBoxOfCategory.DataSource = categories;
-                    comboBoxOfCategory.DisplayMember = "Name";
-                    comboBoxOfCategory.ValueMember = "CategoryId";
+                    MessageBox.Show(Resources.ErrorUnitUpload, Resources.TitleError,
+                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    return;
                 }
-                else
+
+                var selectedCategory = (Category)ComboBoxOfCategory.SelectedItem;
+
+                var category = db.Categories.Find(selectedCategory.Category_Id);
+                if (category != null)
                 {
-                    MessageBox.Show("Ошибка с загрузкой категорий\nПопробуйте снова!",
-                    "Ошибка",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    selectedCategory.Unit_Id = selectedUnitId;
+                    selectedCategory.Name = newCategory;
+
+                    var question = MessageBox.Show($"{Resources.SureWantToSaveCategoryChange}\n\n{Resources.ConsequencesSaveCategoryChange}",
+                                                   Resources.TitleConfirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (question == DialogResult.Yes)
+                    {
+                        if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                            return;
+
+                        MessageBox.Show(Resources.SuccessUpdateCategory, Resources.TitleInformation,
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+                    LoadCategories();
+                    AddCategory.LoadUnits(db, ComboBoxOfNewUnitData);
+
+                    Hide();
+                    var productCatalog = new ProductCatalog(userLogin);
+                    productCatalog.ShowDialog();
+                    Close();
+                }
+            }
+            else
+            {
+                MessageBox.Show($"{Resources.ErrorSaveCategory}\n{Resources.TryAgain}", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+        }
+
+        private void ButtonOfDelete_Click(object sender, EventArgs e)
+        {
+            if (ComboBoxOfCategory.SelectedItem == null)
+            {
+                MessageBox.Show(Resources.ChooseCategoryDelete, Resources.TitleAlert,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            var question = MessageBox.Show($"{Resources.AskForDeleteCategory}\n{ComboBoxOfCategory.Text}?", Resources.TitleConfirmation,
+                                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (question == DialogResult.Yes)
+            {
+                var selectedCategory = (Category)ComboBoxOfCategory.SelectedItem;
+
+                var category = db.Categories.Find(selectedCategory.Category_Id);
+                if (category != null)
+                {
+                    category.Status = CategoryStatus.Hidden;
+
+                    if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                        return;
+
+                    MessageBox.Show(Resources.SuccessDeleteCategory, Resources.TitleInformation,
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    LoadCategories();
+                    ComboBoxOfCategory.SelectedIndex = -1;
                 }
             }
         }
 
-        private void buttonOfReturn_Click(object sender, EventArgs e)
+        private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Hide();
             var productCatalog = new ProductCatalog(userLogin);
             productCatalog.ShowDialog();
-            this.Close();
-        }
-
-        private void buttonOfSaveChanges_Click(object sender, EventArgs e)
-        {
-            if (comboBoxOfCategory.SelectedItem == null)
-            {
-                MessageBox.Show("Выберите категорию для редактирования",
-                "Предупреждение",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string newCategoryName = Microsoft.VisualBasic.Interaction.InputBox(
-                "Введите новое название категории:",
-                "Редактирование категории",
-                comboBoxOfCategory.Text);
-
-            if (!string.IsNullOrWhiteSpace(newCategoryName))
-            {
-                var selectedCategory = (Category)comboBoxOfCategory.SelectedItem;
-
-                using (var db = new ApplicationContextDB())
-                {
-                    var category = db.Categories.Find(selectedCategory.CategoryId);
-                    if (category != null)
-                    {
-                        category.Name = newCategoryName;
-                        db.SaveChanges();
-
-                        MessageBox.Show("Категория успешно обновлена!",
-                        "Успех",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        LoadCategories();
-                    }
-                }
-            }
-        }
-
-        private void buttonOfDelete_Click(object sender, EventArgs e)
-        {
-            if (comboBoxOfCategory.SelectedItem == null)
-            {
-                MessageBox.Show("Выберите категорию для удаления",
-                "Предупреждение",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            var result = MessageBox.Show($"Вы уверены, что хотите удалить категорию \"{comboBoxOfCategory.Text}\"?\n\n" +
-                "ВНИМАНИЕ: Если у этой категории есть товары, они могут быть удалены или остаться без категории!",
-                "Подтверждение удаления",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (result == DialogResult.Yes)
-            {
-                var selectedCategory = (Category)comboBoxOfCategory.SelectedItem;
-
-                using (var db = new ApplicationContextDB())
-                {
-                    var category = db.Categories.Find(selectedCategory.CategoryId);
-                    if (category != null)
-                    {
-                        db.Categories.Remove(category);
-                        db.SaveChanges();
-
-                        MessageBox.Show("Категория успешно удалена!",
-                        "Успех",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        LoadCategories();
-                        comboBoxOfCategory.SelectedIndex = -1;
-                    }
-                }
-            }
+            Close();
         }
     }
 }

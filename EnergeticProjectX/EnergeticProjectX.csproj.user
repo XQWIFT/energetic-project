@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Compile Update="Forms\AddCategory.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\AddClient.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -28,22 +31,25 @@
     <Compile Update="Forms\ListOfUsers.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\MakingShipment.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\ProductCatalog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\ProductManagement.cs">
+    <Compile Update="Forms\RegistrationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\RegistrationForm.cs">
+    <Compile Update="Forms\ShipmentDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ShipmentJournal.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\UserChangePassword.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\WarehousemanPanel.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Forms\СlientManagement.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

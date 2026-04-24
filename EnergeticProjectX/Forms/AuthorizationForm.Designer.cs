@@ -1,4 +1,5 @@
-﻿namespace EnergeticProjectX
+﻿
+namespace EnergeticProjectX
 {
     partial class AuthorizationForm
     {
@@ -28,116 +29,141 @@
         /// </summary>
         private void InitializeComponent()
         {
-            labelOfAuthorization = new Label();
-            labelOfLogin = new Label();
-            textBoxForLogin = new TextBox();
-            labelOfPassword = new Label();
-            textBoxOfPassword = new TextBox();
-            buttonOfInvolve = new Button();
-            buttonOfRegistration = new Button();
+            LabelOfAuthorization = new Label();
+            LabelOfLogin = new Label();
+            TextBoxForLogin = new TextBox();
+            LabelOfPassword = new Label();
+            TextBoxOfPassword = new TextBox();
+            ButtonOfInvolve = new Button();
+            LabelOfRegistration = new Label();
+            LabelOfRequiredFieldsInfo = new Label();
             SuspendLayout();
             // 
-            // labelOfAuthorization
+            // LabelOfAuthorization
             // 
-            labelOfAuthorization.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            labelOfAuthorization.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfAuthorization.Location = new Point(229, 9);
-            labelOfAuthorization.Name = "labelOfAuthorization";
-            labelOfAuthorization.Size = new Size(346, 63);
-            labelOfAuthorization.TabIndex = 0;
-            labelOfAuthorization.Text = "Авторизация";
-            labelOfAuthorization.TextAlign = ContentAlignment.MiddleCenter;
+            LabelOfAuthorization.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            LabelOfAuthorization.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfAuthorization.Location = new Point(306, 106);
+            LabelOfAuthorization.Name = "LabelOfAuthorization";
+            LabelOfAuthorization.Size = new Size(386, 63);
+            LabelOfAuthorization.TabIndex = 0;
+            LabelOfAuthorization.Text = "Авторизация";
+            LabelOfAuthorization.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // labelOfLogin
+            // LabelOfLogin
             // 
-            labelOfLogin.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfLogin.Location = new Point(12, 118);
-            labelOfLogin.Name = "labelOfLogin";
-            labelOfLogin.Size = new Size(121, 54);
-            labelOfLogin.TabIndex = 1;
-            labelOfLogin.Text = "Логин";
-            labelOfLogin.TextAlign = ContentAlignment.MiddleCenter;
+            LabelOfLogin.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfLogin.Location = new Point(158, 220);
+            LabelOfLogin.Name = "LabelOfLogin";
+            LabelOfLogin.Size = new Size(149, 55);
+            LabelOfLogin.TabIndex = 1;
+            LabelOfLogin.Text = "Логин";
+            LabelOfLogin.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // textBoxForLogin
+            // TextBoxForLogin
             // 
-            textBoxForLogin.BorderStyle = BorderStyle.FixedSingle;
-            textBoxForLogin.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxForLogin.Location = new Point(170, 118);
-            textBoxForLogin.Name = "textBoxForLogin";
-            textBoxForLogin.Size = new Size(618, 50);
-            textBoxForLogin.TabIndex = 2;
+            TextBoxForLogin.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            TextBoxForLogin.BackColor = Color.White;
+            TextBoxForLogin.BorderStyle = BorderStyle.FixedSingle;
+            TextBoxForLogin.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxForLogin.Location = new Point(363, 220);
+            TextBoxForLogin.Name = "TextBoxForLogin";
+            TextBoxForLogin.Size = new Size(474, 55);
+            TextBoxForLogin.TabIndex = 2;
             // 
-            // labelOfPassword
+            // LabelOfPassword
             // 
-            labelOfPassword.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfPassword.Location = new Point(12, 206);
-            labelOfPassword.Name = "labelOfPassword";
-            labelOfPassword.Size = new Size(145, 51);
-            labelOfPassword.TabIndex = 3;
-            labelOfPassword.Text = "Пароль";
-            labelOfPassword.TextAlign = ContentAlignment.MiddleCenter;
+            LabelOfPassword.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfPassword.Location = new Point(158, 326);
+            LabelOfPassword.Name = "LabelOfPassword";
+            LabelOfPassword.Size = new Size(177, 50);
+            LabelOfPassword.TabIndex = 3;
+            LabelOfPassword.Text = "Пароль*";
+            LabelOfPassword.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // textBoxOfPassword
+            // TextBoxOfPassword
             // 
-            textBoxOfPassword.BorderStyle = BorderStyle.FixedSingle;
-            textBoxOfPassword.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfPassword.Location = new Point(170, 208);
-            textBoxOfPassword.Name = "textBoxOfPassword";
-            textBoxOfPassword.Size = new Size(618, 50);
-            textBoxOfPassword.TabIndex = 4;
-            textBoxOfPassword.UseSystemPasswordChar = true;
+            TextBoxOfPassword.BackColor = Color.White;
+            TextBoxOfPassword.BorderStyle = BorderStyle.FixedSingle;
+            TextBoxOfPassword.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfPassword.Location = new Point(363, 326);
+            TextBoxOfPassword.Name = "TextBoxOfPassword";
+            TextBoxOfPassword.Size = new Size(474, 55);
+            TextBoxOfPassword.TabIndex = 4;
+            TextBoxOfPassword.UseSystemPasswordChar = true;
             // 
-            // buttonOfInvolve
+            // ButtonOfInvolve
             // 
-            buttonOfInvolve.Font = new Font("Segoe UI", 22F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonOfInvolve.Location = new Point(229, 399);
-            buttonOfInvolve.Name = "buttonOfInvolve";
-            buttonOfInvolve.Size = new Size(346, 84);
-            buttonOfInvolve.TabIndex = 5;
-            buttonOfInvolve.Text = "ВОЙТИ";
-            buttonOfInvolve.UseVisualStyleBackColor = true;
-            buttonOfInvolve.Click += buttonOfInvolve_Click;
+            ButtonOfInvolve.Enabled = false;
+            ButtonOfInvolve.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfInvolve.FlatAppearance.BorderSize = 4;
+            ButtonOfInvolve.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfInvolve.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfInvolve.FlatStyle = FlatStyle.Flat;
+            ButtonOfInvolve.Font = new Font("Segoe UI", 22F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            ButtonOfInvolve.ForeColor = SystemColors.ControlText;
+            ButtonOfInvolve.Location = new Point(265, 511);
+            ButtonOfInvolve.Name = "ButtonOfInvolve";
+            ButtonOfInvolve.Size = new Size(437, 79);
+            ButtonOfInvolve.TabIndex = 5;
+            ButtonOfInvolve.Text = "Войти";
+            ButtonOfInvolve.UseVisualStyleBackColor = true;
+            ButtonOfInvolve.Click += ButtonOfInvolve_Click;
             // 
-            // buttonOfRegistration
+            // LabelOfRegistration
             // 
-            buttonOfRegistration.FlatStyle = FlatStyle.System;
-            buttonOfRegistration.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonOfRegistration.Location = new Point(12, 304);
-            buttonOfRegistration.Name = "buttonOfRegistration";
-            buttonOfRegistration.Size = new Size(776, 59);
-            buttonOfRegistration.TabIndex = 6;
-            buttonOfRegistration.Text = "Нет аккаунта? Зарегистрироваться";
-            buttonOfRegistration.UseVisualStyleBackColor = true;
-            buttonOfRegistration.Click += buttonOfRegistration_Click;
+            LabelOfRegistration.AutoSize = true;
+            LabelOfRegistration.Font = new Font("Segoe UI", 16F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 204);
+            LabelOfRegistration.Location = new Point(215, 421);
+            LabelOfRegistration.Name = "LabelOfRegistration";
+            LabelOfRegistration.Size = new Size(565, 45);
+            LabelOfRegistration.TabIndex = 6;
+            LabelOfRegistration.Text = "Нет аккаунта? Зарегистрироваться";
+            LabelOfRegistration.Click += LabelOfRegistration_Click;
+            // 
+            // LabelOfRequiredFieldsInfo
+            // 
+            LabelOfRequiredFieldsInfo.AutoSize = true;
+            LabelOfRequiredFieldsInfo.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfRequiredFieldsInfo.ForeColor = Color.DimGray;
+            LabelOfRequiredFieldsInfo.Location = new Point(265, 478);
+            LabelOfRequiredFieldsInfo.Name = "LabelOfRequiredFieldsInfo";
+            LabelOfRequiredFieldsInfo.Size = new Size(276, 30);
+            LabelOfRequiredFieldsInfo.TabIndex = 7;
+            LabelOfRequiredFieldsInfo.Text = "*Все поля обязательные";
             // 
             // AuthorizationForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 516);
-            Controls.Add(buttonOfRegistration);
-            Controls.Add(buttonOfInvolve);
-            Controls.Add(textBoxOfPassword);
-            Controls.Add(labelOfPassword);
-            Controls.Add(textBoxForLogin);
-            Controls.Add(labelOfLogin);
-            Controls.Add(labelOfAuthorization);
+            BackColor = Color.Lavender;
+            ClientSize = new Size(997, 675);
+            Controls.Add(LabelOfRequiredFieldsInfo);
+            Controls.Add(LabelOfRegistration);
+            Controls.Add(ButtonOfInvolve);
+            Controls.Add(TextBoxOfPassword);
+            Controls.Add(LabelOfPassword);
+            Controls.Add(TextBoxForLogin);
+            Controls.Add(LabelOfLogin);
+            Controls.Add(LabelOfAuthorization);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "AuthorizationForm";
-            Text = "Учёт данных";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Начальная страница";
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Label labelOfAuthorization;
-        private Label labelOfLogin;
-        private TextBox textBoxForLogin;
-        private Label labelOfPassword;
-        private TextBox textBoxOfPassword;
-        private Button buttonOfInvolve;
-        private Button buttonOfRegistration;
+        private Label LabelOfAuthorization;
+        private Label LabelOfLogin;
+        private TextBox TextBoxForLogin;
+        private Label LabelOfPassword;
+        private TextBox TextBoxOfPassword;
+        private Button ButtonOfInvolve;
+        private Label LabelOfRegistration;
+        private Label LabelOfRequiredFieldsInfo;
     }
 }

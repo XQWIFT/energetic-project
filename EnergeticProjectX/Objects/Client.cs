@@ -1,49 +1,95 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
+using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using EnergeticProjectX.Properties;
+using System.Text.RegularExpressions;
 
-namespace ClientControl
+namespace EnergeticProjectX.Objects
 {
     /// <summary>
-    /// Создаётся клиент
+    /// Класс, связанный с базой данных и описывающий клиента.
     /// </summary>
-    [Table("Clients")]
+    [Table("clients")]
     public class Client
     {
         /// <summary>
-        /// Уникальный ID клиента
+        /// ID клиента.
         /// </summary>
         [Key]
-        [Column("Id")]
-        public long Client_Id { get; set; }
+        [Column("id")]
+        public Guid Client_Id { get; set; } = Guid.NewGuid();
 
         /// <summary>
-        /// Код клиента (формат: буква K + 6 цифр)
+        /// Название компании или ФИО физического лица или ИП.
         /// </summary>
-        [Column("ClientCode")]
-        public string ClientCode { get; set; }
+        [Column("name")]
+        [Required]
+        public required string Name { get; set; }
 
         /// <summary>
-        /// Название компании или ФИО физического лица
+        /// Тип контрагента.
         /// </summary>
-        [Column("Name")]
-        public string Name { get; set; }
+        [Column("contractor")]
+        [Required]
+        public required Contractors Contractor { get; set; }
 
         /// <summary>
-        /// Тип контрагента
+        /// ИНН организации, физического лица или ИП.
         /// </summary>
-        [Column("Type")]
-        public string Contractor {  get; set; }
+        [Column("inn")]
+        [StringLength(12)]
+        [Required]
+        public required string INN { get; set; }
 
         /// <summary>
-        /// ИНН организации или физического лица 
+        /// Контактная информация. Например, номер телефона, почтовый адрес.
         /// </summary>
-        [Column("INN")]
-        public string? INN {  get; set; }
-
-        /// <summary>
-        /// Контактная информация (телефон, email, адрес) 
-        /// </summary>
-        [Column("ContactInfo")]
+        [Column("contact_info")]
         public string? ContactInfo { get; set; }
+
+        /// <summary>
+        /// Валидация вводимого пользователем ИНН в зависимости от заданного контрагента.
+        /// Юр. лицо - комбинация из 10 цифр, Физ. лицо или ИП - комбинация из 12 цифр.
+        /// </summary>
+        /// <param name="iNN">Идентификационный номер нового клиента</param>
+        /// <param name="contractorType">Контрагент</param>
+        /// <returns>Подтверждение валидации</returns>
+        [SuppressMessage("Performance", "SYSLIB1045:Преобразовать в \"GeneratedRegexAttribute\".", Justification = "<Ожидание>")]
+        public static bool ValidateINN(string iNN, string contractorTypeString)
+        {
+            if (string.IsNullOrWhiteSpace(iNN)) return false;
+
+            iNN = iNN.Replace(" ", "");
+
+            if (!Regex.IsMatch(iNN, @"^\d+$")) return false;
+
+            var contractorType = EnumMethod.ParseDescriptionOfPotentialContractorsValue(contractorTypeString);
+
+            return contractorType switch
+            {
+                Contractors.LegalEntity => iNN.Length == 10,
+                Contractors.PhysicalPerson or Contractors.IndividualEntrepreneur => iNN.Length == 12,
+                _ => false
+            };
+        }
+
+        /// <summary>
+        /// Получение ошибки, связанной с валидацией ИНН.
+        /// Юр. лицо - комбинация из 10 цифр, Физ. лицо или ИП - комбинация из 12 цифр.
+        /// </summary>
+        /// <param name="contractorTypeString"></param>
+        /// <returns></returns>
+        public static string GetINNErrorMessage(string contractorTypeString)
+        {
+            var contractorType = EnumMethod.ParseDescriptionOfPotentialContractorsValue(contractorTypeString);
+            if (contractorType == Contractors.LegalEntity)
+                return Resources.INNRequirementsTenDigits;
+            else if (contractorType == Contractors.PhysicalPerson || contractorType == Contractors.IndividualEntrepreneur)
+                return Resources.INNRequirementsTwelveDigits;
+            else
+                return Resources.INNFormatError;
+        }
     }
 }

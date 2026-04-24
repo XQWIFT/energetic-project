@@ -1,248 +1,351 @@
-﻿using CategoryControl;
-using DBControl;
+﻿using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
+using EnergeticProjectX.Objects;
+using EnergeticProjectX.Properties;
+using System.Globalization;
 using ProductCatalogForm;
-using ProductControl;
 
 namespace EditProductForms
 {
+    /// <summary>
+    /// Форма для просмотра и изменения данных товара.
+    /// </summary>
     public partial class EditProduct : Form
     {
-        string userLogin;
-        string article;
-        private Product currentProduct;
+        private readonly ApplicationContextDB db = new();
 
+        private readonly string userLogin;
+        private readonly string article;
+        private Product? currentProduct;
+
+        /// <summary>
+        /// Конструктор изменения товаров.
+        /// </summary>
         public EditProduct(string userLogin, string article)
         {
             InitializeComponent();
+
             this.userLogin = userLogin;
             this.article = article;
 
+            UserExistsCheck();
+            LoadCurrency();
             LoadProductData();
-
-            textBoxOfName.TextChanged += isTextChanged!;
-            comboBoxOfCategory.TextChanged += isTextChanged!;
-            textBoxOfPrice.TextChanged += isTextChanged!;
-            comboBoxOfUnit.TextChanged += isTextChanged!;
-            comboBoxOfCategory.SelectedIndexChanged += CheckFields!;
-
-            LoadUnits();
-
             LoadCategories();
 
-            buttonOfSaveChanges.Enabled = false;
+            ComboBoxOfCategory.DrawMode = DrawMode.OwnerDrawFixed;
+            ComboBoxOfCategory.DrawItem += ComboBoxOfCategory_DrawItem!;
+
+            ComboBoxOfCategory.BackColor = Color.White;
+            ComboBoxOfCategory.Enabled = false;
+
+            TextBoxOfName.TextChanged += IsTextChanged!;
+            ComboBoxOfCategory.TextChanged += IsTextChanged!;
+            TextBoxOfUnit.TextChanged += IsTextChanged!;
+            ComboBoxOfCategory.SelectedIndexChanged += IsTextChanged!;
+            TextBoxOfPurchasePrice.TextChanged += IsTextChanged!;
         }
 
         private void LoadProductData()
         {
             try
             {
-                using (var context = new ApplicationContextDB())
+                currentProduct = db.Products.FirstOrDefault(p => p.Article == article)!;
+
+                if (currentProduct != null)
                 {
-                    currentProduct = context.Products
-                        .FirstOrDefault(p => p.Article == article)!;
+                    TextBoxOfName.Text = currentProduct.Name;
+                    TextBoxOfCurrentStockQuantity.Text = currentProduct.StockQuantity.ToString();
+                    TextBoxOfPurchasePrice.Text = PriceCurrencyManager.SetPriceToChosenCurrency(db, currentProduct.PurchasePrice, userLogin).ToString();
+                    TextBoxOfPriceForSell.Text = PriceCurrencyManager.SetPriceToChosenCurrency(db, currentProduct.SalePrice, userLogin).ToString();
+                    TextBoxOfCreationDate.Text = currentProduct.CreationDate.ToString("dd.MM.yyyy HH:mm");
+                    TextBoxOfDiscountDate.Text = currentProduct.DiscountDate.ToString("dd.MM.yyyy");
+                }
+                else
+                {
+                    MessageBox.Show($"{Resources.ProductNotFound}\n{Resources.TryAgain}", Resources.TitleError,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}",
+                                Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+        }
+
+        private void UserExistsCheck()
+        {
+            var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
+
+            if (user == null)
+            {
+                MessageBox.Show($"{Resources.UserNotFound}\n{Resources.TryAgain}", Resources.TitleErrorBD,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+        }
+
+        private void LoadCurrency()
+        {
+            var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
+
+            var currency = db.Currencies.FirstOrDefault(c => c.Currency_Id == user!.CurrencyId);
+
+            LabelOfCurrencySymbolFirst.Text = currency!.CurrencySymbol;
+            LabelOfCurrencySymbolSecond.Text = currency!.CurrencySymbol;
+        }
+
+        private void LoadCategories()
+        {
+            try
+            {
+                ComboBoxOfCategory.SelectedIndexChanged -= IsComboBoxOfCategoryChanged!;
+
+                var categories = db.Categories.Where(u => u.Status == CategoryStatus.Active).ToList();
+
+                if (categories != null && categories.Count != 0)
+                {
+                    ComboBoxOfCategory.DataSource = categories;
+                    ComboBoxOfCategory.DisplayMember = Resources.CategoryDisplayMember;
+                    ComboBoxOfCategory.ValueMember = Resources.CategoryValueMember;
 
                     if (currentProduct != null)
                     {
-                        textBoxOfName.Text = currentProduct.Name;
-                        textBoxOfPrice.Text = currentProduct.Price.ToString();
-                        comboBoxOfUnit.Text = currentProduct.Unit;
+                        ComboBoxOfCategory.SelectedValue = currentProduct.CategoryId;
+                        UpdateUnitDisplay();
                     }
-                    else
-                    {
-                        MessageBox.Show("Товар не найден!", "Ошибка",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this.Close();
-                    }
+
+                    ComboBoxOfCategory.SelectedIndexChanged += IsComboBoxOfCategoryChanged!;
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// Загрузка категорий из базы данных
-        /// </summary>
-        public void LoadCategories()
-        {
-            try
-            {
-                using (var context = new ApplicationContextDB())
+                else
                 {
-                    var categories = context.Categories.ToList();
+                    MessageBox.Show($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}",
+                                    Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                    if (categories != null && categories.Any())
-                    {
-                        comboBoxOfCategory.DataSource = categories;
-                        comboBoxOfCategory.DisplayMember = "Name";
-                        comboBoxOfCategory.ValueMember = "CategoryId";
-
-                        if (currentProduct != null)
-                        {
-                            comboBoxOfCategory.SelectedValue = currentProduct.CategoryId;
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ошибка с загрузкой категорий\nПопробуйте снова!",
-                            "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки категорий: {ex.Message}",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private bool HasChanges()
-        {
-            if (currentProduct == null) return false;
-
-            bool nameChanged = textBoxOfName.Text != currentProduct.Name;
-
-            bool categoryChanged = false;
-            if (comboBoxOfCategory.SelectedItem != null)
-            {
-                var selectedCategory = comboBoxOfCategory.SelectedItem as Category;
-                if (selectedCategory != null)
-                {
-                    categoryChanged = selectedCategory.CategoryId != currentProduct.CategoryId;
-                }
-            }
-
-            bool priceChanged = false;
-            if (double.TryParse(textBoxOfPrice.Text, out double newPrice))
-            {
-                priceChanged = Math.Abs(newPrice - currentProduct.Price) > 0.01;
-            }
-
-            bool unitChanged = comboBoxOfUnit.Text != currentProduct.Unit;
-
-            return nameChanged || categoryChanged || priceChanged || unitChanged;
-        }
-
-        private void LoadUnits()
-        {
-            try
-            {
-                var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                string[] Lines = File.ReadAllLines(Path.Combine(baseDir, "Files/UnitProduct.txt"));
-
-                comboBoxOfUnit.Items.Clear();
-                foreach (var item in Lines)
-                {
-                    comboBoxOfUnit.Items.Add(item);
-                }
-
-                if (!string.IsNullOrEmpty(currentProduct?.Unit))
-                {
-                    comboBoxOfUnit.Text = currentProduct.Unit;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки единиц измерения: {ex.Message}",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void CheckFields(object sender, EventArgs e)
-        {
-            bool allFilled = !string.IsNullOrWhiteSpace(textBoxOfName.Text) &&
-                             comboBoxOfCategory.SelectedItem != null &&
-                             !string.IsNullOrWhiteSpace(textBoxOfPrice.Text) &&
-                             !string.IsNullOrWhiteSpace(comboBoxOfUnit.Text);
-
-            buttonOfSaveChanges.Enabled = allFilled && HasChanges();
-        }
-
-        private void isTextChanged(object sender, EventArgs e)
-        {
-            bool allFieldsFilled = !string.IsNullOrWhiteSpace(textBoxOfName.Text) &&
-                                   !string.IsNullOrWhiteSpace(comboBoxOfCategory.Text) &&
-                                   !string.IsNullOrWhiteSpace(textBoxOfPrice.Text) &&
-                                   !string.IsNullOrWhiteSpace(comboBoxOfUnit.Text);
-
-            buttonOfSaveChanges.Enabled = allFieldsFilled && HasChanges();
-        }
-
-        private void buttonOfSave_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (comboBoxOfCategory.SelectedValue == null)
-                {
-                    MessageBox.Show("Выберите категорию товара!", "Ошибка",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-
-                using (var context = new ApplicationContextDB())
-                {
-                    var productToUpdate = context.Products
-                        .FirstOrDefault(p => p.Article == article);
-
-                    if (productToUpdate != null)
-                    {
-                        productToUpdate.Name = textBoxOfName.Text;
-                        productToUpdate.CategoryId = (int)comboBoxOfCategory.SelectedValue;
-
-                        if (double.TryParse(textBoxOfPrice.Text, out double price))
-                        {
-                            productToUpdate.Price = price;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Некорректная цена\nПопробуйте снова!",
-                                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            textBoxOfPrice.Clear();
-                            return;
-                        }
-
-                        productToUpdate.Unit = comboBoxOfUnit.Text;
-
-                        context.SaveChanges();
-
-                        MessageBox.Show("Товар успешно обновлён!", "Успех",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        this.Hide();
-                        var productCatalog = new ProductCatalog(userLogin);
-                        productCatalog.ShowDialog();
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Товар не найден в базе данных!", "Ошибка",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Ошибка сохранения данных: {ex.Message}",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}",
+                                Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
             }
         }
 
-        private void buttonOfCancel_Click(object sender, EventArgs e)
+        private void ButtonOfChange_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show(
-                "Вы уверены, что хотите отменить редактирование?\nВсе несохранённые изменения будут потеряны.",
-                "Подтверждение отмены",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
+            var result = MessageBox.Show($"{Resources.SureWantToChangeProductData}\n\n{Resources.AvailableFieldsToEditProduct}\n\n" +
+                                        $"{Resources.IfChangePurchaseThenChangeSale}", Resources.TitleConfirmation,
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
-                this.Hide();
+                ButtonOfChange.Enabled = false;
+
+                TextBoxOfName.ReadOnly = false;
+                ComboBoxOfCategory.Enabled = true;
+                ComboBoxOfCategory.BackColor = Color.White;
+                TextBoxOfPurchasePrice.ReadOnly = false;
+                TextBoxOfDiscountDate.ReadOnly = false;
+            }
+        }
+
+        private void IsComboBoxOfCategoryChanged(object sender, EventArgs e)
+        {
+            UpdateUnitDisplay();
+        }
+
+        private void UpdateUnitDisplay()
+        {
+            if (ComboBoxOfCategory.SelectedItem is not Category selectedCategory)
+            {
+                TextBoxOfUnit.Text = string.Empty;
+                return;
+            }
+
+            var unit = db.Units.FirstOrDefault(u => u.Unit_Id == selectedCategory.Unit_Id);
+            TextBoxOfUnit.Text = unit?.Name?.ToString() ?? string.Empty;
+        }
+
+        private void IsTextChanged(object sender, EventArgs e)
+        {
+            var allFieldsFilled = !string.IsNullOrWhiteSpace(TextBoxOfName.Text) &&
+                                  !string.IsNullOrWhiteSpace(ComboBoxOfCategory.Text) &&
+                                  !string.IsNullOrWhiteSpace(TextBoxOfPurchasePrice.Text) &&
+                                  !string.IsNullOrWhiteSpace(TextBoxOfDiscountDate.Text);
+
+            if (currentProduct == null)
+                return;
+
+            var hasChangesTextBoxes = TextBoxOfName.Text != currentProduct.Name ||
+                             TextBoxOfPurchasePrice.Text != currentProduct.PurchasePrice.ToString() ||
+                             TextBoxOfDiscountDate.Text != currentProduct.DiscountDate.ToString();
+
+            var hasChangesComboBox = false;
+            if (ComboBoxOfCategory.SelectedItem != null)
+            {
+                if (ComboBoxOfCategory.SelectedItem is Category selectedCategory)
+                {
+                    hasChangesComboBox = selectedCategory.Category_Id != currentProduct.CategoryId;
+                }
+            }
+
+            var hasChanges = hasChangesTextBoxes || hasChangesComboBox;
+
+
+            ButtonOfSaveChanges.Enabled = allFieldsFilled && hasChanges;
+        }
+
+        private void ButtonOfSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (ComboBoxOfCategory.SelectedValue == null)
+                {
+                    MessageBox.Show(Resources.ChooseCategoryProduct, Resources.TitleError,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var productToUpdate = db.Products.FirstOrDefault(p => p.Article == article);
+
+                if (productToUpdate != null)
+                {
+                    productToUpdate.Name = TextBoxOfName.Text.Trim();
+                    if (Guid.TryParse(ComboBoxOfCategory.SelectedValue.ToString(), out Guid categoryId))
+                    {
+                        productToUpdate.CategoryId = categoryId;
+                    }
+                    else
+                    {
+                        MessageBox.Show($"{Resources.UncorrectCategory}\n{Resources.TryAgain}",
+                                           Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ComboBoxOfCategory.ResetText();
+                        return;
+                    }
+
+                    var purchasePrice = PriceCurrencyManager.ValidatePurchasePrice(TextBoxOfPurchasePrice.Text);
+                    if (purchasePrice == null)
+                    {
+                        TextBoxOfPurchasePrice.Text = string.Empty;
+
+                        return;
+                    }
+
+                    productToUpdate.PurchasePrice = PriceCurrencyManager.SetPriceToDefaultCurrency(db, (decimal)purchasePrice, userLogin);
+
+                    productToUpdate.SalePrice = PriceCurrencyManager.GetSalePriceInDefaultCurrency(productToUpdate.PurchasePrice);
+
+                    if (!DateOnly.TryParseExact(TextBoxOfDiscountDate.Text, Resources.CorrectDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var discountDate))
+                    {
+                        MessageBox.Show($"{Resources.IncorrectDateFormat}\n\n{Resources.CorrectDateFormatExample}", Resources.TitleError,
+                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    else if (discountDate < DateOnly.FromDateTime(productToUpdate.CreationDate).AddMonths(2))
+                    {
+                        MessageBox.Show($"{Resources.DiscountDateCannotBeCreationDate}.\n{Resources.TryAgain}");
+
+                        TextBoxOfDiscountDate.Text = string.Empty;
+
+                        return;
+                    }
+
+                    productToUpdate.DiscountDate = discountDate;
+
+                    if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                        return;
+
+                    MessageBox.Show(Resources.SuccessUpdateProduct, Resources.TitleInformation,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    Hide();
+                    var productCatalog = new ProductCatalog(userLogin);
+                    productCatalog.ShowDialog();
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show($"{Resources.ProductNotFound}\n{Resources.TryAgain}", Resources.TitleError,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+        }
+
+        private void ButtonOfCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult answer = MessageBox.Show($"{Resources.AskOfCancelEdit}\n\n{Resources.LostUnsavedChanges}", Resources.ConfirmationCancel,
+                                                  MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (answer == DialogResult.Yes)
+            {
+                Hide();
                 var productCatalog = new ProductCatalog(userLogin);
                 productCatalog.ShowDialog();
-                this.Close();
+                Close();
+            }
+        }
+
+        private void ComboBoxOfCategory_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+
+            e.Graphics.FillRectangle(Brushes.White, e.Bounds);
+
+            string text = ComboBoxOfCategory.GetItemText(ComboBoxOfCategory.Items[e.Index])!;
+
+            e.Graphics.DrawString(text, e.Font!, Brushes.Black, e.Bounds);
+
+            if ((e.State & DrawItemState.Focus) == DrawItemState.Focus)
+            {
+                ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
+            }
+        }
+
+        private void ButtonOfProductDelete_Click(object sender, EventArgs e)
+        {
+            var answer = MessageBox.Show(Resources.AskForDeleteProduct, Resources.TitleConfirmation,
+                                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (answer == DialogResult.Yes)
+            {
+                var product = db.Products.FirstOrDefault(p => p.Article == article);
+
+                if (product == null)
+                {
+                    MessageBox.Show($"{Resources.ProductNotFound}\n{Resources.TryAgain}", Resources.TitleError,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    return;
+                }
+
+                product.Status = ProductStatus.Hidden;
+
+                if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                    return;
+
+                MessageBox.Show(Resources.SuccessDeleteProduct, Resources.TitleInformation,
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                Hide();
+                var productCatalog = new ProductCatalog(userLogin);
+                productCatalog.ShowDialog();
+                Close();
             }
         }
     }

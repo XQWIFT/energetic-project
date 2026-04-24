@@ -1,58 +1,71 @@
 ﻿using AdministratorPanelForm;
-using DBControl;
-using SelectUserDataForTable;
+using EnergeticProjectX.Properties;
+using EnergeticProjectX.Models;
+using EnergeticProjectX.Classes;
 
 namespace ListOfUsersForm
 {
     /// <summary>
-    /// Работа с таблицей пользователей
+    /// Класс для просмотра списка пользователей системы
     /// </summary>
     public partial class ListOfUsers : Form
     {
-        DBControl.ApplicationContextDB contextOfUser = new();
-        BindingSource bindingSource = new BindingSource();
-        string userLogin;
+        private readonly ApplicationContextDB contextOfUser = new();
+        private readonly BindingSource bindingSource = [];
 
+        private readonly string userLogin;
+
+        /// <summary>
+        /// Конструктор для просмотра таблицы пользователей системыv
+        /// </summary>
+        /// <param name="userLogin">Логин авторизованного пользователя</param>
         public ListOfUsers(string userLogin)
         {
             InitializeComponent();
+
             this.userLogin = userLogin;
+
             LoadUsers();
         }
 
-        private void LoadUsers()
+        /// <summary>
+        /// Загрузка данных пользователей в таблицу
+        /// </summary>
+        public void LoadUsers()
         {
             try
             {
                 bindingSource.DataSource = contextOfUser.Users
                     .Select(u => new UserDisplayModel
                     {
-                        User_Id = u.User_Id,
-                        Name = u.Name,
                         Surname = u.Surname,
+                        Name = u.Name,
                         Patronymic = u.Patronymic,
-                        UserRole = u.UserRole
+                        UserRole = u.UserRole.GetDescriptionOfEnumValue()
                     })
                     .ToList();
-                dataGridOfUsers.DataSource = bindingSource;
+
+                DataGridOfUsers.DataSource = bindingSource;
                 bindingSource.ResetBindings(false);
 
-                MessageBox.Show($"Загружено {contextOfUser.Users.Count()} пользователей",
-                    "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"{Resources.HowMuchUsersUploaded} {contextOfUser.Users.Count()}", Resources.TitleInformation,
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}", Resources.TitleError,
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
             }
         }
 
         private void ReturnToAdministratorPanel_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            AdministratorPanel administratorPanel = new(userLogin);
+            Hide();
+            var administratorPanel = new AdministratorPanel(userLogin);
             administratorPanel.ShowDialog();
-            this.Close();
+            Close();
         }
     }
 }

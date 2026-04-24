@@ -28,157 +28,190 @@
         /// </summary>
         private void InitializeComponent()
         {
-            comboBoxOfContractor = new ComboBox();
-            buttonOfCancel = new Button();
-            buttonOfSaveChanges = new Button();
-            textBoxOfContactInfo = new TextBox();
-            textBoxOfINN = new TextBox();
-            labelOfContactInfo = new Label();
-            labelOfINN = new Label();
-            labelOfContractor = new Label();
-            textBoxOfName = new TextBox();
-            labelOfName = new Label();
-            labelOfEditClient = new Label();
+            ComboBoxOfContractor = new ComboBox();
+            ButtonOfCancel = new Button();
+            ButtonOfSaveChanges = new Button();
+            TextBoxOfContactInfo = new TextBox();
+            TextBoxOfINN = new TextBox();
+            LabelOfContactInfo = new Label();
+            LabelOfINN = new Label();
+            LabelOfContractor = new Label();
+            TextBoxOfName = new TextBox();
+            LabelOfName = new Label();
+            LabelOfEditClient = new Label();
+            ButtonOfDeleteClient = new Button();
             SuspendLayout();
             // 
-            // comboBoxOfContractor
+            // ComboBoxOfContractor
             // 
-            comboBoxOfContractor.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            comboBoxOfContractor.FormattingEnabled = true;
-            comboBoxOfContractor.Items.AddRange(new object[] { "Физ.лицо", "Юр.лицо", "ИП" });
-            comboBoxOfContractor.Location = new Point(222, 150);
-            comboBoxOfContractor.Name = "comboBoxOfContractor";
-            comboBoxOfContractor.Size = new Size(561, 46);
-            comboBoxOfContractor.TabIndex = 22;
+            ComboBoxOfContractor.DropDownStyle = ComboBoxStyle.DropDownList;
+            ComboBoxOfContractor.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            ComboBoxOfContractor.FormattingEnabled = true;
+            ComboBoxOfContractor.Items.AddRange(new object[] { "Физ. лицо", "Юр. лицо", "ИП" });
+            ComboBoxOfContractor.Location = new Point(127, 267);
+            ComboBoxOfContractor.Name = "ComboBoxOfContractor";
+            ComboBoxOfContractor.Size = new Size(540, 46);
+            ComboBoxOfContractor.TabIndex = 22;
             // 
-            // buttonOfCancel
+            // ButtonOfCancel
             // 
-            buttonOfCancel.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonOfCancel.Location = new Point(420, 405);
-            buttonOfCancel.Name = "buttonOfCancel";
-            buttonOfCancel.Size = new Size(363, 69);
-            buttonOfCancel.TabIndex = 21;
-            buttonOfCancel.Text = "Отменить";
-            buttonOfCancel.UseVisualStyleBackColor = true;
-            buttonOfCancel.Click += buttonOfCancel_Click;
+            ButtonOfCancel.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfCancel.FlatAppearance.BorderSize = 4;
+            ButtonOfCancel.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfCancel.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfCancel.FlatStyle = FlatStyle.Flat;
+            ButtonOfCancel.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            ButtonOfCancel.Location = new Point(401, 572);
+            ButtonOfCancel.Name = "ButtonOfCancel";
+            ButtonOfCancel.Size = new Size(266, 69);
+            ButtonOfCancel.TabIndex = 21;
+            ButtonOfCancel.Text = "Отменить";
+            ButtonOfCancel.UseVisualStyleBackColor = true;
+            ButtonOfCancel.Click += ButtonOfCancel_Click;
             // 
-            // buttonOfSaveChanges
+            // ButtonOfSaveChanges
             // 
-            buttonOfSaveChanges.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            buttonOfSaveChanges.Location = new Point(17, 405);
-            buttonOfSaveChanges.Name = "buttonOfSaveChanges";
-            buttonOfSaveChanges.Size = new Size(363, 68);
-            buttonOfSaveChanges.TabIndex = 20;
-            buttonOfSaveChanges.Text = "Сохранить";
-            buttonOfSaveChanges.UseVisualStyleBackColor = true;
-            buttonOfSaveChanges.Click += buttonOfSaveChanges_Click;
+            ButtonOfSaveChanges.Enabled = false;
+            ButtonOfSaveChanges.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfSaveChanges.FlatAppearance.BorderSize = 4;
+            ButtonOfSaveChanges.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfSaveChanges.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfSaveChanges.FlatStyle = FlatStyle.Flat;
+            ButtonOfSaveChanges.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            ButtonOfSaveChanges.Location = new Point(127, 572);
+            ButtonOfSaveChanges.Name = "ButtonOfSaveChanges";
+            ButtonOfSaveChanges.Size = new Size(259, 68);
+            ButtonOfSaveChanges.TabIndex = 20;
+            ButtonOfSaveChanges.Text = "Сохранить";
+            ButtonOfSaveChanges.UseVisualStyleBackColor = true;
+            ButtonOfSaveChanges.Click += ButtonOfSaveChanges_Click;
             // 
-            // textBoxOfContactInfo
+            // TextBoxOfContactInfo
             // 
-            textBoxOfContactInfo.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfContactInfo.Location = new Point(222, 327);
-            textBoxOfContactInfo.Name = "textBoxOfContactInfo";
-            textBoxOfContactInfo.Size = new Size(561, 45);
-            textBoxOfContactInfo.TabIndex = 19;
+            TextBoxOfContactInfo.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfContactInfo.Location = new Point(127, 493);
+            TextBoxOfContactInfo.Name = "TextBoxOfContactInfo";
+            TextBoxOfContactInfo.Size = new Size(540, 45);
+            TextBoxOfContactInfo.TabIndex = 19;
             // 
-            // textBoxOfINN
+            // TextBoxOfINN
             // 
-            textBoxOfINN.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfINN.Location = new Point(222, 230);
-            textBoxOfINN.Name = "textBoxOfINN";
-            textBoxOfINN.Size = new Size(561, 45);
-            textBoxOfINN.TabIndex = 18;
+            TextBoxOfINN.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfINN.Location = new Point(127, 386);
+            TextBoxOfINN.Name = "TextBoxOfINN";
+            TextBoxOfINN.Size = new Size(540, 45);
+            TextBoxOfINN.TabIndex = 18;
             // 
-            // labelOfContactInfo
+            // LabelOfContactInfo
             // 
-            labelOfContactInfo.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfContactInfo.Location = new Point(17, 304);
-            labelOfContactInfo.Name = "labelOfContactInfo";
-            labelOfContactInfo.Size = new Size(183, 98);
-            labelOfContactInfo.TabIndex = 17;
-            labelOfContactInfo.Text = "Контактная информация";
+            LabelOfContactInfo.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfContactInfo.Location = new Point(127, 446);
+            LabelOfContactInfo.Name = "LabelOfContactInfo";
+            LabelOfContactInfo.Size = new Size(419, 54);
+            LabelOfContactInfo.TabIndex = 17;
+            LabelOfContactInfo.Text = "Контактная информация";
             // 
-            // labelOfINN
+            // LabelOfINN
             // 
-            labelOfINN.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfINN.Location = new Point(48, 230);
-            labelOfINN.Name = "labelOfINN";
-            labelOfINN.Size = new Size(85, 45);
-            labelOfINN.TabIndex = 16;
-            labelOfINN.Text = "ИНН";
+            LabelOfINN.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfINN.Location = new Point(121, 338);
+            LabelOfINN.Name = "LabelOfINN";
+            LabelOfINN.Size = new Size(477, 45);
+            LabelOfINN.TabIndex = 16;
+            LabelOfINN.Text = "Идентификационный номер";
             // 
-            // labelOfContractor
+            // LabelOfContractor
             // 
-            labelOfContractor.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfContractor.Location = new Point(17, 150);
-            labelOfContractor.Name = "labelOfContractor";
-            labelOfContractor.Size = new Size(165, 45);
-            labelOfContractor.TabIndex = 15;
-            labelOfContractor.Text = "Контрагент";
+            LabelOfContractor.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfContractor.Location = new Point(121, 219);
+            LabelOfContractor.Name = "LabelOfContractor";
+            LabelOfContractor.Size = new Size(207, 45);
+            LabelOfContractor.TabIndex = 15;
+            LabelOfContractor.Text = "Контрагент";
             // 
-            // textBoxOfName
+            // TextBoxOfName
             // 
-            textBoxOfName.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfName.Location = new Point(222, 76);
-            textBoxOfName.Name = "textBoxOfName";
-            textBoxOfName.Size = new Size(561, 45);
-            textBoxOfName.TabIndex = 14;
+            TextBoxOfName.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfName.Location = new Point(127, 158);
+            TextBoxOfName.Name = "TextBoxOfName";
+            TextBoxOfName.Size = new Size(540, 45);
+            TextBoxOfName.TabIndex = 14;
             // 
-            // labelOfName
+            // LabelOfName
             // 
-            labelOfName.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfName.Location = new Point(17, 76);
-            labelOfName.Name = "labelOfName";
-            labelOfName.Size = new Size(151, 45);
-            labelOfName.TabIndex = 13;
-            labelOfName.Text = "Название";
+            LabelOfName.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfName.Location = new Point(121, 110);
+            LabelOfName.Name = "LabelOfName";
+            LabelOfName.Size = new Size(265, 45);
+            LabelOfName.TabIndex = 13;
+            LabelOfName.Text = "Наименование";
             // 
-            // labelOfEditClient
+            // LabelOfEditClient
             // 
-            labelOfEditClient.AutoSize = true;
-            labelOfEditClient.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelOfEditClient.Location = new Point(170, 9);
-            labelOfEditClient.Name = "labelOfEditClient";
-            labelOfEditClient.Size = new Size(432, 48);
-            labelOfEditClient.TabIndex = 12;
-            labelOfEditClient.Text = "Редактирование клиента";
+            LabelOfEditClient.AutoSize = true;
+            LabelOfEditClient.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfEditClient.Location = new Point(141, 36);
+            LabelOfEditClient.Name = "LabelOfEditClient";
+            LabelOfEditClient.Size = new Size(515, 54);
+            LabelOfEditClient.TabIndex = 12;
+            LabelOfEditClient.Text = "Редактирование клиента";
+            // 
+            // ButtonOfDeleteClient
+            // 
+            ButtonOfDeleteClient.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfDeleteClient.FlatAppearance.BorderSize = 4;
+            ButtonOfDeleteClient.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfDeleteClient.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfDeleteClient.FlatStyle = FlatStyle.Flat;
+            ButtonOfDeleteClient.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            ButtonOfDeleteClient.Location = new Point(201, 657);
+            ButtonOfDeleteClient.Name = "ButtonOfDeleteClient";
+            ButtonOfDeleteClient.Size = new Size(377, 68);
+            ButtonOfDeleteClient.TabIndex = 23;
+            ButtonOfDeleteClient.Text = "Удалить клиента";
+            ButtonOfDeleteClient.UseVisualStyleBackColor = true;
+            ButtonOfDeleteClient.Click += ButtonOfDeleteClient_Click;
             // 
             // EditClient
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 498);
-            Controls.Add(comboBoxOfContractor);
-            Controls.Add(buttonOfCancel);
-            Controls.Add(buttonOfSaveChanges);
-            Controls.Add(textBoxOfContactInfo);
-            Controls.Add(textBoxOfINN);
-            Controls.Add(labelOfContactInfo);
-            Controls.Add(labelOfINN);
-            Controls.Add(labelOfContractor);
-            Controls.Add(textBoxOfName);
-            Controls.Add(labelOfName);
-            Controls.Add(labelOfEditClient);
+            BackColor = Color.Lavender;
+            ClientSize = new Size(818, 763);
+            Controls.Add(ButtonOfDeleteClient);
+            Controls.Add(ComboBoxOfContractor);
+            Controls.Add(ButtonOfCancel);
+            Controls.Add(ButtonOfSaveChanges);
+            Controls.Add(TextBoxOfContactInfo);
+            Controls.Add(TextBoxOfINN);
+            Controls.Add(LabelOfContactInfo);
+            Controls.Add(LabelOfINN);
+            Controls.Add(LabelOfContractor);
+            Controls.Add(TextBoxOfName);
+            Controls.Add(LabelOfName);
+            Controls.Add(LabelOfEditClient);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "EditClient";
-            Text = "Редактирование клиента";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Управление данными клиентской базы";
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private ComboBox comboBoxOfContractor;
-        private Button buttonOfCancel;
-        private Button buttonOfSaveChanges;
-        private TextBox textBoxOfContactInfo;
-        private TextBox textBoxOfINN;
-        private Label labelOfContactInfo;
-        private Label labelOfINN;
-        private Label labelOfContractor;
-        private TextBox textBoxOfName;
-        private Label labelOfName;
-        private Label labelOfEditClient;
+        private ComboBox ComboBoxOfContractor;
+        private Button ButtonOfCancel;
+        private Button ButtonOfSaveChanges;
+        private TextBox TextBoxOfContactInfo;
+        private TextBox TextBoxOfINN;
+        private Label LabelOfContactInfo;
+        private Label LabelOfINN;
+        private Label LabelOfContractor;
+        private TextBox TextBoxOfName;
+        private Label LabelOfName;
+        private Label LabelOfEditClient;
+        private Button ButtonOfDeleteClient;
     }
 }

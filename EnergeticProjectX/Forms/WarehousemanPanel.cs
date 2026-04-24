@@ -1,34 +1,66 @@
 ﻿using UserChangePasswordForm;
 using EnergeticProjectX;
+using ProductCatalogForm;
+using MakingShipmentForm;
+using EnergeticProjectX.Classes;
+using EnergeticProjectX.Properties;
 
 namespace WarehousemanPanelForm
 {
     /// <summary>
-    /// Главное меню кладовщика
+    /// Класс для реализации главного меню кладовщика
     /// </summary>
     public partial class WarehousemanPanel : Form
     {
-        string userLogin;
+        private readonly ApplicationContextDB db = new();
+
+        private readonly string userLogin;
+
+        /// <summary>
+        /// Конструктор для главного меню кладовщика
+        /// </summary>
+        /// <param name="userLogin">Логин авторизованного пользователя</param>
         public WarehousemanPanel(string userLogin)
         {
             InitializeComponent();
+
             this.userLogin = userLogin;
+
+            var dataOfUser = db.Users.FirstOrDefault(u => u.Login == userLogin);
+
+            labelOfFullName.Text = $"{Resources.FullName}: {dataOfUser!.Surname} {dataOfUser.Name} {dataOfUser.Patronymic}";
         }
 
-        private void buttonOfChangePassword_Click(object sender, EventArgs e)
+        private void ButtonOfChangePassword_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Hide();
             var userChangePassword = new UserChangePassword(userLogin);
             userChangePassword.ShowDialog();
-            this.Close();
+            Close();
         }
 
-        private void buttonOfLogOut_Click(object sender, EventArgs e)
+        private void ButtonOfLogOut_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Hide();
             var authForm = new AuthorizationForm();
             authForm.ShowDialog();
-            this.Close();
+            Close();
+        }
+
+        private void ButtonOfProductCatalog_Click(object sender, EventArgs e)
+        {
+            Hide();
+            var productCatalog = new ProductCatalog(userLogin);
+            productCatalog.ShowDialog();
+            Close();
+        }
+
+        private void ButtonOfMakingShipment_Click(object sender, EventArgs e)
+        {
+            Hide();
+            var makingShipment = new MakingShipment(userLogin);
+            makingShipment.ShowDialog();
+            Close();
         }
     }
 }
