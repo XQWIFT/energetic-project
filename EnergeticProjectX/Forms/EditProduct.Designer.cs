@@ -70,9 +70,9 @@
             ButtonOfCancel.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfCancel.FlatStyle = FlatStyle.Flat;
             ButtonOfCancel.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfCancel.Location = new Point(75, 829);
+            ButtonOfCancel.Location = new Point(48, 828);
             ButtonOfCancel.Name = "ButtonOfCancel";
-            ButtonOfCancel.Size = new Size(375, 80);
+            ButtonOfCancel.Size = new Size(413, 80);
             ButtonOfCancel.TabIndex = 32;
             ButtonOfCancel.Text = "Каталог товаров";
             ButtonOfCancel.UseVisualStyleBackColor = true;
@@ -86,12 +86,12 @@
             ButtonOfSaveChanges.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfSaveChanges.FlatStyle = FlatStyle.Flat;
             ButtonOfSaveChanges.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfSaveChanges.Location = new Point(75, 928);
+            ButtonOfSaveChanges.Location = new Point(48, 927);
             ButtonOfSaveChanges.Name = "ButtonOfSaveChanges";
-            ButtonOfSaveChanges.Size = new Size(375, 82);
+            ButtonOfSaveChanges.Size = new Size(413, 82);
             ButtonOfSaveChanges.TabIndex = 31;
             ButtonOfSaveChanges.Text = "Сохранить изменения";
-            ButtonOfSaveChanges.UseVisualStyleBackColor = true;
+            ButtonOfSaveChanges.UseVisualStyleBackColor = false;
             ButtonOfSaveChanges.Click += ButtonOfSave_Click;
             // 
             // LabelOfUnit
@@ -162,9 +162,9 @@
             ButtonOfChange.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfChange.FlatStyle = FlatStyle.Flat;
             ButtonOfChange.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfChange.Location = new Point(472, 829);
+            ButtonOfChange.Location = new Point(473, 828);
             ButtonOfChange.Name = "ButtonOfChange";
-            ButtonOfChange.Size = new Size(378, 80);
+            ButtonOfChange.Size = new Size(400, 80);
             ButtonOfChange.TabIndex = 35;
             ButtonOfChange.Text = "Редактировать";
             ButtonOfChange.UseVisualStyleBackColor = true;
@@ -257,9 +257,9 @@
             ButtonOfProductDelete.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfProductDelete.FlatStyle = FlatStyle.Flat;
             ButtonOfProductDelete.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfProductDelete.Location = new Point(472, 928);
+            ButtonOfProductDelete.Location = new Point(473, 927);
             ButtonOfProductDelete.Name = "ButtonOfProductDelete";
-            ButtonOfProductDelete.Size = new Size(378, 82);
+            ButtonOfProductDelete.Size = new Size(400, 82);
             ButtonOfProductDelete.TabIndex = 45;
             ButtonOfProductDelete.Text = "Удалить товар";
             ButtonOfProductDelete.UseVisualStyleBackColor = true;

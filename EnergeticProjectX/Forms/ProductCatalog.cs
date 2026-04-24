@@ -50,7 +50,7 @@ namespace ProductCatalogForm
                 ButtonOfChangeCaterogies.Visible = true;
                 ButtonOfAddProduct.Visible = true;
                 ButtonOfProductCard.Visible = true;
-                panelSearch.Visible = true;
+                PanelSearch.Visible = true;
                 ButtonOfMakingShipment.Visible = false;
             }
             else if (user != null && user.UserRole == UserRole.Warehouseman)
@@ -61,7 +61,7 @@ namespace ProductCatalogForm
                 ButtonOfAddProduct.Visible = false;
                 ButtonOfProductCard.Visible = false;
                 ButtonOfMakingShipment.Visible = true;
-                panelSearch.Visible = true;
+                PanelSearch.Visible = true;
             }
             else
             {
@@ -171,7 +171,7 @@ namespace ProductCatalogForm
                 if (product.DiscountDate <= DateOnly.FromDateTime(DateTime.Today))
                     e.CellStyle.BackColor = Color.LightSalmon;
                 else if (product.DiscountDate <= DateOnly.FromDateTime(DateTime.Today.AddDays(7)))
-                    e.CellStyle.BackColor = Color.LemonChiffon;
+                    e.CellStyle.BackColor = Color.LightGoldenrodYellow;
             }
         }
 

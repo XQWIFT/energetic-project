@@ -48,11 +48,18 @@ namespace EnergeticProjectX.Objects
         public int Quantity { get; set; }
 
         /// <summary>
-        /// Цена товара на момент отгрузки.
+        /// Цена продажи товара на момент отгрузки.
         /// </summary>
-        [Column("sale_price", TypeName = "decimal(10,2)")]
+        [Column("sale_price", TypeName = "decimal(11,2)")]
         [Range(0.01, double.MaxValue)]
         [Required]
         public required decimal FixedSalePrice { get; set; }
+
+        /// <summary>
+        /// Закупочная цена товара на момент отгрузки.
+        /// </summary>
+
+        [Column("purchase_price", TypeName = "decimal(11,2)")]
+        public required decimal FixedPurchasePrice { get; set; }
     }
 }

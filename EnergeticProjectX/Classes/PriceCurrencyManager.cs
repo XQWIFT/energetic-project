@@ -1,14 +1,19 @@
 ﻿using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using System.Globalization;
+using System.IO.Packaging;
 
 namespace EnergeticProjectX.Classes
 {
+
     /// <summary>
     /// Класс, содержащий методы, которые определяют взаимосвязь цены, курса валюты и формы записи для UI.
     /// </summary>
     public class PriceCurrencyManager
     {
+        private const decimal MaxPurchasePriceValue = 99999999.99m;
+        private const decimal MinPurchasePriceValue = 0m;
+
         /// <summary>
         /// Приведение цены к заданному формату относительно курса валюты.
         /// Формат: XXX.XXX.XX + курс валюты
@@ -53,17 +58,31 @@ namespace EnergeticProjectX.Classes
 
                 return null;
             }
-            else if (!decimal.TryParse(purchasePriceString, out decimal purchasePrice))
+
+            if (!decimal.TryParse(purchasePriceString, out decimal purchasePrice))
             {
-                MessageBox.Show($"{Resources.IncorrectPurchasePrice}\n{Resources.TryAgain}", Resources.TitleError,
+                var isAllDigits = purchasePriceString.All(c => char.IsDigit(c) || c == ',' || c == '.');
+
+                if (isAllDigits)
+                    MessageBox.Show($"{Resources.PurchasePriceOverflowExc}.\n{Resources.TryAgain}", Resources.TitleWarning,
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                else
+                    MessageBox.Show($"{Resources.PurchasePriceIsSupposedToBeNumber}\n{Resources.TryAgain}", Resources.TitleError,
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return null;
             }
-            else if (purchasePrice <= 0)
+            else if (purchasePrice <= MinPurchasePriceValue)
             {
                 MessageBox.Show($"{Resources.PurchasePriceIsNegative}\n{Resources.TryAgain}", Resources.TitleError,
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return null;
+            }
+            else if (purchasePrice > MaxPurchasePriceValue)
+            {
+                MessageBox.Show($"{Resources.PurchasePriceOverflowExc}.\n{Resources.TryAgain}", Resources.TitleWarning,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 return null;
             }

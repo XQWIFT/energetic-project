@@ -16,7 +16,7 @@ namespace MakingShipmentForm
 
         private readonly string userLogin;
 
-        private readonly List<ShipmentItemRow> shipmentItems = [];
+        private readonly List<ShipmentItemRow> ShipmentItems = [];
 
         private ShipmentItemRow? selectedShipmentItem;
 
@@ -40,6 +40,9 @@ namespace MakingShipmentForm
             ComboBoxOfClient.SelectedIndexChanged += ValidateFields!;
             ComboBoxOfProduct.SelectedIndexChanged += ComboBoxProduct_SelectedIndexChanged!;
             NumericQuantity.ValueChanged += ValidateFields!;
+            NumericQuantity.ValueChanged += NumericQuantity_ValueChanged!;
+
+            TextBoxOfStockQuantity.Text = string.Empty;
         }
 
         private void LoadClients()
@@ -47,19 +50,21 @@ namespace MakingShipmentForm
             var clients = db.Clients.ToList();
 
             ComboBoxOfClient.DataSource = clients;
-            ComboBoxOfClient.DisplayMember = "Name";
-            ComboBoxOfClient.ValueMember = "Client_Id";
+            ComboBoxOfClient.DisplayMember = Resources.NameEng;
+            ComboBoxOfClient.ValueMember = Resources.Client_IdEng;
+
+            ComboBoxOfClient.SelectedIndex = -1;
         }
 
         private void LoadProducts()
         {
-            var products = db.Products
-                .Where(p => p.Status == ProductStatus.Active)
-                .ToList();
+            var products = db.Products.Where(p => p.Status == ProductStatus.Active).ToList();
 
             ComboBoxOfProduct.DataSource = products;
-            ComboBoxOfProduct.DisplayMember = "Name";
-            ComboBoxOfProduct.ValueMember = "Article";
+            ComboBoxOfProduct.DisplayMember = Resources.NameEng;
+            ComboBoxOfProduct.ValueMember = Resources.ArticleEng;
+
+            ComboBoxOfProduct.SelectedIndex = -1;
         }
 
         private void ButtonAddProduct_Click(object sender, EventArgs e)
@@ -86,9 +91,7 @@ namespace MakingShipmentForm
 
                 int quantity = (int)NumericQuantity.Value;
 
-                int alreadyAdded = shipmentItems
-                    .Where(i => i.Article == article)
-                    .Sum(i => i.Quantity);
+                int alreadyAdded = ShipmentItems.Where(i => i.Article == article).Sum(i => i.Quantity);
 
                 if (alreadyAdded + quantity > product.StockQuantity)
                 {
@@ -111,14 +114,15 @@ namespace MakingShipmentForm
                     Quantity = quantity,
                     ClientId = clientId,
                     ClientName = clientName,
-                    PriceSnapshot = PriceCurrencyManager.PriceToCorrectFormat(db, PriceCurrencyManager.SetPriceToChosenCurrency(db, product.PurchasePrice, userLogin), userLogin)
+                    PriceSnapshot = PriceCurrencyManager.SetPriceToChosenCurrency(db, product.PurchasePrice, userLogin)
                 };
 
-                shipmentItems.Add(newItem);
+                ShipmentItems.Add(newItem);
                 LoggerService.Info($"{Resources.Product} {article} {Resources.AddedToShipment}\n{Resources.Quantity}: {quantity}");
 
                 RefreshItemsGrid();
                 UpdateButtonStates();
+                UpdateStockQuantityDisplay();
 
                 NumericQuantity.Value = 1;
             }
@@ -138,7 +142,7 @@ namespace MakingShipmentForm
         {
             DataGridOfItems.DataSource = null;
 
-            var displayData = shipmentItems
+            var displayData = ShipmentItems
                 .Select((i, index) => new ShipmentItemDisplayModel
                 {
                     Article = i.Article,
@@ -152,7 +156,7 @@ namespace MakingShipmentForm
 
             if (selectedShipmentItem != null)
             {
-                var selectedIndex = shipmentItems.IndexOf(selectedShipmentItem);
+                var selectedIndex = ShipmentItems.IndexOf(selectedShipmentItem);
                 if (selectedIndex >= 0 && selectedIndex < DataGridOfItems.Rows.Count)
                 {
                     DataGridOfItems.ClearSelection();
@@ -160,12 +164,12 @@ namespace MakingShipmentForm
                 }
             }
 
-            LoggerService.Debug($"{Resources.ShipmentUploaded}: {shipmentItems.Count}");
+            LoggerService.Debug($"{Resources.ShipmentUploaded}: {ShipmentItems.Count}");
         }
 
         private void ButtonMakeShipment_Click(object sender, EventArgs e)
         {
-            if (shipmentItems.Count == 0)
+            if (ShipmentItems.Count == 0)
             {
                 MessageBox.Show(Resources.NoProductsInShipment, Resources.TitleWarning,
                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -173,30 +177,32 @@ namespace MakingShipmentForm
                 return;
             }
 
-            var result = MessageBox.Show($"{Resources.SureWantToMakeShipment}\n\n{Resources.ProductNumber}: {shipmentItems.Count}",
+            var result = MessageBox.Show($"{Resources.SureWantToMakeShipment}\n\n{Resources.ProductNumber}: {ShipmentItems.Count}",
                                         Resources.TitleConfirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result != DialogResult.Yes)
             {
                 LoggerService.Info(Resources.ShipmentCreationCancelledByUser);
+
                 return;
             }
 
             try
             {
-                LoggerService.Info($"{Resources.StartOfMakingShipment} {shipmentItems.Count}");
+                LoggerService.Info($"{Resources.StartOfMakingShipment} {ShipmentItems.Count}");
 
                 var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
                 if (user == null)
                 {
                     LoggerService.Error($"{userLogin}: {Resources.UserNotFound}");
+
                     MessageBox.Show($"{Resources.UserNotFound}\n{Resources.TryAgain}", Resources.TitleError,
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     return;
                 }
 
-                var clientId = shipmentItems.First().ClientId;
+                var clientId = ShipmentItems.First().ClientId;
 
                 var shipment = new Shipment
                 {
@@ -206,10 +212,11 @@ namespace MakingShipmentForm
                 };
 
                 db.Shipments.Add(shipment);
+
                 LoggerService.Debug($"{Resources.RecordOfShipmentCreated} {shipment.Shipment_Id}");
 
-                int totalQuantity = 0;
-                foreach (var item in shipmentItems)
+                var totalQuantity = 0;
+                foreach (var item in ShipmentItems)
                 {
                     var product = db.Products.First(p => p.Article == item.Article);
 
@@ -217,7 +224,8 @@ namespace MakingShipmentForm
                     {
                         Shipment_Id = shipment.Shipment_Id,
                         Product_Id = product.Product_Id,
-                        FixedSalePrice = decimal.Parse(item.PriceSnapshot!),
+                        FixedPurchasePrice = product.PurchasePrice,
+                        FixedSalePrice = item.PriceSnapshot,
                         Quantity = item.Quantity
                     });
 
@@ -266,14 +274,14 @@ namespace MakingShipmentForm
 
         private void UpdateButtonStates()
         {
-            ButtonOfMakingShipment.Enabled = shipmentItems.Count > 0;
+            ButtonOfMakingShipment.Enabled = ShipmentItems.Count > 0;
             ButtonOfProductDelete.Enabled = selectedShipmentItem != null;
         }
         private void ValidateFields(object? sender = null, EventArgs? e = null)
         {
-            bool hasClient = ComboBoxOfClient.SelectedValue != null;
-            bool hasProduct = ComboBoxOfProduct.SelectedValue != null;
-            bool hasQuantity = NumericQuantity.Value > 0;
+            var hasClient = ComboBoxOfClient.SelectedValue != null;
+            var hasProduct = ComboBoxOfProduct.SelectedValue != null;
+            var hasQuantity = NumericQuantity.Value > 0;
 
             ButtonOfAddProduct.Enabled = hasClient && hasProduct && hasQuantity;
             ButtonOfProductDelete.Enabled = selectedShipmentItem != null;
@@ -290,13 +298,19 @@ namespace MakingShipmentForm
                 var product = db.Products.FirstOrDefault(p => p.Article == article);
                 if (product != null)
                 {
-                    TextBoxOfStockQuantity.Text = product.StockQuantity.ToString();
-                    LoggerService.Debug($"{Resources.ProductIsChosen} {article}\n{Resources.InWhatAmount} {product.StockQuantity}");
+                    int alreadyAdded = ShipmentItems.Where(i => i.Article == article).Sum(i => i.Quantity);
+
+                    int available = product.StockQuantity - alreadyAdded;
+
+                    TextBoxOfStockQuantity.Text = available.ToString();
+
+                    LoggerService.Debug($"{Resources.ProductIsChosen} {article}\n{Resources.InWhatAmount} {product.StockQuantity}\n" +
+                                        $"{Resources.AlreadyAddedRus}: {alreadyAdded}\n{Resources.Available}: {available}");
                 }
             }
             else
             {
-                TextBoxOfStockQuantity.Text = Resources.StringO;
+                TextBoxOfStockQuantity.Text = string.Empty;
             }
 
             ValidateFields();
@@ -304,9 +318,9 @@ namespace MakingShipmentForm
 
         private void DataGridOfItems_CellClick(object? sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < shipmentItems.Count)
+            if (e.RowIndex >= 0 && e.RowIndex < ShipmentItems.Count)
             {
-                selectedShipmentItem = shipmentItems[e.RowIndex];
+                selectedShipmentItem = ShipmentItems[e.RowIndex];
 
                 LoggerService.Debug($"{Resources.ProductRowSelected}: {selectedShipmentItem.Article}");
 
@@ -326,13 +340,14 @@ namespace MakingShipmentForm
 
             try
             {
-                shipmentItems.Remove(selectedShipmentItem);
+                ShipmentItems.Remove(selectedShipmentItem);
 
                 LoggerService.Info($"{Resources.ProductRemovedFromShipment}: {selectedShipmentItem.Article}");
 
                 selectedShipmentItem = null;
                 RefreshItemsGrid();
                 UpdateButtonStates();
+                UpdateStockQuantityDisplay();
             }
             catch (Exception ex)
             {
@@ -341,6 +356,50 @@ namespace MakingShipmentForm
                 MessageBox.Show($"{Resources.ErrorProductDelete}\n{Resources.TryAgain}",
                                Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void UpdateStockQuantityDisplay()
+        {
+            if (ComboBoxOfProduct.SelectedValue is string article)
+            {
+                var product = db.Products.FirstOrDefault(p => p.Article == article);
+                if (product != null)
+                {
+                    var alreadyAdded = ShipmentItems.Where(i => i.Article == article).Sum(i => i.Quantity);
+
+                    var available = product.StockQuantity - alreadyAdded;
+
+                    TextBoxOfStockQuantity.Text = available.ToString();
+
+                    LoggerService.Debug($"{Resources.UploadedListForRus}: {article}\n" +
+                                        $"{Resources.StockQuantityRus}: {product.StockQuantity}\n" +
+                                        $"{Resources.AddedRus}: {alreadyAdded}\n" +
+                                        $"{Resources.AvailableRus}: {available}");
+                }
+            }
+        }
+
+        private void NumericQuantity_ValueChanged(object sender, EventArgs e)
+        {
+            if (ComboBoxOfProduct.SelectedValue is string article &&
+                int.TryParse(TextBoxOfStockQuantity.Text, out var available))
+            {
+                var alreadyAdded = ShipmentItems
+                    .Where(i => i.Article == article)
+                    .Sum(i => i.Quantity);
+
+                var maxAllowed = available - alreadyAdded;
+
+                if (NumericQuantity.Value > maxAllowed && maxAllowed > 0)
+                {
+                    MessageBox.Show($"{Resources.NotEnoughInStockQuantityRus}.\n{Resources.Available}: {maxAllowed}\n{Resources.PointedRus}: {NumericQuantity.Value}",
+                                    Resources.TitleWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    NumericQuantity.Value = maxAllowed;
+                }
+            }
+
+            ValidateFields();
         }
     }
 }

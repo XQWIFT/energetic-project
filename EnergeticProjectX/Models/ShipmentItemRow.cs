@@ -33,6 +33,6 @@
         /// <summary>
         /// Цена на момент совершения отгрузки.
         /// </summary>
-        public string? PriceSnapshot { get; set; }
+        public decimal PriceSnapshot { get; set; }
     }
 }

@@ -28,21 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             ButtonOfAddCategory = new Button();
             ButtonOfAddProduct = new Button();
             ButtonOfMainMenu = new Button();
             ButtonOfProductCard = new Button();
             DataGridOfProducts = new DataGridView();
             ButtonOfMakingShipment = new Button();
-            panelSearch = new Panel();
+            PanelSearch = new Panel();
             LabelOfSearch = new Label();
             textBoxSearch = new TextBox();
             ButtonOfSearch = new Button();
             ButtonOfChangeCaterogies = new Button();
+            LabelOfCriticalStockQuantity = new Label();
+            LabelOfHavingDiscount = new Label();
+            LabelOfHavingDiscountSoon = new Label();
             ((System.ComponentModel.ISupportInitialize)DataGridOfProducts).BeginInit();
-            panelSearch.SuspendLayout();
+            PanelSearch.SuspendLayout();
             SuspendLayout();
             // 
             // ButtonOfAddCategory
@@ -85,7 +88,7 @@
             ButtonOfMainMenu.FlatAppearance.MouseDownBackColor = Color.Gray;
             ButtonOfMainMenu.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfMainMenu.FlatStyle = FlatStyle.Flat;
-            ButtonOfMainMenu.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            ButtonOfMainMenu.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
             ButtonOfMainMenu.Location = new Point(16, 636);
             ButtonOfMainMenu.Name = "ButtonOfMainMenu";
             ButtonOfMainMenu.Size = new Size(286, 66);
@@ -121,14 +124,14 @@
             DataGridOfProducts.BackgroundColor = SystemColors.ControlLight;
             DataGridOfProducts.BorderStyle = BorderStyle.Fixed3D;
             DataGridOfProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            DataGridOfProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            DataGridOfProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             DataGridOfProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DataGridOfProducts.EnableHeadersVisualStyles = false;
             DataGridOfProducts.GridColor = SystemColors.WindowText;
@@ -137,14 +140,14 @@
             DataGridOfProducts.Name = "DataGridOfProducts";
             DataGridOfProducts.ReadOnly = true;
             DataGridOfProducts.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            DataGridOfProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            DataGridOfProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             DataGridOfProducts.RowHeadersVisible = false;
             DataGridOfProducts.RowHeadersWidth = 62;
             DataGridOfProducts.Size = new Size(964, 540);
@@ -166,16 +169,16 @@
             ButtonOfMakingShipment.UseVisualStyleBackColor = true;
             ButtonOfMakingShipment.Click += ButtonOfMakingShipment_Click;
             // 
-            // panelSearch
+            // PanelSearch
             // 
-            panelSearch.Controls.Add(LabelOfSearch);
-            panelSearch.Controls.Add(textBoxSearch);
-            panelSearch.Controls.Add(ButtonOfSearch);
-            panelSearch.Location = new Point(13, 12);
-            panelSearch.Name = "panelSearch";
-            panelSearch.Size = new Size(967, 63);
-            panelSearch.TabIndex = 0;
-            panelSearch.Visible = false;
+            PanelSearch.Controls.Add(LabelOfSearch);
+            PanelSearch.Controls.Add(textBoxSearch);
+            PanelSearch.Controls.Add(ButtonOfSearch);
+            PanelSearch.Location = new Point(13, 12);
+            PanelSearch.Name = "PanelSearch";
+            PanelSearch.Size = new Size(967, 63);
+            PanelSearch.TabIndex = 0;
+            PanelSearch.Visible = false;
             // 
             // LabelOfSearch
             // 
@@ -226,14 +229,50 @@
             ButtonOfChangeCaterogies.UseVisualStyleBackColor = true;
             ButtonOfChangeCaterogies.Click += ButtonOfChangeCaterogies_Click;
             // 
+            // LabelOfCriticalStockQuantity
+            // 
+            LabelOfCriticalStockQuantity.BackColor = Color.LightCoral;
+            LabelOfCriticalStockQuantity.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfCriticalStockQuantity.Location = new Point(40, 807);
+            LabelOfCriticalStockQuantity.Name = "LabelOfCriticalStockQuantity";
+            LabelOfCriticalStockQuantity.Size = new Size(294, 56);
+            LabelOfCriticalStockQuantity.TabIndex = 12;
+            LabelOfCriticalStockQuantity.Text = "Критический остаток";
+            LabelOfCriticalStockQuantity.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // LabelOfHavingDiscount
+            // 
+            LabelOfHavingDiscount.BackColor = Color.LightGoldenrodYellow;
+            LabelOfHavingDiscount.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfHavingDiscount.Location = new Point(640, 807);
+            LabelOfHavingDiscount.Name = "LabelOfHavingDiscount";
+            LabelOfHavingDiscount.Size = new Size(313, 56);
+            LabelOfHavingDiscount.TabIndex = 13;
+            LabelOfHavingDiscount.Text = "Скоро снижение цены";
+            LabelOfHavingDiscount.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // LabelOfHavingDiscountSoon
+            // 
+            LabelOfHavingDiscountSoon.BackColor = Color.LightSalmon;
+            LabelOfHavingDiscountSoon.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfHavingDiscountSoon.Location = new Point(340, 807);
+            LabelOfHavingDiscountSoon.Name = "LabelOfHavingDiscountSoon";
+            LabelOfHavingDiscountSoon.Size = new Size(294, 56);
+            LabelOfHavingDiscountSoon.TabIndex = 14;
+            LabelOfHavingDiscountSoon.Text = "Цена уже снижена";
+            LabelOfHavingDiscountSoon.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // ProductCatalog
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
-            ClientSize = new Size(992, 811);
+            ClientSize = new Size(992, 892);
+            Controls.Add(LabelOfHavingDiscountSoon);
+            Controls.Add(LabelOfHavingDiscount);
+            Controls.Add(LabelOfCriticalStockQuantity);
             Controls.Add(ButtonOfChangeCaterogies);
-            Controls.Add(panelSearch);
+            Controls.Add(PanelSearch);
             Controls.Add(ButtonOfMakingShipment);
             Controls.Add(DataGridOfProducts);
             Controls.Add(ButtonOfProductCard);
@@ -246,8 +285,8 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Информация о товаре";
             ((System.ComponentModel.ISupportInitialize)DataGridOfProducts).EndInit();
-            panelSearch.ResumeLayout(false);
-            panelSearch.PerformLayout();
+            PanelSearch.ResumeLayout(false);
+            PanelSearch.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -259,10 +298,13 @@
         private Button ButtonOfProductCard;
         private DataGridView DataGridOfProducts;
         private Button ButtonOfMakingShipment;
-        private Panel panelSearch;
+        private Panel PanelSearch;
         private TextBox textBoxSearch;
         private Label LabelOfSearch;
         private Button ButtonOfSearch;
         private Button ButtonOfChangeCaterogies;
+        private Label LabelOfCriticalStockQuantity;
+        private Label LabelOfHavingDiscount;
+        private Label LabelOfHavingDiscountSoon;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using EnergeticProjectX.Enums;
-using EnergeticProjectX.Properties;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -91,6 +90,6 @@ namespace EnergeticProjectX.Objects
         /// Константа, которая определяет увеличение цены для продажи относительно цены закупки.
         /// </summary>
         [NotMapped]
-        public const decimal priceIncreaseCoefficient = 1.5m;
+        public const decimal priceIncreaseCoefficient = 1.5m; 
     }
 }

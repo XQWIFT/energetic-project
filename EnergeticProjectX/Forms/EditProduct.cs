@@ -2,6 +2,7 @@
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
+using System.Globalization;
 using ProductCatalogForm;
 
 namespace EditProductForms
@@ -28,11 +29,8 @@ namespace EditProductForms
             this.article = article;
 
             UserExistsCheck();
-
             LoadCurrency();
-
             LoadProductData();
-
             LoadCategories();
 
             ComboBoxOfCategory.DrawMode = DrawMode.OwnerDrawFixed;
@@ -238,15 +236,26 @@ namespace EditProductForms
                     if (purchasePrice == null)
                     {
                         TextBoxOfPurchasePrice.Text = string.Empty;
+
                         return;
                     }
 
                     productToUpdate.PurchasePrice = PriceCurrencyManager.SetPriceToDefaultCurrency(db, (decimal)purchasePrice, userLogin);
 
-                    if (!DateOnly.TryParse(TextBoxOfDiscountDate.Text, out var discountDate))
+                    productToUpdate.SalePrice = PriceCurrencyManager.GetSalePriceInDefaultCurrency(productToUpdate.PurchasePrice);
+
+                    if (!DateOnly.TryParseExact(TextBoxOfDiscountDate.Text, Resources.CorrectDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var discountDate))
                     {
                         MessageBox.Show($"{Resources.IncorrectDateFormat}\n\n{Resources.CorrectDateFormatExample}", Resources.TitleError,
                                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    else if (discountDate < DateOnly.FromDateTime(productToUpdate.CreationDate).AddMonths(2))
+                    {
+                        MessageBox.Show($"{Resources.DiscountDateCannotBeCreationDate}.\n{Resources.TryAgain}");
+
+                        TextBoxOfDiscountDate.Text = string.Empty;
+
                         return;
                     }
 

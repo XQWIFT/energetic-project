@@ -96,20 +96,21 @@ namespace EditCategoriesForm
                 return;
             }
 
-            string newCategory = Interaction.InputBox(Resources.InputNewCategoryName,Resources.EditCategory, ComboBoxOfCategory.Text);
+            var chosenCategory = (Category)ComboBoxOfCategory.SelectedItem;
+
+            var newCategory = Interaction.InputBox(Resources.InputNewCategoryName, Resources.EditCategory, ComboBoxOfCategory.Text);
+
+            if (db.Categories.Any(c => c.Category_Id != chosenCategory.Category_Id && c.Status == CategoryStatus.Active && EF.Functions.ILike(c.Name, newCategory)))
+            {
+                MessageBox.Show(Resources.NewCategoryExists, Resources.TitleWarning,
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                return;
+            }
 
             if (!string.IsNullOrWhiteSpace(newCategory))
             {
-                if (db.Categories.Any(c => c.Status == CategoryStatus.Active &&
-                                           EF.Functions.ILike(c.Name, newCategory)))
-                {
-                    MessageBox.Show(Resources.NewCategoryExists, Resources.TitleWarning,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                    return;
-                }
-
-                if (!Guid.TryParse(ComboBoxOfNewUnitData.SelectedValue!.ToString(), out Guid selectedUnitId))
+                if (!Guid.TryParse(ComboBoxOfNewUnitData.SelectedValue!.ToString(), out var selectedUnitId))
                 {
                     MessageBox.Show(Resources.ErrorUnitUpload, Resources.TitleError,
                                      MessageBoxButtons.OK, MessageBoxIcon.Error);

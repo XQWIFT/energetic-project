@@ -87,8 +87,7 @@ namespace AddCategoryForm
                 Unit_Id = selectedUnitId
             };
 
-            if (db.Categories.Any(c => c.Status == CategoryStatus.Active &&
-                                       EF.Functions.ILike(c.Name, newCategory.Name)))
+            if (db.Categories.Any(c => c.Status == CategoryStatus.Active && EF.Functions.ILike(c.Name, newCategory.Name)))
             {
                 MessageBox.Show(Resources.NewCategoryExists, Resources.TitleWarning,
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);

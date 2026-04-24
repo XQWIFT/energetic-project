@@ -27,6 +27,7 @@ namespace EnergeticProjectX.Classes
             catch (Exception ex)
             {
                 LoggerService.Fatal($"{Resources.UnhandledExceptionMessage}, {ex}");
+
                 MessageBox.Show(Resources.CriticalError, Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

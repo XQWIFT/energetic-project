@@ -158,7 +158,7 @@ namespace AddProductForm
             MessageBox.Show($"{Resources.Product} {product.Name} {Resources.AddProductSuccess}:\n\n" +
                             $"{Resources.CreationData}: {product.CreationDate}\n" +
                             $"{Resources.DiscountDate}: {product.DiscountDate}\n" +
-                            $"{Resources.PurchasePrice}: {PriceCurrencyManager.PriceToCorrectFormat(db, (decimal)purchasePrice, userLogin)}\n" +
+                            $"{Resources.PurchasePriceRus}: {PriceCurrencyManager.PriceToCorrectFormat(db, (decimal)purchasePrice, userLogin)}\n" +
                             $"{Resources.SalePrice}: {PriceCurrencyManager.PriceToCorrectFormat(db, Product.priceIncreaseCoefficient * (decimal)purchasePrice, userLogin)}\n" +
                             $"{Resources.StockQuantityByDefault}", Resources.TitleInformation,
                             MessageBoxButtons.OK, MessageBoxIcon.Information);

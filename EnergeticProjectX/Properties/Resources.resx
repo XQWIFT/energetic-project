@@ -378,7 +378,7 @@
   <data name="WaitingToEnterThePrice" xml:space="preserve">
     <value>Ожидается закупочная цена товара. Пожалуйста, введите закупочную цену.</value>
   </data>
-  <data name="IncorrectPurchasePrice" xml:space="preserve">
+  <data name="PurchasePriceIsSupposedToBeNumber" xml:space="preserve">
     <value>Закупочная цена должна быть числом!</value>
   </data>
   <data name="PurchasePriceIsNegative" xml:space="preserve">
@@ -432,7 +432,7 @@
   <data name="StockQuantityByDefault" xml:space="preserve">
     <value>Текущий остаток: 0 (по умолчанию)</value>
   </data>
-  <data name="PurchasePrice" xml:space="preserve">
+  <data name="PurchasePriceRus" xml:space="preserve">
     <value>Закупочная цена</value>
   </data>
   <data name="SalePrice" xml:space="preserve">
@@ -466,7 +466,7 @@
     <value>Вам будут доступны следующие поля для редактирования: «Название товара», «Категория товара», «Цена закупки» и «Снижение цены».</value>
   </data>
   <data name="IncorrectDateFormat" xml:space="preserve">
-    <value>Неверный формат даты снижения цены, введите: dd.mm.yyyy.</value>
+    <value>Неверный формат даты снижения цены, введите: dd.MM.yyyy.</value>
   </data>
   <data name="CorrectDateFormatExample" xml:space="preserve">
     <value>Например: 05.05.2005</value>
@@ -518,9 +518,6 @@
   </data>
   <data name="InWhatAmount" xml:space="preserve">
     <value>В количестве:</value>
-  </data>
-  <data name="StringO" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="Client" xml:space="preserve">
     <value>Получатель</value>
@@ -597,10 +594,142 @@
   <data name="SelectProductToDelete" xml:space="preserve">
     <value>Выделите товар для удаления.</value>
   </data>
-  <data name="Article" xml:space="preserve">
+  <data name="ArticleRus" xml:space="preserve">
     <value>Артикул</value>
   </data>
-  <data name="Name" xml:space="preserve">
+  <data name="NameRus" xml:space="preserve">
     <value>Название</value>
+  </data>
+  <data name="PurchasePriceOverflowExc" xml:space="preserve">
+    <value>Введено слишком большое число</value>
+  </data>
+  <data name="CorrectDateFormat" xml:space="preserve">
+    <value>dd.MM.yyyy</value>
+  </data>
+  <data name="NameEng" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Client_IdEng" xml:space="preserve">
+    <value>Client_Id</value>
+  </data>
+  <data name="ArticleEng" xml:space="preserve">
+    <value>Article</value>
+  </data>
+  <data name="AvailableRus" xml:space="preserve">
+    <value>Доступно</value>
+  </data>
+  <data name="AlreadyAddedRus" xml:space="preserve">
+    <value>Уже добавлено</value>
+  </data>
+  <data name="UploadedListForRus" xml:space="preserve">
+    <value>Обновлен список для</value>
+  </data>
+  <data name="StockQuantityRus" xml:space="preserve">
+    <value>Текущий остаток</value>
+  </data>
+  <data name="AddedRus" xml:space="preserve">
+    <value>Добавлено</value>
+  </data>
+  <data name="NotEnoughInStockQuantityRus" xml:space="preserve">
+    <value>Недостаточно товара на складе</value>
+  </data>
+  <data name="PointedRus" xml:space="preserve">
+    <value>Указано</value>
+  </data>
+  <data name="DiscountDateCannotBeCreationDate" xml:space="preserve">
+    <value>Снижение цены должно быть произойти не раньше, чем через два месяца после создания</value>
+  </data>
+  <data name="ShipmentJournalOpened" xml:space="preserve">
+    <value>Журнал отгрузок открыт пользователем:</value>
+  </data>
+  <data name="ShipmentsLoaded" xml:space="preserve">
+    <value>Загружено отгрузок:</value>
+  </data>
+  <data name="ErrorLoadShipments" xml:space="preserve">
+    <value>Ошибка при загрузке отгрузок</value>
+  </data>
+  <data name="ShipmentSelected" xml:space="preserve">
+    <value>Выбрана отгрузка</value>
+  </data>
+  <data name="DateRangeChanged" xml:space="preserve">
+    <value>Изменён период:</value>
+  </data>
+  <data name="ReturnToMainMenu" xml:space="preserve">
+    <value>Возврат в главное меню</value>
+  </data>
+  <data name="OpenShipmentDetails" xml:space="preserve">
+    <value>Открыты подробности отгрузки:</value>
+  </data>
+  <data name="ExportReportStarted" xml:space="preserve">
+    <value>Начат экспорт отчёта за период:</value>
+  </data>
+  <data name="SaveReportAs" xml:space="preserve">
+    <value>Сохранить отчёт как:</value>
+  </data>
+  <data name="ErrorExportReport" xml:space="preserve">
+    <value>Ошибка при экспорте отчёта</value>
+  </data>
+  <data name="ReportExported" xml:space="preserve">
+    <value>Совершён экспорт отчёта:</value>
+  </data>
+  <data name="TotalRevenue" xml:space="preserve">
+    <value>Выручка:</value>
+  </data>
+  <data name="TotalProfit" xml:space="preserve">
+    <value>Прибыль:</value>
+  </data>
+  <data name="TotalShipments" xml:space="preserve">
+    <value>Число отгрузок:</value>
+  </data>
+  <data name="ReportExportedSuccessfully" xml:space="preserve">
+    <value>Отчёт успешно экспортирован!</value>
+  </data>
+  <data name="SelectShipmentForDetails" xml:space="preserve">
+    <value>Выберите отгрузку для просмотра подробностей!</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Оформил</value>
+  </data>
+  <data name="Revenue" xml:space="preserve">
+    <value>Выручка</value>
+  </data>
+  <data name="Profit" xml:space="preserve">
+    <value>Выручка</value>
+  </data>
+  <data name="IncorrectPeriodOfDates" xml:space="preserve">
+    <value>Выбранная дата «До» не может быть раньше даты «С».</value>
+  </data>
+  <data name="IncorrectDataPeriod" xml:space="preserve">
+    <value>Некорректный диапазон дат!</value>
+  </data>
+  <data name="RangeRus" xml:space="preserve">
+    <value>Период</value>
+  </data>
+  <data name="StartLoadingShipments" xml:space="preserve">
+    <value>Начало загрузки отгрузок</value>
+  </data>
+  <data name="ShipmentLoaded" xml:space="preserve">
+    <value>Отгрузка загружена:</value>
+  </data>
+  <data name="ErrorWhileLoadingShipment" xml:space="preserve">
+    <value>Ошибка при загрузке отгрузки</value>
+  </data>
+  <data name="ShipmentNotFounded" xml:space="preserve">
+    <value>Отгрузки за выбранный период не найдены!</value>
+  </data>
+  <data name="CriticalErrorWhenLoadingShipments" xml:space="preserve">
+    <value>Ошибка при загрузке отгрузок!</value>
+  </data>
+  <data name="ErrowWhileLoadingData" xml:space="preserve">
+    <value>Ошибка при загрузке данных!</value>
+  </data>
+  <data name="Notstated" xml:space="preserve">
+    <value>Неизвестно</value>
+  </data>
+  <data name="StartDateCannotBeInFuture" xml:space="preserve">
+    <value>Конечная дата не может быть позже сегодняшнего дня.</value>
+  </data>
+  <data name="IncorrectToDateChoice" xml:space="preserve">
+    <value>Некорректный выбор начальной даты.</value>
   </data>
 </root>
