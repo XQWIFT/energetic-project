@@ -1,10 +1,9 @@
-﻿using EnergeticProjectX.Classes;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
+using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using ProductCatalogForm;
-using System.Diagnostics;
-using Windows.Security.Authentication.OnlineId;
 
 namespace AddProductForm
 {
@@ -65,8 +64,7 @@ namespace AddProductForm
             }
             else
             {
-                MessageBox.Show($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -78,8 +76,7 @@ namespace AddProductForm
 
             if (user == null)
             {
-                MessageBox.Show($"{Resources.UserNotFound}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.UserNotFound}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -88,8 +85,7 @@ namespace AddProductForm
 
             if (currency == null)
             {
-                MessageBox.Show($"{Resources.ErrorUserDataUpload}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.ErrorUserDataUpload}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -101,8 +97,7 @@ namespace AddProductForm
         {
             if (ComboBoxOfCategory.SelectedItem is not Category selectedCategory)
             {
-                MessageBox.Show($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -114,16 +109,14 @@ namespace AddProductForm
             if (unit != null)
                 TextBoxOfUnit.Text = unit.Name.ToString();
             else
-                MessageBox.Show($"{Resources.UnitNotFound}\n{Resources.TryAgain}",
-                                Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.UnitNotFound}\n{Resources.TryAgain}");
         }
 
         private void ButtonOfAdd_Click(object sender, EventArgs e)
         {
             if (ComboBoxOfCategory.SelectedValue == null)
             {
-                MessageBox.Show(Resources.ChooseCategoryProduct, Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowAlert(Resources.ChooseCategoryProduct);
 
                 return;
             }
@@ -134,8 +127,7 @@ namespace AddProductForm
 
             if (!Guid.TryParse(ComboBoxOfCategory.SelectedValue.ToString()!, out Guid selectedCategoryId))
             {
-                MessageBox.Show($"{Resources.CategoryGetIdError}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowError($"{Resources.CategoryGetIdError}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -148,20 +140,19 @@ namespace AddProductForm
                 PurchasePrice = PriceCurrencyManager.SetPriceToDefaultCurrency(db, (decimal)purchasePrice, userLogin),
                 SalePrice = PriceCurrencyManager.GetSalePriceInDefaultCurrency(PriceCurrencyManager.SetPriceToDefaultCurrency(db, (decimal)purchasePrice, userLogin)),
                 CreationDate = DateTime.UtcNow,
-                DiscountDate = DateOnly.FromDateTime(DateTime.UtcNow).AddMonths(2)
+                DiscountDate = DateOnly.FromDateTime(DateTime.Now).AddMonths(2)
             };
             
             db.Products.Add(product);
-            if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+            if (EH.DBSaveChangesUniversalErrorCheck(db))
                 return;
 
-            MessageBox.Show($"{Resources.Product} {product.Name} {Resources.AddProductSuccess}:\n\n" +
-                            $"{Resources.CreationData}: {product.CreationDate}\n" +
-                            $"{Resources.DiscountDate}: {product.DiscountDate}\n" +
-                            $"{Resources.PurchasePriceRus}: {PriceCurrencyManager.PriceToCorrectFormat(db, (decimal)purchasePrice, userLogin)}\n" +
-                            $"{Resources.SalePrice}: {PriceCurrencyManager.PriceToCorrectFormat(db, Product.priceIncreaseCoefficient * (decimal)purchasePrice, userLogin)}\n" +
-                            $"{Resources.StockQuantityByDefault}", Resources.TitleInformation,
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+            EH.ShowInformation($"{Resources.Product} {product.Name} {Resources.AddProductSuccess}:\n\n" +
+                               $"{Resources.CreationData}: {DateTime.Now}\n" +
+                               $"{Resources.DiscountDate}: {product.DiscountDate}\n" +
+                               $"{Resources.PurchasePriceRus}: {PriceCurrencyManager.PriceToCorrectFormat(db, (decimal)purchasePrice, userLogin)}\n" +
+                               $"{Resources.SalePrice}: {PriceCurrencyManager.PriceToCorrectFormat(db, Product.priceIncreaseCoefficient * (decimal)purchasePrice, userLogin)}\n" +
+                               $"{Resources.StockQuantityByDefault}");
 
             Hide();
             var productCatalog = new ProductCatalog(userLogin);

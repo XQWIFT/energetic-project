@@ -5,7 +5,7 @@ namespace EnergeticProjectX.Classes
     internal static class Program
     {
         /// <summary>
-        ///  Главная точка входа в приложение
+        ///  Главная точка входа в приложение.
         /// </summary>
         [STAThread]
         static void Main()
@@ -17,18 +17,18 @@ namespace EnergeticProjectX.Classes
                 ApplicationConfiguration.Initialize();
 
                 var db = new ApplicationContextDB();
-                LoggerService.Debug(Resources.SLContextDBCreated);
+                LoggerService.Debug("Контекст базы данных создан.");
 
                 ApplicationMethod.Initialize(db);
-                LoggerService.Info(Resources.ProgramInitializationEnd);
+                LoggerService.Info("Методы при вызове программы завершены.");
 
                 Application.Run(new AuthorizationForm());
             }
             catch (Exception ex)
             {
-                LoggerService.Fatal($"{Resources.UnhandledExceptionMessage}, {ex}");
+                LoggerService.Fatal($"Необработанное исключение: {ex}");
 
-                MessageBox.Show(Resources.CriticalError, Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ErrorHandler.ShowError(Resources.CriticalError);
             }
         }
     }

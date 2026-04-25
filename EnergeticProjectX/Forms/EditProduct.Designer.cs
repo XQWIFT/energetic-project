@@ -138,7 +138,7 @@
             // 
             LabelOfEditProduct.AutoSize = true;
             LabelOfEditProduct.Font = new Font("Segoe UI", 22F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfEditProduct.Location = new Point(276, 41);
+            LabelOfEditProduct.Location = new Point(267, 50);
             LabelOfEditProduct.Name = "LabelOfEditProduct";
             LabelOfEditProduct.Size = new Size(384, 60);
             LabelOfEditProduct.TabIndex = 24;
@@ -289,7 +289,7 @@
             // 
             LabelOfCurrencySymbolFirst.AutoSize = true;
             LabelOfCurrencySymbolFirst.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            LabelOfCurrencySymbolFirst.Location = new Point(276, 488);
+            LabelOfCurrencySymbolFirst.Location = new Point(277, 488);
             LabelOfCurrencySymbolFirst.Name = "LabelOfCurrencySymbolFirst";
             LabelOfCurrencySymbolFirst.Size = new Size(0, 45);
             LabelOfCurrencySymbolFirst.TabIndex = 48;
@@ -298,7 +298,7 @@
             // 
             LabelOfCurrencySymbolSecond.AutoSize = true;
             LabelOfCurrencySymbolSecond.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            LabelOfCurrencySymbolSecond.Location = new Point(290, 572);
+            LabelOfCurrencySymbolSecond.Location = new Point(299, 574);
             LabelOfCurrencySymbolSecond.Name = "LabelOfCurrencySymbolSecond";
             LabelOfCurrencySymbolSecond.Size = new Size(0, 45);
             LabelOfCurrencySymbolSecond.TabIndex = 49;

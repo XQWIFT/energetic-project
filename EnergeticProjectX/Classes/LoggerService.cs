@@ -3,7 +3,7 @@
 namespace EnergeticProjectX.Classes
 {
     /// <summary>
-    /// Сервис для логирования событий приложения
+    /// Сервис для логирования событий приложения.
     /// </summary>
     public class LoggerService
     {
@@ -11,7 +11,7 @@ namespace EnergeticProjectX.Classes
         private static ILogger? _logger;
 
         /// <summary>
-        /// Получение логгера для указанного типа
+        /// Получение логгера для указанного типа через обобщение.
         /// </summary>
         private static ILogger<T> GetLogger<T>()
         {
@@ -27,37 +27,37 @@ namespace EnergeticProjectX.Classes
         }
 
         /// <summary>
-        /// Логирование информации (Information level)
+        /// Information: Логирование информации.
         /// </summary>
         public static void Info(string message) =>
             GetLogger<LoggerService>().LogInformation("{Message}", message);
 
         /// <summary>
-        /// Логирование ошибки (Error level)
+        /// Error: Логирование ошибки.
         /// </summary>
         public static void Error(string message, Exception? ex = null) =>
             GetLogger<LoggerService>().LogError(ex, "{Message}", message);
 
         /// <summary>
-        /// Логирование отладочной информации (Debug level)
+        /// Debug: Логирование отладочной информации.
         /// </summary>
         public static void Debug(string message) =>
             GetLogger<LoggerService>().LogDebug("{Message}", message);
 
         /// <summary>
-        /// Логирование предупреждения (Warning level)
+        /// Warning: Логирование предупреждения.
         /// </summary>
         public static void Warning(string message) =>
             GetLogger<LoggerService>().LogWarning("{Message}", message);
 
         /// <summary>
-        /// Логирование критической ошибки (Critical level)
+        /// Critical: Логирование критической ошибки.
         /// </summary>
         public static void Fatal(string message, Exception? ex = null) =>
             GetLogger<LoggerService>().LogCritical(ex, "{Message}", message);
 
         /// <summary>
-        /// Логирование трассировки (Trace level)
+        /// Trace: Логирование трассировки.
         /// </summary>
         public static void Trace(string message) =>
             GetLogger<LoggerService>().LogTrace("{Message}", message);

@@ -1,7 +1,7 @@
 ﻿namespace EnergeticProjectX.Enums
 {
     /// <summary>
-    /// Статус категории товара
+    /// Статус категории товара: Active - Категория активна, Hidden - Категория скрыта.
     /// </summary>
     public enum CategoryStatus
     {

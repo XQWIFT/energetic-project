@@ -1,4 +1,5 @@
-﻿using EnergeticProjectX.Classes;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
+using EnergeticProjectX.Classes;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Enums;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace EditClientForm
 {
     /// <summary>
-    /// Класс для редактирования данных клиента
+    /// Класс для редактирования данных клиента.
     /// </summary>
     public partial class EditClient : Form
     {
@@ -22,13 +23,13 @@ namespace EditClientForm
         private readonly string contactInfo;
 
         /// <summary>
-        /// Конструктор для редактирования данных клиента
+        /// Конструктор для редактирования данных клиента.
         /// </summary>
-        /// <param name="userLogin">Логин авторизованного пользователя</param>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
         /// <param name="name">Название клиентской организации, ФИО клиента и т.п.</param>
-        /// <param name="contractor">Контрагент</param>
-        /// <param name="iNN">Идентификационный номер клиента</param>
-        /// <param name="contactInfo">Контактная информация</param>
+        /// <param name="contractor">Контрагент.</param>
+        /// <param name="iNN">Идентификационный номер клиента.</param>
+        /// <param name="contactInfo">Контактная информация.</param>
         public EditClient(string userLogin, Guid clientId, string name, string contractor, string iNN, string contactInfo)
         {
             InitializeComponent();
@@ -54,8 +55,8 @@ namespace EditClientForm
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
             var allFieldsFilled = !string.IsNullOrWhiteSpace(TextBoxOfName.Text) &&
-                                   !string.IsNullOrWhiteSpace(ComboBoxOfContractor.Text) &&
-                                   !string.IsNullOrWhiteSpace(TextBoxOfINN.Text);
+                                  !string.IsNullOrWhiteSpace(ComboBoxOfContractor.Text) &&
+                                  !string.IsNullOrWhiteSpace(TextBoxOfINN.Text);
 
             var hasChanges = TextBoxOfName.Text != name ||
                              ComboBoxOfContractor.Text != contractor ||
@@ -69,18 +70,14 @@ namespace EditClientForm
         {
             if (!Client.ValidateINN(TextBoxOfINN.Text.Trim(), ComboBoxOfContractor.Text))
             {
-                MessageBox.Show($"{Client.GetINNErrorMessage(ComboBoxOfContractor.Text)}\n{Resources.TryAgain}", Resources.ErrorValidation,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning($"{Client.GetINNErrorMessage(ComboBoxOfContractor.Text)}\n{Resources.TryAgain}");
 
-                TextBoxOfINN.Clear();
                 TextBoxOfINN.Focus();
             }
             else if (db.Clients.Any(u => u.INN == TextBoxOfINN.Text.Trim()))
             {
-                MessageBox.Show($"{Resources.INNAlreadyInDB}\n{Resources.TryAgain}", Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning($"{Resources.INNAlreadyInDB}\n{Resources.TryAgain}");
 
-                TextBoxOfINN.Clear();
                 TextBoxOfINN.Focus();
             }
             else
@@ -88,10 +85,10 @@ namespace EditClientForm
                 var client = db.Clients.FirstOrDefault(u => u.Client_Id == clientId)!;
                 client.Name = TextBoxOfName.Text.Trim();
                 client.Contractor = (Contractors)EnumMethod.ParseDescriptionOfPotentialContractorsValue(ComboBoxOfContractor.Text)!;
-                client.INN = TextBoxOfINN.Text;
-                client.ContactInfo = TextBoxOfContactInfo.Text;
+                client.INN = TextBoxOfINN.Text.Trim();
+                client.ContactInfo = TextBoxOfContactInfo.Text.Trim();
 
-                ErrorHandler.DBSaveChangesUniversalErrorCheck(db);
+                EH.DBSaveChangesUniversalErrorCheck(db);
 
                 Hide();
                 var listOfClients = new ListOfClients(userLogin);
@@ -102,8 +99,7 @@ namespace EditClientForm
 
         private void ButtonOfDeleteClient_Click(object sender, EventArgs e)
         {
-            var answer = MessageBox.Show($"{Resources.SureWantToDeleteClient}\n{name}?\n\n{Resources.ConsequencesIfDeleteClient}",
-                                         Resources.TitleConfirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            var answer = EH.ShowConfirmation($"{Resources.SureWantToDeleteClient}\n{name}?\n\n{Resources.ConsequencesIfDeleteClient}");
 
             if (answer == DialogResult.Yes)
             {
@@ -118,8 +114,7 @@ namespace EditClientForm
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show(Resources.ErrorClientDelete, Resources.TitleError,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    EH.ShowError(Resources.ErrorClientDelete);
 
                     return;
                 }

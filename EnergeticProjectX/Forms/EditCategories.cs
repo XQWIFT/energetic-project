@@ -1,4 +1,5 @@
-﻿using AddCategoryForm;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
+using AddCategoryForm;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
@@ -10,7 +11,7 @@ using ProductCatalogForm;
 namespace EditCategoriesForm
 {
     /// <summary>
-    /// Класс для изменения существующей категории
+    /// Класс для изменения существующей категории.
     /// </summary>
     public partial class EditCategories : Form
     {
@@ -19,9 +20,9 @@ namespace EditCategoriesForm
         private readonly string userLogin;
 
         /// <summary>
-        /// Конструктор изменения существующей категорий
+        /// Конструктор изменения существующей категорий.
         /// </summary>
-        /// <param name="userLogin">Логин авторизованного пользователя</param>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
         public EditCategories(string userLogin)
         {
             InitializeComponent();
@@ -58,15 +59,14 @@ namespace EditCategoriesForm
             }
             else
             {
-                MessageBox.Show($"{Resources.ErrorUnitUpload}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowError($"{Resources.ErrorUnitUpload}\n{Resources.TryAgain}");
 
                 return;
             }
         }
 
         /// <summary>
-        /// Загрузка категорий из базы данных
+        /// Загрузка категорий из базы данных.
         /// </summary>
         private void LoadCategories()
         {
@@ -80,8 +80,7 @@ namespace EditCategoriesForm
             }
             else
             {
-                MessageBox.Show($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -91,8 +90,8 @@ namespace EditCategoriesForm
         {
             if (ComboBoxOfCategory.SelectedItem == null || ComboBoxOfNewUnitData.SelectedItem == null)
             {
-                MessageBox.Show(Resources.ChooseEditCategoryAndNewUnit, Resources.TitleAlert,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowAlert(Resources.ChooseEditCategoryAndNewUnit);
+
                 return;
             }
 
@@ -102,8 +101,7 @@ namespace EditCategoriesForm
 
             if (db.Categories.Any(c => c.Category_Id != chosenCategory.Category_Id && c.Status == CategoryStatus.Active && EF.Functions.ILike(c.Name, newCategory)))
             {
-                MessageBox.Show(Resources.NewCategoryExists, Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning(Resources.NewCategoryExists);
 
                 return;
             }
@@ -112,8 +110,7 @@ namespace EditCategoriesForm
             {
                 if (!Guid.TryParse(ComboBoxOfNewUnitData.SelectedValue!.ToString(), out var selectedUnitId))
                 {
-                    MessageBox.Show(Resources.ErrorUnitUpload, Resources.TitleError,
-                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    EH.ShowError(Resources.ErrorUnitUpload);
 
                     return;
                 }
@@ -126,16 +123,14 @@ namespace EditCategoriesForm
                     selectedCategory.Unit_Id = selectedUnitId;
                     selectedCategory.Name = newCategory;
 
-                    var question = MessageBox.Show($"{Resources.SureWantToSaveCategoryChange}\n\n{Resources.ConsequencesSaveCategoryChange}",
-                                                   Resources.TitleConfirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    var question = EH.ShowConfirmation($"{Resources.SureWantToSaveCategoryChange}\n\n{Resources.ConsequencesSaveCategoryChange}");
 
                     if (question == DialogResult.Yes)
                     {
-                        if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                        if (EH.DBSaveChangesUniversalErrorCheck(db))
                             return;
 
-                        MessageBox.Show(Resources.SuccessUpdateCategory, Resources.TitleInformation,
-                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        EH.ShowInformation(Resources.SuccessUpdateCategory);
                     }
 
                     LoadCategories();
@@ -149,8 +144,7 @@ namespace EditCategoriesForm
             }
             else
             {
-                MessageBox.Show($"{Resources.ErrorSaveCategory}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.ErrorSaveCategory}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -160,14 +154,12 @@ namespace EditCategoriesForm
         {
             if (ComboBoxOfCategory.SelectedItem == null)
             {
-                MessageBox.Show(Resources.ChooseCategoryDelete, Resources.TitleAlert,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowAlert(Resources.ChooseCategoryDelete);
 
                 return;
             }
 
-            var question = MessageBox.Show($"{Resources.AskForDeleteCategory}\n{ComboBoxOfCategory.Text}?", Resources.TitleConfirmation,
-                                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var question = EH.ShowConfirmation($"{Resources.AskForDeleteCategory}\n{ComboBoxOfCategory.Text}?");
 
             if (question == DialogResult.Yes)
             {
@@ -178,11 +170,10 @@ namespace EditCategoriesForm
                 {
                     category.Status = CategoryStatus.Hidden;
 
-                    if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                    if (EH.DBSaveChangesUniversalErrorCheck(db))
                         return;
 
-                    MessageBox.Show(Resources.SuccessDeleteCategory, Resources.TitleInformation,
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    EH.ShowInformation(Resources.SuccessDeleteCategory);
 
                     LoadCategories();
                     ComboBoxOfCategory.SelectedIndex = -1;

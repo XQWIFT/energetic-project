@@ -142,7 +142,7 @@ namespace Registration
             // LabelOfPasswordConfirmation
             // 
             LabelOfPasswordConfirmation.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            LabelOfPasswordConfirmation.Location = new Point(118, 470);
+            LabelOfPasswordConfirmation.Location = new Point(114, 470);
             LabelOfPasswordConfirmation.MaximumSize = new Size(250, 0);
             LabelOfPasswordConfirmation.Name = "LabelOfPasswordConfirmation";
             LabelOfPasswordConfirmation.Size = new Size(250, 97);

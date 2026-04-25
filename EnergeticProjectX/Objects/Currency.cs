@@ -46,7 +46,7 @@ namespace EnergeticProjectX.Objects
         [Column("exchange_rate", TypeName = "decimal(10,4)")]
         [Range(0.0001, double.MaxValue)]
         [Required]
-        public required double ExchangeRate { get; set; }
+        public required decimal ExchangeRate { get; set; }
 
         /// <summary>
         /// Дата обновления курса валюты.

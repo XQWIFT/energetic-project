@@ -1,4 +1,5 @@
-﻿using EnergeticProjectX.Classes;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
+using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Models;
@@ -29,14 +30,14 @@ namespace MakingShipmentForm
 
             this.userLogin = userLogin;
 
-            LoggerService.Info($"{Resources.SLMakingShipmentFormIsOpened} {userLogin}");
+            LoggerService.Info($"Форма оформления отгрузки открыта пользователем: {userLogin}");
 
             LoadClients();
             LoadProducts();
 
             UpdateButtonStates();
 
-            DataGridOfItems.CellClick += DataGridOfItems_CellClick;
+            DataGridOfItems.CellClick += DataGridOfItems_CellClick!;
             ComboBoxOfClient.SelectedIndexChanged += ValidateFields!;
             ComboBoxOfProduct.SelectedIndexChanged += ComboBoxProduct_SelectedIndexChanged!;
             NumericQuantity.ValueChanged += ValidateFields!;
@@ -56,9 +57,26 @@ namespace MakingShipmentForm
             ComboBoxOfClient.SelectedIndex = -1;
         }
 
+        private void DataGridOfItems_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataGridOfItems.ClearSelection();
+            DataGridOfItems.Rows[e.RowIndex].Selected = true;
+
+            if (DataGridOfItems.Rows[e.RowIndex].DataBoundItem is ShipmentItemDisplayModel)
+            {
+                selectedShipmentItem = ShipmentItems[e.RowIndex];
+
+                LoggerService.Debug($"Выбрана позиция отгрузки: {selectedShipmentItem.Article}");
+
+                UpdateButtonStates();
+            }
+        }
+
         private void LoadProducts()
         {
-            var products = db.Products.Where(p => p.Status == ProductStatus.Active).ToList();
+            var products = db.Products.Where(p => p.Status == ProductStatus.Active && p.StockQuantity > 0).ToList();
 
             ComboBoxOfProduct.DataSource = products;
             ComboBoxOfProduct.DisplayMember = Resources.NameEng;
@@ -73,39 +91,37 @@ namespace MakingShipmentForm
             {
                 if (ComboBoxOfClient.SelectedValue == null || ComboBoxOfProduct.SelectedValue == null)
                 {
-                    MessageBox.Show(Resources.FillRequiredFields, Resources.TitleWarning,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    EH.ShowWarning(Resources.FillRequiredFields);
 
                     return;
                 }
 
-                string article = ComboBoxOfProduct.SelectedValue.ToString()!;
+                var article = ComboBoxOfProduct.SelectedValue.ToString()!;
                 var product = db.Products.FirstOrDefault(p => p.Article == article);
 
                 if (product == null)
                 {
-                    LoggerService.Warning($"{Resources.Product} {article} {Resources.NotFoundInDB}");
+                    LoggerService.Warning($"Товар {article} не найден в базе данных.");
 
                     return;
                 }
 
-                int quantity = (int)NumericQuantity.Value;
+                var quantity = (int)NumericQuantity.Value;
 
-                int alreadyAdded = ShipmentItems.Where(i => i.Article == article).Sum(i => i.Quantity);
+                var alreadyAdded = ShipmentItems.Where(i => i.Article == article).Sum(i => i.Quantity);
 
                 if (alreadyAdded + quantity > product.StockQuantity)
                 {
                     int available = product.StockQuantity - alreadyAdded;
-                    LoggerService.Warning($"{Resources.TryToAdd} {article}.\n{Resources.Quantity}: {quantity}\n{Resources.Available}: {available}");
+                    LoggerService.Warning($"Попытка добавления товара {article}.\nКоличество: {quantity}\nДоступно: {available}");
 
-                    MessageBox.Show($"{Resources.NotEnoughProductInStock}\n{Resources.Available}: {available}",
-                                    Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    EH.ShowWarning($"{Resources.NotEnoughProductInStock}\n{Resources.Available}: {available}");
 
                     return;
                 }
 
                 Guid clientId = Guid.Parse(ComboBoxOfClient.SelectedValue.ToString()!);
-                string clientName = db.Clients.FirstOrDefault(c => c.Client_Id == clientId)?.Name ?? "—";
+                var clientName = db.Clients.FirstOrDefault(c => c.Client_Id == clientId)?.Name ?? "—";
 
                 var newItem = new ShipmentItemRow
                 {
@@ -114,7 +130,7 @@ namespace MakingShipmentForm
                     Quantity = quantity,
                     ClientId = clientId,
                     ClientName = clientName,
-                    PriceSnapshot = PriceCurrencyManager.SetPriceToChosenCurrency(db, product.PurchasePrice, userLogin)
+                    PriceSnapshot = PriceCurrencyManager.SetPriceToChosenCurrency(db, product.SalePrice, userLogin)
                 };
 
                 ShipmentItems.Add(newItem);
@@ -128,10 +144,9 @@ namespace MakingShipmentForm
             }
             catch (Exception ex)
             {
-                LoggerService.Error(Resources.ProductAddToShipmentError, ex);
+                LoggerService.Error("Ошибка добавления товара в отгрузку.", ex);
 
-                MessageBox.Show($"{Resources.ProductAddToShipmentError}\n{Resources.TryAgain}",
-                               Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.ProductAddToShipmentError}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -164,40 +179,37 @@ namespace MakingShipmentForm
                 }
             }
 
-            LoggerService.Debug($"{Resources.ShipmentUploaded}: {ShipmentItems.Count}");
+            LoggerService.Debug($"Обновлена таблица отгрузки, всего позиций: {ShipmentItems.Count}.");
         }
 
         private void ButtonMakeShipment_Click(object sender, EventArgs e)
         {
             if (ShipmentItems.Count == 0)
             {
-                MessageBox.Show(Resources.NoProductsInShipment, Resources.TitleWarning,
-                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning(Resources.NoProductsInShipment);
 
                 return;
             }
 
-            var result = MessageBox.Show($"{Resources.SureWantToMakeShipment}\n\n{Resources.ProductNumber}: {ShipmentItems.Count}",
-                                        Resources.TitleConfirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var answer = EH.ShowConfirmation($"{Resources.SureWantToMakeShipment}\n\n{Resources.ProductNumber}: {ShipmentItems.Count}");
 
-            if (result != DialogResult.Yes)
+            if (answer != DialogResult.Yes)
             {
-                LoggerService.Info(Resources.ShipmentCreationCancelledByUser);
+                LoggerService.Info("Создание отгрузки отменено пользователем.");
 
                 return;
             }
 
             try
             {
-                LoggerService.Info($"{Resources.StartOfMakingShipment} {ShipmentItems.Count}");
+                LoggerService.Info($"Начало оформления отгрузки, товаров: {ShipmentItems.Count}.");
 
                 var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
                 if (user == null)
                 {
-                    LoggerService.Error($"{userLogin}: {Resources.UserNotFound}");
+                    LoggerService.Error($"{userLogin}: Пользователь не найден.");
 
-                    MessageBox.Show($"{Resources.UserNotFound}\n{Resources.TryAgain}", Resources.TitleError,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    EH.ShowError($"{Resources.UserNotFound}\n{Resources.TryAgain}");
 
                     return;
                 }
@@ -213,7 +225,7 @@ namespace MakingShipmentForm
 
                 db.Shipments.Add(shipment);
 
-                LoggerService.Debug($"{Resources.RecordOfShipmentCreated} {shipment.Shipment_Id}");
+                LoggerService.Debug($"Создана запись об отгрузке. ID отгрузки: {shipment.Shipment_Id}.");
 
                 var totalQuantity = 0;
                 foreach (var item in ShipmentItems)
@@ -232,20 +244,19 @@ namespace MakingShipmentForm
                     product.StockQuantity -= item.Quantity;
                     totalQuantity += item.Quantity;
 
-                    LoggerService.Debug($"{Resources.Product}: {item.Article}.\n{Resources.Quantity}: {item.Quantity}\n{Resources.NewStockQuantity} {product.StockQuantity}");
+                    LoggerService.Debug($"Товар: {item.Article}.\nКоличество: {item.Quantity}.\nНовый остаток: {product.StockQuantity}.");
                 }
 
-                if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                if (EH.DBSaveChangesUniversalErrorCheck(db))
                 {
-                    LoggerService.Error(Resources.NotManagedToSaveShipment);
+                    LoggerService.Error("Не удалось сохранить отгрузку в базу данных.");
 
                     return;
                 }
 
-                LoggerService.Info($"{Resources.ShipmentSuccessfullyCreated} {shipment.Shipment_Id}, {Resources.Products} {totalQuantity}");
+                LoggerService.Info($"Отгрузка успешно оформлена. ID отгрузки: {shipment.Shipment_Id}, Товаров: {totalQuantity}");
 
-                MessageBox.Show($"{Resources.ShipmentSuccessfullyProcessed}\n{Resources.Date}: {DateOnly.FromDateTime(shipment.CreationDate)}",
-                                Resources.TitleSuccess, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                EH.ShowInformation($"{Resources.ShipmentSuccessfullyProcessed}\n{Resources.Date}: {DateOnly.FromDateTime(DateTime.Now)}");
 
                 Hide();
                 var warehousemanPanel = new WarehousemanPanel(userLogin);
@@ -254,9 +265,9 @@ namespace MakingShipmentForm
             }
             catch (Exception ex)
             {
-                LoggerService.Error(Resources.CriticalErrorWhenMakingShipment, ex);
+                LoggerService.Error("Критическая ошибка при создании отгрузки.", ex);
 
-                MessageBox.Show($"{Resources.ErrorSave}\n", Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.ErrorSaveShipment}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -264,7 +275,7 @@ namespace MakingShipmentForm
 
         private void ButtonCancel_Click(object sender, EventArgs e)
         {
-            LoggerService.Info(Resources.ShipmentCreationCancelledByUser);
+            LoggerService.Info("Создание отгрузки отменено пользователем.");
 
             Hide();
             var warehousemanPanel = new WarehousemanPanel(userLogin);
@@ -286,13 +297,15 @@ namespace MakingShipmentForm
             ButtonOfAddProduct.Enabled = hasClient && hasProduct && hasQuantity;
             ButtonOfProductDelete.Enabled = selectedShipmentItem != null;
 
-            LoggerService.Debug($"{Resources.Client}: {hasClient}\n" +
-                                $"{Resources.Product}: {hasProduct}\n" +
-                                $"{Resources.Quantity}: {hasQuantity}");
+            LoggerService.Debug($"Получатель: {hasClient}.\n" +
+                                $"Товар: {hasProduct}.\n" +
+                                $"Количество: {hasQuantity}.");
         }
 
         private void ComboBoxProduct_SelectedIndexChanged(object sender, EventArgs e)
         {
+            NumericQuantity.Enabled = false;
+
             if (ComboBoxOfProduct.SelectedValue is string article)
             {
                 var product = db.Products.FirstOrDefault(p => p.Article == article);
@@ -304,8 +317,12 @@ namespace MakingShipmentForm
 
                     TextBoxOfStockQuantity.Text = available.ToString();
 
-                    LoggerService.Debug($"{Resources.ProductIsChosen} {article}\n{Resources.InWhatAmount} {product.StockQuantity}\n" +
-                                        $"{Resources.AlreadyAddedRus}: {alreadyAdded}\n{Resources.Available}: {available}");
+                    NumericQuantity.Enabled = true;
+                    NumericQuantity.Minimum = 1;
+                    NumericQuantity.Value = 1;
+
+                    LoggerService.Debug($"Выбран товар: {article}.\nКоличество:{product.StockQuantity}.\n" +
+                                        $"Уже добавлено: {alreadyAdded}.\nДоступно: {available}.");
                 }
             }
             else
@@ -314,18 +331,6 @@ namespace MakingShipmentForm
             }
 
             ValidateFields();
-        }
-
-        private void DataGridOfItems_CellClick(object? sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < ShipmentItems.Count)
-            {
-                selectedShipmentItem = ShipmentItems[e.RowIndex];
-
-                LoggerService.Debug($"{Resources.ProductRowSelected}: {selectedShipmentItem.Article}");
-
-                UpdateButtonStates();
-            }
         }
 
         private void ButtonOfProductDelete_Click(object sender, EventArgs e)
@@ -348,6 +353,11 @@ namespace MakingShipmentForm
                 RefreshItemsGrid();
                 UpdateButtonStates();
                 UpdateStockQuantityDisplay();
+
+                if (ComboBoxOfProduct.SelectedValue == null)
+                {
+                    NumericQuantity.Enabled = false;
+                }
             }
             catch (Exception ex)
             {
@@ -371,10 +381,10 @@ namespace MakingShipmentForm
 
                     TextBoxOfStockQuantity.Text = available.ToString();
 
-                    LoggerService.Debug($"{Resources.UploadedListForRus}: {article}\n" +
-                                        $"{Resources.StockQuantityRus}: {product.StockQuantity}\n" +
-                                        $"{Resources.AddedRus}: {alreadyAdded}\n" +
-                                        $"{Resources.AvailableRus}: {available}");
+                    LoggerService.Debug($"Обновлён список для: {article}.\n" +
+                                        $"Текущий остаток: {product.StockQuantity}.\n" +
+                                        $"Добавлено: {alreadyAdded}.\n" +
+                                        $"Доступно: {available}.");
                 }
             }
         }
@@ -392,7 +402,7 @@ namespace MakingShipmentForm
 
                 if (NumericQuantity.Value > maxAllowed && maxAllowed > 0)
                 {
-                    MessageBox.Show($"{Resources.NotEnoughInStockQuantityRus}.\n{Resources.Available}: {maxAllowed}\n{Resources.PointedRus}: {NumericQuantity.Value}",
+                    MessageBox.Show($"{Resources.NotEnoughInStockQuantityRus}.\n{Resources.Available}: {maxAllowed}\n{Resources.TryToPointRus}: {NumericQuantity.Value}",
                                     Resources.TitleWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     NumericQuantity.Value = maxAllowed;

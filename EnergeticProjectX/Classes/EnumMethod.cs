@@ -4,15 +4,15 @@ using EnergeticProjectX.Enums;
 namespace EnergeticProjectX.Classes
 {
     /// <summary>
-    /// Статический класс для работы с методами реализованных перечислений.
+    /// Статический класс с методами для реализованных перечислений.
     /// </summary>
     public static class EnumMethod
     {
         /// <summary>
         /// Метод для получения строкового значения из описания - атрибут Description.
         /// </summary>
-        /// <param name="value">Переменная перечисления</param>
-        /// <returns>Строковое значение из описания</returns>
+        /// <param name="value">Переменная перечисления.</param>
+        /// <returns>Строковое значение из атрибута описания.</returns>
         public static string GetDescriptionOfEnumValue(this Enum value)
         {
             var field = value.GetType().GetField(value.ToString());
@@ -25,7 +25,7 @@ namespace EnergeticProjectX.Classes
         }
 
         /// <summary>
-        /// Метод, который преобразует строковое описание (атрибут Description) в соответствующее
+        /// Метод, который преобразует строковое описание - атрибут Description - в соответствующее
         /// значение перечисления Contractors.
         /// </summary>
         /// <param name="description">Текстовое описание контрагента</param>

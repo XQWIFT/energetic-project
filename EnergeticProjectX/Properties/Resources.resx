@@ -189,7 +189,7 @@
   <data name="IncorrectLoginOrPassword" xml:space="preserve">
     <value>Неверный логин или пароль.</value>
   </data>
-  <data name="UncorrectPrice" xml:space="preserve">
+  <data name="IncorrectPrice" xml:space="preserve">
     <value>Некорректная цена</value>
   </data>
   <data name="UnitDisplayMember" xml:space="preserve">
@@ -204,7 +204,7 @@
   <data name="ConfirmationDelete" xml:space="preserve">
     <value>Подтверждение удаления</value>
   </data>
-  <data name="UncorrectIDClient" xml:space="preserve">
+  <data name="IncorrectIDClient" xml:space="preserve">
     <value>Неверный ID клиента!</value>
   </data>
   <data name="ProductNotFound" xml:space="preserve">
@@ -216,7 +216,7 @@
   <data name="SuccessUpdateProduct" xml:space="preserve">
     <value>Товар успешно обновлён!</value>
   </data>
-  <data name="UncorrectCategory" xml:space="preserve">
+  <data name="IncorrectCategory" xml:space="preserve">
     <value>Некорректная категория</value>
   </data>
   <data name="ConfirmationCancel" xml:space="preserve">
@@ -489,7 +489,7 @@
   <data name="SLApplicationEnd" xml:space="preserve">
     <value>Приложение завершено!</value>
   </data>
-  <data name="LSCriticalErrorInLaunching" xml:space="preserve">
+  <data name="SLCriticalErrorInLaunching" xml:space="preserve">
     <value>Необработанное исключение при запуске</value>
   </data>
   <data name="SLCriticalErrorInLaunchingProgram" xml:space="preserve">
@@ -633,8 +633,8 @@
   <data name="NotEnoughInStockQuantityRus" xml:space="preserve">
     <value>Недостаточно товара на складе</value>
   </data>
-  <data name="PointedRus" xml:space="preserve">
-    <value>Указано</value>
+  <data name="TryToPointRus" xml:space="preserve">
+    <value>Попытка указать</value>
   </data>
   <data name="DiscountDateCannotBeCreationDate" xml:space="preserve">
     <value>Снижение цены должно быть произойти не раньше, чем через два месяца после создания</value>
@@ -720,16 +720,43 @@
   <data name="CriticalErrorWhenLoadingShipments" xml:space="preserve">
     <value>Ошибка при загрузке отгрузок!</value>
   </data>
-  <data name="ErrowWhileLoadingData" xml:space="preserve">
+  <data name="ErrorWhileLoadingData" xml:space="preserve">
     <value>Ошибка при загрузке данных!</value>
   </data>
   <data name="Notstated" xml:space="preserve">
     <value>Неизвестно</value>
   </data>
   <data name="StartDateCannotBeInFuture" xml:space="preserve">
-    <value>Конечная дата не может быть позже сегодняшнего дня.</value>
+    <value>Начальная дата не может быть позже текущего дня.</value>
   </data>
   <data name="IncorrectToDateChoice" xml:space="preserve">
     <value>Некорректный выбор начальной даты.</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ErrorSaveShipment" xml:space="preserve">
+    <value>Ошибка при сохранении отгрузки.</value>
+  </data>
+  <data name="EndDateCannotBeInPast" xml:space="preserve">
+    <value>Конечная дата не может быть </value>
+  </data>
+  <data name="CurrencyName" xml:space="preserve">
+    <value>CurrencyName</value>
+  </data>
+  <data name="Currency_Id" xml:space="preserve">
+    <value>Currency_Id</value>
+  </data>
+  <data name="SelectCurrency" xml:space="preserve">
+    <value>Выберите валюту!</value>
+  </data>
+  <data name="SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Настройки успешно сохранены!</value>
+  </data>
+  <data name="NewCurrency" xml:space="preserve">
+    <value>Новая валюта</value>
+  </data>
+  <data name="ExchangeRate" xml:space="preserve">
+    <value>Курс валюты</value>
   </data>
 </root>

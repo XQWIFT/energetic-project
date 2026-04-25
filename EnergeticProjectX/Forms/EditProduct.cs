@@ -1,4 +1,5 @@
-﻿using EnergeticProjectX.Classes;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
+using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
@@ -21,6 +22,8 @@ namespace EditProductForms
         /// <summary>
         /// Конструктор изменения товаров.
         /// </summary>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
+        /// <param name="article">Артикул выбранного товара.</param>
         public EditProduct(string userLogin, string article)
         {
             InitializeComponent();
@@ -63,16 +66,14 @@ namespace EditProductForms
                 }
                 else
                 {
-                    MessageBox.Show($"{Resources.ProductNotFound}\n{Resources.TryAgain}", Resources.TitleError,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    EH.ShowError($"{Resources.ProductNotFound}\n{Resources.TryAgain}");
 
                     return;
                 }
             }
             catch (Exception)
             {
-                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}",
-                                Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.ErrorUploadData}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -84,8 +85,7 @@ namespace EditProductForms
 
             if (user == null)
             {
-                MessageBox.Show($"{Resources.UserNotFound}\n{Resources.TryAgain}", Resources.TitleErrorBD,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.UserNotFound}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -125,16 +125,14 @@ namespace EditProductForms
                 }
                 else
                 {
-                    MessageBox.Show($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}",
-                                    Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    EH.ShowError($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}");
 
                     return;
                 }
             }
             catch (Exception)
             {
-                MessageBox.Show($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}",
-                                Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -142,11 +140,10 @@ namespace EditProductForms
 
         private void ButtonOfChange_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show($"{Resources.SureWantToChangeProductData}\n\n{Resources.AvailableFieldsToEditProduct}\n\n" +
-                                        $"{Resources.IfChangePurchaseThenChangeSale}", Resources.TitleConfirmation,
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var answer = EH.ShowConfirmation($"{Resources.SureWantToChangeProductData}\n\n{Resources.AvailableFieldsToEditProduct}\n\n" +
+                                             $"{Resources.IfChangePurchaseThenChangeSale}");
 
-            if (result == DialogResult.Yes)
+            if (answer == DialogResult.Yes)
             {
                 ButtonOfChange.Enabled = false;
 
@@ -185,11 +182,12 @@ namespace EditProductForms
             if (currentProduct == null)
                 return;
 
-            var hasChangesTextBoxes = TextBoxOfName.Text != currentProduct.Name ||
-                             TextBoxOfPurchasePrice.Text != currentProduct.PurchasePrice.ToString() ||
-                             TextBoxOfDiscountDate.Text != currentProduct.DiscountDate.ToString();
+            var hasChangesTextBoxes = TextBoxOfName.Text.Trim() != currentProduct.Name ||
+                                      TextBoxOfPurchasePrice.Text.Trim() != PriceCurrencyManager.SetPriceToChosenCurrency(db, currentProduct.PurchasePrice, userLogin).ToString() ||
+                                      TextBoxOfDiscountDate.Text.Trim() != currentProduct.DiscountDate.ToString();
 
             var hasChangesComboBox = false;
+
             if (ComboBoxOfCategory.SelectedItem != null)
             {
                 if (ComboBoxOfCategory.SelectedItem is Category selectedCategory)
@@ -210,8 +208,8 @@ namespace EditProductForms
             {
                 if (ComboBoxOfCategory.SelectedValue == null)
                 {
-                    MessageBox.Show(Resources.ChooseCategoryProduct, Resources.TitleError,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    EH.ShowAlert(Resources.ChooseCategoryProduct);
+
                     return;
                 }
 
@@ -226,8 +224,8 @@ namespace EditProductForms
                     }
                     else
                     {
-                        MessageBox.Show($"{Resources.UncorrectCategory}\n{Resources.TryAgain}",
-                                           Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        EH.ShowError($"{Resources.IncorrectCategory}\n{Resources.TryAgain}");
+
                         ComboBoxOfCategory.ResetText();
                         return;
                     }
@@ -246,13 +244,13 @@ namespace EditProductForms
 
                     if (!DateOnly.TryParseExact(TextBoxOfDiscountDate.Text, Resources.CorrectDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var discountDate))
                     {
-                        MessageBox.Show($"{Resources.IncorrectDateFormat}\n\n{Resources.CorrectDateFormatExample}", Resources.TitleError,
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        EH.ShowError($"{Resources.IncorrectDateFormat}\n\n{Resources.CorrectDateFormatExample}");
+
                         return;
                     }
                     else if (discountDate < DateOnly.FromDateTime(productToUpdate.CreationDate).AddMonths(2))
                     {
-                        MessageBox.Show($"{Resources.DiscountDateCannotBeCreationDate}.\n{Resources.TryAgain}");
+                        EH.ShowWarning($"{Resources.DiscountDateCannotBeCreationDate}.\n{Resources.TryAgain}");
 
                         TextBoxOfDiscountDate.Text = string.Empty;
 
@@ -261,11 +259,10 @@ namespace EditProductForms
 
                     productToUpdate.DiscountDate = discountDate;
 
-                    if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                    if (EH.DBSaveChangesUniversalErrorCheck(db))
                         return;
 
-                    MessageBox.Show(Resources.SuccessUpdateProduct, Resources.TitleInformation,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    EH.ShowInformation(Resources.SuccessUpdateProduct);
 
                     Hide();
                     var productCatalog = new ProductCatalog(userLogin);
@@ -274,14 +271,12 @@ namespace EditProductForms
                 }
                 else
                 {
-                    MessageBox.Show($"{Resources.ProductNotFound}\n{Resources.TryAgain}", Resources.TitleError,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    EH.ShowError($"{Resources.ProductNotFound}\n{Resources.TryAgain}");
                 }
             }
             catch (Exception)
             {
-                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError($"{Resources.ErrorUploadData}\n{Resources.TryAgain}");
 
                 return;
             }
@@ -289,8 +284,7 @@ namespace EditProductForms
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            DialogResult answer = MessageBox.Show($"{Resources.AskOfCancelEdit}\n\n{Resources.LostUnsavedChanges}", Resources.ConfirmationCancel,
-                                                  MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var answer = EH.ShowConfirmation($"{Resources.AskOfCancelEdit}\n\n{Resources.LostUnsavedChanges}");
 
             if (answer == DialogResult.Yes)
             {
@@ -307,7 +301,7 @@ namespace EditProductForms
 
             e.Graphics.FillRectangle(Brushes.White, e.Bounds);
 
-            string text = ComboBoxOfCategory.GetItemText(ComboBoxOfCategory.Items[e.Index])!;
+            var text = ComboBoxOfCategory.GetItemText(ComboBoxOfCategory.Items[e.Index])!;
 
             e.Graphics.DrawString(text, e.Font!, Brushes.Black, e.Bounds);
 
@@ -319,8 +313,7 @@ namespace EditProductForms
 
         private void ButtonOfProductDelete_Click(object sender, EventArgs e)
         {
-            var answer = MessageBox.Show(Resources.AskForDeleteProduct, Resources.TitleConfirmation,
-                                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var answer = EH.ShowConfirmation(Resources.AskForDeleteProduct);
 
             if (answer == DialogResult.Yes)
             {
@@ -328,19 +321,17 @@ namespace EditProductForms
 
                 if (product == null)
                 {
-                    MessageBox.Show($"{Resources.ProductNotFound}\n{Resources.TryAgain}", Resources.TitleError,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    EH.ShowError($"{Resources.ProductNotFound}\n{Resources.TryAgain}");
 
                     return;
                 }
 
                 product.Status = ProductStatus.Hidden;
 
-                if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                if (EH.DBSaveChangesUniversalErrorCheck(db))
                     return;
 
-                MessageBox.Show(Resources.SuccessDeleteProduct, Resources.TitleInformation,
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                EH.ShowInformation(Resources.SuccessDeleteProduct);
 
                 Hide();
                 var productCatalog = new ProductCatalog(userLogin);

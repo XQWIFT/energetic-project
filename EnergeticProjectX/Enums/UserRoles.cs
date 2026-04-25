@@ -1,7 +1,7 @@
 ﻿namespace EnergeticProjectX.Enums
 {
     /// <summary>
-    /// Роль пользователя
+    /// Роль пользователя.
     /// </summary>
     public enum UserRole
     {

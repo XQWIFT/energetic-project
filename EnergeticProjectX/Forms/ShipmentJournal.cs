@@ -9,7 +9,7 @@ using System.Text;
 namespace ShipmentJournalForm
 {
     /// <summary>
-    /// Форма журнала отгрузок для администратора
+    /// Форма журнала отгрузок для администратора.
     /// </summary>
     public partial class ShipmentJournal : Form
     {
@@ -22,7 +22,7 @@ namespace ShipmentJournalForm
         /// <summary>
         /// Конструктор для реализации формы.
         /// </summary>
-        /// <param name="userLogin">Логин авторизованного пользователя</param>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
         public ShipmentJournal(string userLogin)
         {
             InitializeComponent();
@@ -40,10 +40,13 @@ namespace ShipmentJournalForm
             DateTimePickerTo.CustomFormat = Resources.CorrectDateFormat;
 
             DataGridViewOfShipments.CellClick += DataGridViewOfShipments_CellClick;
-            DateTimePickerFrom.ValueChanged += DateTimePicker_ValueChanged;
+            DateTimePickerFrom.ValueChanged += DateTimePickerFrom_ValueChanged;
             DateTimePickerTo.ValueChanged += DateTimePickerTo_ValueChanged;
 
             LoadShipments();
+
+            selectedShipment = null;
+
             UpdateButtonStates();
         }
 
@@ -131,7 +134,7 @@ namespace ShipmentJournalForm
             {
                 LoggerService.Error(Resources.CriticalErrorWhenLoadingShipments, ex);
 
-                MessageBox.Show($"{Resources.ErrowWhileLoadingData}\n{Resources.TryAgain}", Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{Resources.ErrorWhileLoadingData}\n{Resources.TryAgain}", Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 allShipments = [];
                 DataGridViewOfShipments.DataSource = allShipments;
@@ -142,21 +145,31 @@ namespace ShipmentJournalForm
 
         private void DataGridViewOfShipments_CellClick(object? sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < allShipments.Count)
+            if (e.RowIndex < 0)
             {
-                selectedShipment = db.Shipments.FirstOrDefault(s => s.Shipment_Id == allShipments[e.RowIndex].ShipmentId);
+                selectedShipment = null;
+                UpdateButtonStates();
+                return;
+            }
+
+            DataGridViewOfShipments.ClearSelection();
+            DataGridViewOfShipments.Rows[e.RowIndex].Selected = true;
+
+            DataGridViewOfShipments.ClearSelection();
+            DataGridViewOfShipments.Rows[e.RowIndex].Selected = true;
+
+            if (e.RowIndex < allShipments.Count &&
+                DataGridViewOfShipments.Rows[e.RowIndex].DataBoundItem is ShipmentJournalDisplayModel model)
+            {
+                selectedShipment = db.Shipments.FirstOrDefault(s => s.Shipment_Id == model.ShipmentId);
 
                 LoggerService.Debug($"{Resources.ShipmentSelected}: {selectedShipment?.Shipment_Id}");
-
-                UpdateButtonStates();
             }
-        }
+            else
+            {
+                selectedShipment = null;
+            }
 
-        private void DateTimePicker_ValueChanged(object? sender, EventArgs e)
-        {
-            LoggerService.Debug($"{Resources.DateRangeChanged}: {DateTimePickerFrom.Value:dd.MM.yyyy} - {DateTimePickerTo.Value:dd.MM.yyyy}");
-
-            LoadShipments();
             UpdateButtonStates();
         }
 
@@ -216,17 +229,6 @@ namespace ShipmentJournalForm
 
         private void DateTimePickerTo_ValueChanged(object? sender, EventArgs e)
         {
-            if (DateTimePickerTo.Value.Date > DateTime.Today)
-            {
-                LoggerService.Warning($"{Resources.IncorrectToDateChoice}: {DateTimePickerTo.Value:dd.MM.yyyy}");
-
-                MessageBox.Show($"{Resources.StartDateCannotBeInFuture}\n{Resources.TryAgain}", Resources.TitleWarning,
-                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                DateTimePickerTo.Value = DateTime.Today;
-                return;
-            }
-
             if (DateTimePickerTo.Value < DateTimePickerFrom.Value)
             {
                 LoggerService.Warning($"{Resources.IncorrectDataPeriod}: " +
@@ -238,6 +240,23 @@ namespace ShipmentJournalForm
 
                 DateTimePickerTo.Value = DateTimePickerFrom.Value;
 
+                return;
+            }
+
+            LoadShipments();
+            UpdateButtonStates();
+        }
+
+        private void DateTimePickerFrom_ValueChanged(object? sender, EventArgs e)
+        {
+            if (DateTimePickerFrom.Value.Date > DateTime.Today)
+            {
+                LoggerService.Warning($"Некорректный выбор начальной даты: {DateTimePickerFrom.Value:dd.MM.yyyy}");
+
+                MessageBox.Show($"{Resources.StartDateCannotBeInFuture}\n{Resources.TryAgain}", Resources.TitleWarning,
+                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                DateTimePickerFrom.Value = DateTime.Today;
                 return;
             }
 
@@ -281,10 +300,10 @@ namespace ShipmentJournalForm
                 return;
             }
 
-            LoggerService.Info($"{Resources.OpenShipmentDetails}: {selectedShipment.Shipment_Id}");
+            LoggerService.Info($"{Resources.OpenShipmentDetails}: {selectedShipment}");
 
             Hide();
-            var shipmentDetails = new ShipmentDetails(userLogin, selectedShipment.Shipment_Id);
+            var shipmentDetails = new ShipmentDetails(userLogin, selectedShipment);
             shipmentDetails.ShowDialog();
             Close();
         }

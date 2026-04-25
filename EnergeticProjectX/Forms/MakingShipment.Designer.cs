@@ -224,6 +224,7 @@
             ButtonOfProductDelete.TabIndex = 13;
             ButtonOfProductDelete.Text = "Удалить товар";
             ButtonOfProductDelete.UseVisualStyleBackColor = true;
+            ButtonOfProductDelete.Click += ButtonOfProductDelete_Click;
             // 
             // MakingShipment
             // 

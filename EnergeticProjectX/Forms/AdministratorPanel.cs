@@ -80,5 +80,13 @@ namespace AdministratorPanelForm
             shipmentJournal.ShowDialog();
             Close();
         }
+
+        private void ButtonOfSettings_Click(object sender, EventArgs e)
+        {
+            Hide();
+            var userSettings = new EnergeticProjectX.Forms.Settings(userLogin);
+            userSettings.ShowDialog();
+            Close();
+        }
     }
 }

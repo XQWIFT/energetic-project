@@ -14,7 +14,7 @@ using WarehousemanPanelForm;
 namespace ProductCatalogForm
 {
     /// <summary>
-    /// Форма для работы с каталогом товаров в виде таблицы
+    /// Форма для работы с каталогом товаров в виде таблицы.
     /// </summary>
     public partial class ProductCatalog : Form
     {
@@ -27,9 +27,9 @@ namespace ProductCatalogForm
         private string? selectedArticle;
 
         /// <summary>
-        /// Конструктор для работы с каталогом товаров
+        /// Конструктор для работы с каталогом товаров.
         /// </summary>
-        /// <param name="userLogin">Логин авторизованного пользователя</param>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
         public ProductCatalog(string userLogin)
         {
             InitializeComponent();
@@ -75,9 +75,9 @@ namespace ProductCatalogForm
         }
 
         /// <summary>
-        /// Загрузка товаров из базы данных
+        /// Загрузка товаров из базы данных.
         /// </summary>
-        /// <param name="searchText">Текст из поля для поиска товара</param>
+        /// <param name="searchText">Текст из поля для поиска товара.</param>
         public void LoadProducts(string? searchText = null)
         {
             try

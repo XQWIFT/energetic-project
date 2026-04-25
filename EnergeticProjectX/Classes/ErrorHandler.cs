@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace EnergeticProjectX.Classes
 {
     /// <summary>
-    /// Класс для вычисления частых ошибок в работе программы
+    /// Класс для работы с частыми ошибками в программе.
     /// </summary>
     public class ErrorHandler
     {
@@ -40,11 +40,58 @@ namespace EnergeticProjectX.Classes
             }
             catch (Exception)
             {
-                MessageBox.Show($"{Resources.UniversalErrorBD}\n{Resources.TryAgain}", Resources.TitleErrorBD,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError($"{Resources.UniversalErrorBD}\n{Resources.TryAgain}");
+
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Метод для вывода сообщения с информацией пользователю.
+        /// </summary>
+        /// <param name="message">Информация для пользователя.</param>
+        public static void ShowInformation(string message)
+        {
+            MessageBox.Show(message, Resources.TitleWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        /// <summary>
+        /// Метод для вывода уведомления пользователю.
+        /// </summary>
+        /// <param name="message">Текст уведомления.</param>
+        public static void ShowAlert(string message)
+        {
+            MessageBox.Show(message, Resources.TitleAlert, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        /// <summary>
+        /// Метод для вывода сообщения об ошибке пользователю.
+        /// </summary>
+        /// <param name="message">Текст ошибки.</param>
+        public static void ShowError(string message)
+        {
+            MessageBox.Show(message, Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        /// <summary>
+        /// Метод для вывода сообщения для подтверждения какого-либо действия пользователем.
+        /// </summary>
+        /// <param name="message">Текст для подтверждения.</param>
+        public static DialogResult ShowConfirmation(string message)
+        {
+            var answer = MessageBox.Show(message, Resources.TitleConfirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            return answer;
+        }
+
+        /// <summary>
+        /// Метод для вывода предупреждения пользователю.
+        /// </summary>
+        /// <param name="message">Текст предупреждения.</param>
+        public static void ShowWarning(string message)
+        {
+            MessageBox.Show(message, Resources.TitleWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }

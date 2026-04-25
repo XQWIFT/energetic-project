@@ -1,7 +1,6 @@
 ﻿using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using System.Globalization;
-using System.IO.Packaging;
 
 namespace EnergeticProjectX.Classes
 {
@@ -16,12 +15,11 @@ namespace EnergeticProjectX.Classes
 
         /// <summary>
         /// Приведение цены к заданному формату относительно курса валюты.
-        /// Формат: XXX.XXX.XX + курс валюты
+        /// Формат: XXX XXX,XX (символ валюты).
         /// </summary>
-        /// <param name="db">Контекст базы данных</param>
+        /// <param name="db">Контекст базы данных.</param>
         /// <param name="priceInChosenCurrency">Цена для форматирования, выраженная в выбранной у пользователя валюте</param>
-        /// <returns>При успешном форматировании выводится цена с округлением до двух знаков после запятой и точкой в качестве
-        /// разделителя</returns>
+        /// <returns>При успешном форматировании выводится цена с округлением до двух знаков после запятой по Российскому стандарту записи.</returns>
         public static string PriceToCorrectFormat(ApplicationContextDB db, decimal priceInChosenCurrency, string userLogin)
         {
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
@@ -45,9 +43,10 @@ namespace EnergeticProjectX.Classes
         }
 
         /// <summary>
-        /// Метод для проверки введённой пользователем закупочной цены на конвертацию в число с плавающей точкой и положительность.
+        /// Метод для проверки введённой пользователем закупочной цены на конвертацию в число с плавающей точкой и на соответствие заданному
+        /// числовому диапазону.
         /// </summary>
-        /// <param name="purchasePriceString">Закупочная цена</param>
+        /// <param name="purchasePriceString">Строковая закупочная цена</param>
         /// <returns>При прохождении валидации выводится число с плавающей точкой, иначе - null.</returns>
         public static decimal? ValidatePurchasePrice(string purchasePriceString)
         {
@@ -93,8 +92,8 @@ namespace EnergeticProjectX.Classes
         /// <summary>
         /// Метод для получения цены продажи товара в рублях относительно закупочной цены в рублях.
         /// </summary>
-        /// <param name="purchasePriceInDefaultCurrency">Закупочная цена товара в рублях</param>
-        /// <returns>Цена продажи товара в рублях</returns>
+        /// <param name="purchasePriceInDefaultCurrency">Закупочная цена товара в рублях.</param>
+        /// <returns>Цена продажи товара в рублях.</returns>
         public static decimal GetSalePriceInDefaultCurrency(decimal purchasePriceInDefaultCurrency)
         {
             return Math.Round(Product.priceIncreaseCoefficient * purchasePriceInDefaultCurrency, 2, MidpointRounding.AwayFromZero);
@@ -103,10 +102,10 @@ namespace EnergeticProjectX.Classes
         /// <summary>
         /// Метод для переопределения любой цены в заданной валюте в рубли.
         /// </summary>
-        /// <param name="db">Контекст базы данных</param>
-        /// <param name="price"></param>
-        /// <param name="userLogin"></param>
-        /// <returns></returns>
+        /// <param name="db">Контекст базы данных.</param>
+        /// <param name="price">Цена в выбранной у пользователя валюте.</param>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
+        /// <returns>Цена в рублях.</returns>
         public static decimal SetPriceToDefaultCurrency(ApplicationContextDB db, decimal price, string userLogin)
         {
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
@@ -119,12 +118,12 @@ namespace EnergeticProjectX.Classes
         }
 
         /// <summary>
-        /// Метод для переопределения цены в рублях в эквивалент в выбранной пользователем валюте.
+        /// Метод для переопределения любой цены в рублях в эквивалент в выбранной пользователем валюте.
         /// </summary>
-        /// <param name="db"></param>
-        /// <param name="priceInDefaultCurrency"></param>
-        /// <param name="userLogin"></param>
-        /// <returns></returns>
+        /// <param name="db">Контекст базы данных.</param>
+        /// <param name="priceInDefaultCurrency">Цена в рублях.</param>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
+        /// <returns>Цена в выбранной у пользователя валюте.</returns>
         public static decimal SetPriceToChosenCurrency(ApplicationContextDB db, decimal priceInDefaultCurrency, string userLogin)
         {
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);

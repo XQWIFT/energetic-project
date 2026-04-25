@@ -261,6 +261,7 @@
             ButtonOfSettings.TabIndex = 17;
             ButtonOfSettings.Text = "Настройки";
             ButtonOfSettings.UseVisualStyleBackColor = true;
+            ButtonOfSettings.Click += ButtonOfSettings_Click;
             // 
             // label1
             // 

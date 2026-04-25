@@ -1,5 +1,7 @@
-﻿using EnergeticProjectX.Enums;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
+using EnergeticProjectX.Enums;
 using EnergeticProjectX.Properties;
+using EnergeticProjectX.Services;
 
 namespace EnergeticProjectX.Classes
 {
@@ -12,6 +14,8 @@ namespace EnergeticProjectX.Classes
         {
             CheckConnectionDB(db);
 
+            CheckAndUpdateRates(db);
+
             DeleteHiddenProducts(db);
 
             DeleteHiddenCategories(db);
@@ -20,53 +24,85 @@ namespace EnergeticProjectX.Classes
         /// <summary>
         /// Метод для проверки подключения пользователя к базе данных.
         /// </summary>
+        /// <param name="db">Контекст базы данных.</param>
         public static void CheckConnectionDB(this ApplicationContextDB db)
         {
             if (!db.Database.CanConnect())
             {
-                MessageBox.Show(Resources.ConnectionToDataBaseFailed, Resources.TitleErrorBD,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                Application.Exit();
+                EH.ShowError(Resources.ConnectionToDataBaseFailed);
             }
         }
 
         /// <summary>
         /// Метод для удаления скрытого товара, который не участвует ни в одной ранее совершённой отгрузке.
         /// </summary>
-        /// <param name="db">Контекст базы данных</param>
+        /// <param name="db">Контекст базы данных.</param>
         private static void DeleteHiddenProducts(ApplicationContextDB db)
         {
             var hiddenProducts = db.Products.Where(p => p.Status == ProductStatus.Hidden).ToList();
 
             foreach (var hiddenProduct in hiddenProducts)
             {
-                bool participateInShipment = db.ShipmentItems.Any(item => item.Product_Id == hiddenProduct.Product_Id);
+                var participateInShipment = db.ShipmentItems.Any(item => item.Product_Id == hiddenProduct.Product_Id);
 
                 if (!participateInShipment)
                     db.Products.Remove(hiddenProduct);
             }
 
-            ErrorHandler.DBSaveChangesCleanUpHiddenItemsError(db, Resources.CleanUpHiddenProductsError);
+            EH.DBSaveChangesCleanUpHiddenItemsError(db, Resources.CleanUpHiddenProductsError);
         }
 
         /// <summary>
         /// Метод для удаления скрытых категорий, за которыми не закреплено ни одного товара.
         /// </summary>
-        /// <param name="db"></param>
+        /// <param name="db">Контекст базы данных.</param>
         private static void DeleteHiddenCategories(ApplicationContextDB db)
         {
             var hiddenCategories = db.Categories.Where(u => u.Status == CategoryStatus.Hidden).ToList();
 
             foreach (var hiddenCategory in hiddenCategories)
             {
-                bool hasProducts = db.Products.Any(product => product.CategoryId == hiddenCategory.Category_Id);
+                var hasProducts = db.Products.Any(product => product.CategoryId == hiddenCategory.Category_Id);
 
                 if (!hasProducts)
                     db.Categories.Remove(hiddenCategory);
             }
 
-            ErrorHandler.DBSaveChangesCleanUpHiddenItemsError(db, Resources.CleanUpHiddenCategoriesError);
+            EH.DBSaveChangesCleanUpHiddenItemsError(db, Resources.CleanUpHiddenCategoriesError);
+        }
+
+        /// <summary>
+        /// Метод для проверки и обновления курсов валют.
+        /// </summary>
+        /// <param name="db">Контекст базы данных.</param>
+        private static void CheckAndUpdateRates(ApplicationContextDB db)
+        {
+            try
+            {
+                var lastUpdate = db.Currencies.Max(c => (DateTime?)c.DataOfUpdate);
+
+                if (ExchangeRateService.ShouldUpdateRates(lastUpdate, TimeSpan.FromHours(24)))
+                {
+                    EH.ShowInformation("Обновление курсов валют...\nПожалуйста, подождите.");
+
+                    var updated = ExchangeRateService.UpdateRatesFromCbr(db);
+
+                    if (updated > 0)
+                    {
+                        EH.ShowInformation($"Курсы обновлены!\n\nОбновлено: {updated} валют");
+                    }
+                    else
+                    {
+                        EH.ShowWarning("Курсы не обновлены.\nПопробуйте позже.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerService.Error("Ошибка обновления курсов", ex);
+
+                EH.ShowWarning("Не удалось обновить курсы.\nПриложение продолжит работу.");
+            }
         }
     }
 }

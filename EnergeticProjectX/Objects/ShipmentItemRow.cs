@@ -1,4 +1,4 @@
-﻿namespace EnergeticProjectX.Models
+﻿namespace EnergeticProjectX.Objects
 {
     /// <summary>
     /// Класс для работы с отгрузками.
