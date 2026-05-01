@@ -1,7 +1,6 @@
 ﻿using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 namespace EnergeticProjectX.Classes
@@ -52,8 +51,19 @@ namespace EnergeticProjectX.Classes
         public DbSet<Currency> Currencies { get; set; }
 
         /// <summary>
+        /// Подключается к таблице Deliveries внутри базы данных.
+        /// </summary>
+        public DbSet<Delivery> Deliveries { get; set; } = null!;
+
+        /// <summary>
+        /// Подключается к таблице DeliveryItems внутри базы данных.
+        /// </summary>
+        public DbSet<DeliveryItems> DeliveryItems { get; set; } = null!;
+
+        /// <summary>
         /// Базовый конструктор без параметров для создания контекста базы данных.
         /// </summary>
+        /// 
         public ApplicationContextDB()
         {
             {
@@ -82,17 +92,11 @@ namespace EnergeticProjectX.Classes
         /// </summary>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder.AddFile("logs/ef-core.log");
-                builder.SetMinimumLevel(LogLevel.Information);
-            });
-
             if (!optionsBuilder.IsConfigured)
             {
                 string connectionString = HiddenDataManager.GetConnectionString();
 
-                optionsBuilder.UseNpgsql(connectionString).UseLoggerFactory(loggerFactory);
+                optionsBuilder.UseNpgsql(connectionString);
             }
         }
 

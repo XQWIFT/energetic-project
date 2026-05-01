@@ -1,4 +1,4 @@
-﻿namespace EditCategoriesForm
+﻿namespace EnergeticProjectX.Forms
 {
     partial class EditCategories
     {
@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             ButtonOfCancel = new Button();
-            ButtonOfDelete = new Button();
+            ButtonOfDeleteCategory = new Button();
             ButtonOfSaveChanges = new Button();
-            labelOdEdit = new Label();
+            LabelOfEditCategory = new Label();
             LabelOfCategory = new Label();
             ComboBoxOfCategory = new ComboBox();
             LabelOfUnitData = new Label();
-            textBoxForCurrentUnit = new TextBox();
+            TextBoxForCurrentUnit = new TextBox();
             LabelOfNewUnitData = new Label();
             ComboBoxOfNewUnitData = new ComboBox();
             SuspendLayout();
@@ -55,23 +55,27 @@
             ButtonOfCancel.Text = "Отменить";
             ButtonOfCancel.UseVisualStyleBackColor = true;
             ButtonOfCancel.Click += ButtonOfCancel_Click;
+            ButtonOfCancel.Enter += TabSelection_Enter;
+            ButtonOfCancel.Leave += TabSelection_Leave;
             // 
-            // ButtonOfDelete
+            // ButtonOfDeleteCategory
             // 
-            ButtonOfDelete.Enabled = false;
-            ButtonOfDelete.FlatAppearance.BorderColor = Color.Black;
-            ButtonOfDelete.FlatAppearance.BorderSize = 4;
-            ButtonOfDelete.FlatAppearance.MouseDownBackColor = Color.Gray;
-            ButtonOfDelete.FlatAppearance.MouseOverBackColor = Color.LightGray;
-            ButtonOfDelete.FlatStyle = FlatStyle.Flat;
-            ButtonOfDelete.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfDelete.Location = new Point(513, 506);
-            ButtonOfDelete.Name = "ButtonOfDelete";
-            ButtonOfDelete.Size = new Size(318, 64);
-            ButtonOfDelete.TabIndex = 5;
-            ButtonOfDelete.Text = "Удалить";
-            ButtonOfDelete.UseVisualStyleBackColor = true;
-            ButtonOfDelete.Click += ButtonOfDelete_Click;
+            ButtonOfDeleteCategory.Enabled = false;
+            ButtonOfDeleteCategory.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfDeleteCategory.FlatAppearance.BorderSize = 4;
+            ButtonOfDeleteCategory.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfDeleteCategory.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfDeleteCategory.FlatStyle = FlatStyle.Flat;
+            ButtonOfDeleteCategory.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            ButtonOfDeleteCategory.Location = new Point(513, 506);
+            ButtonOfDeleteCategory.Name = "ButtonOfDeleteCategory";
+            ButtonOfDeleteCategory.Size = new Size(318, 64);
+            ButtonOfDeleteCategory.TabIndex = 5;
+            ButtonOfDeleteCategory.Text = "Удалить";
+            ButtonOfDeleteCategory.UseVisualStyleBackColor = true;
+            ButtonOfDeleteCategory.Click += ButtonOfDelete_Click;
+            ButtonOfDeleteCategory.Enter += TabSelection_Enter;
+            ButtonOfDeleteCategory.Leave += TabSelection_Leave;
             // 
             // ButtonOfSaveChanges
             // 
@@ -89,15 +93,18 @@
             ButtonOfSaveChanges.Text = "Изменить";
             ButtonOfSaveChanges.UseVisualStyleBackColor = true;
             ButtonOfSaveChanges.Click += ButtonOfSaveChanges_Click;
+            ButtonOfSaveChanges.Enter += TabSelection_Enter;
+            ButtonOfSaveChanges.Leave += TabSelection_Leave;
             // 
-            // labelOdEdit
+            // LabelOfEditCategory
             // 
-            labelOdEdit.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelOdEdit.Location = new Point(227, 68);
-            labelOdEdit.Name = "labelOdEdit";
-            labelOdEdit.Size = new Size(562, 61);
-            labelOdEdit.TabIndex = 7;
-            labelOdEdit.Text = "Редактирование категории";
+            LabelOfEditCategory.AutoSize = true;
+            LabelOfEditCategory.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfEditCategory.Location = new Point(258, 80);
+            LabelOfEditCategory.Name = "LabelOfEditCategory";
+            LabelOfEditCategory.Size = new Size(495, 48);
+            LabelOfEditCategory.TabIndex = 0;
+            LabelOfEditCategory.Text = "Редактирование категории";
             // 
             // LabelOfCategory
             // 
@@ -105,7 +112,7 @@
             LabelOfCategory.Location = new Point(166, 148);
             LabelOfCategory.Name = "LabelOfCategory";
             LabelOfCategory.Size = new Size(356, 46);
-            LabelOfCategory.TabIndex = 8;
+            LabelOfCategory.TabIndex = 0;
             LabelOfCategory.Text = "Название категории";
             // 
             // ComboBoxOfCategory
@@ -116,7 +123,8 @@
             ComboBoxOfCategory.Location = new Point(175, 197);
             ComboBoxOfCategory.Name = "ComboBoxOfCategory";
             ComboBoxOfCategory.Size = new Size(656, 46);
-            ComboBoxOfCategory.TabIndex = 9;
+            ComboBoxOfCategory.TabIndex = 1;
+            ComboBoxOfCategory.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
             // 
             // LabelOfUnitData
             // 
@@ -125,19 +133,19 @@
             LabelOfUnitData.Location = new Point(166, 260);
             LabelOfUnitData.Name = "LabelOfUnitData";
             LabelOfUnitData.Size = new Size(477, 45);
-            LabelOfUnitData.TabIndex = 11;
+            LabelOfUnitData.TabIndex = 0;
             LabelOfUnitData.Text = "Текущая единица измерения";
             // 
-            // textBoxForCurrentUnit
+            // TextBoxForCurrentUnit
             // 
-            textBoxForCurrentUnit.BackColor = Color.White;
-            textBoxForCurrentUnit.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxForCurrentUnit.Location = new Point(175, 308);
-            textBoxForCurrentUnit.Multiline = true;
-            textBoxForCurrentUnit.Name = "textBoxForCurrentUnit";
-            textBoxForCurrentUnit.ReadOnly = true;
-            textBoxForCurrentUnit.Size = new Size(656, 46);
-            textBoxForCurrentUnit.TabIndex = 12;
+            TextBoxForCurrentUnit.BackColor = Color.White;
+            TextBoxForCurrentUnit.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxForCurrentUnit.Location = new Point(175, 308);
+            TextBoxForCurrentUnit.Multiline = true;
+            TextBoxForCurrentUnit.Name = "TextBoxForCurrentUnit";
+            TextBoxForCurrentUnit.ReadOnly = true;
+            TextBoxForCurrentUnit.Size = new Size(656, 46);
+            TextBoxForCurrentUnit.TabIndex = 2;
             // 
             // LabelOfNewUnitData
             // 
@@ -146,7 +154,7 @@
             LabelOfNewUnitData.Location = new Point(175, 378);
             LabelOfNewUnitData.Name = "LabelOfNewUnitData";
             LabelOfNewUnitData.Size = new Size(444, 45);
-            LabelOfNewUnitData.TabIndex = 13;
+            LabelOfNewUnitData.TabIndex = 0;
             LabelOfNewUnitData.Text = "Новая единица измерения";
             // 
             // ComboBoxOfNewUnitData
@@ -157,23 +165,24 @@
             ComboBoxOfNewUnitData.Location = new Point(175, 426);
             ComboBoxOfNewUnitData.Name = "ComboBoxOfNewUnitData";
             ComboBoxOfNewUnitData.Size = new Size(656, 46);
-            ComboBoxOfNewUnitData.TabIndex = 14;
+            ComboBoxOfNewUnitData.TabIndex = 3;
+            ComboBoxOfNewUnitData.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
             // 
             // EditCategories
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
-            ClientSize = new Size(973, 688);
+            ClientSize = new Size(981, 707);
             Controls.Add(ComboBoxOfNewUnitData);
             Controls.Add(LabelOfNewUnitData);
-            Controls.Add(textBoxForCurrentUnit);
+            Controls.Add(TextBoxForCurrentUnit);
             Controls.Add(LabelOfUnitData);
             Controls.Add(ComboBoxOfCategory);
             Controls.Add(LabelOfCategory);
-            Controls.Add(labelOdEdit);
+            Controls.Add(LabelOfEditCategory);
             Controls.Add(ButtonOfCancel);
-            Controls.Add(ButtonOfDelete);
+            Controls.Add(ButtonOfDeleteCategory);
             Controls.Add(ButtonOfSaveChanges);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -186,14 +195,14 @@
 
         #endregion
 
-        private Button ButtonOfDelete;
+        private Button ButtonOfDeleteCategory;
         private Button ButtonOfCancel;
         private Button ButtonOfSaveChanges;
-        private Label labelOdEdit;
+        private Label LabelOfEditCategory;
         private Label LabelOfCategory;
         private ComboBox ComboBoxOfCategory;
         private Label LabelOfUnitData;
-        private TextBox textBoxForCurrentUnit;
+        private TextBox TextBoxForCurrentUnit;
         private Label LabelOfNewUnitData;
         private ComboBox ComboBoxOfNewUnitData;
     }

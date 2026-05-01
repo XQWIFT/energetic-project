@@ -53,9 +53,9 @@ namespace EnergeticProjectX.Objects
         /// Валидация вводимого пользователем ИНН в зависимости от заданного контрагента.
         /// Юр. лицо - комбинация из 10 цифр, Физ. лицо или ИП - комбинация из 12 цифр.
         /// </summary>
-        /// <param name="iNN">Идентификационный номер нового клиента</param>
-        /// <param name="contractorType">Контрагент</param>
-        /// <returns>Подтверждение валидации</returns>
+        /// <param name="iNN">Идентификационный номер нового клиента.</param>
+        /// <param name="contractorType">Контрагент.</param>
+        /// <returns>Подтверждение валидации.</returns>
         [SuppressMessage("Performance", "SYSLIB1045:Преобразовать в \"GeneratedRegexAttribute\".", Justification = "<Ожидание>")]
         public static bool ValidateINN(string iNN, string contractorTypeString)
         {
@@ -79,8 +79,8 @@ namespace EnergeticProjectX.Objects
         /// Получение ошибки, связанной с валидацией ИНН.
         /// Юр. лицо - комбинация из 10 цифр, Физ. лицо или ИП - комбинация из 12 цифр.
         /// </summary>
-        /// <param name="contractorTypeString"></param>
-        /// <returns></returns>
+        /// <param name="contractorTypeString">Тип контрагента в строком представлении.</param>
+        /// <returns>Сообщение об ошибке.</returns>
         public static string GetINNErrorMessage(string contractorTypeString)
         {
             var contractorType = EnumMethod.ParseDescriptionOfPotentialContractorsValue(contractorTypeString);

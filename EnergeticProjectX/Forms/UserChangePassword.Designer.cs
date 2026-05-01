@@ -1,4 +1,4 @@
-﻿namespace UserChangePasswordForm
+﻿namespace EnergeticProjectX.Forms
 {
     partial class UserChangePassword
     {
@@ -28,56 +28,56 @@
         /// </summary>
         private void InitializeComponent()
         {
-            labelOfChangePassword = new Label();
-            labelOfOldPassword = new Label();
-            labelOfNewPassword = new Label();
-            labelOfСonfirmation = new Label();
+            LabelOfChangePassword = new Label();
+            LabelOfOldPassword = new Label();
+            LabelOfNewPassword = new Label();
+            LabelOfСonfirmation = new Label();
             ButtonOfSaveInfo = new Button();
             ButtonOfCancel = new Button();
-            textBoxForOldPassword = new TextBox();
-            textBoxForNewPassword = new TextBox();
-            textBoxOfConfirmation = new TextBox();
+            TextBoxForOldPassword = new TextBox();
+            TextBoxForNewPassword = new TextBox();
+            TextBoxOfConfirmation = new TextBox();
             SuspendLayout();
             // 
-            // labelOfChangePassword
+            // LabelOfChangePassword
             // 
-            labelOfChangePassword.AutoSize = true;
-            labelOfChangePassword.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelOfChangePassword.Location = new Point(238, 47);
-            labelOfChangePassword.Name = "labelOfChangePassword";
-            labelOfChangePassword.Size = new Size(300, 54);
-            labelOfChangePassword.TabIndex = 0;
-            labelOfChangePassword.Text = "Смена пароля";
+            LabelOfChangePassword.AutoSize = true;
+            LabelOfChangePassword.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfChangePassword.Location = new Point(249, 57);
+            LabelOfChangePassword.Name = "LabelOfChangePassword";
+            LabelOfChangePassword.Size = new Size(300, 54);
+            LabelOfChangePassword.TabIndex = 0;
+            LabelOfChangePassword.Text = "Смена пароля";
             // 
-            // labelOfOldPassword
+            // LabelOfOldPassword
             // 
-            labelOfOldPassword.AutoSize = true;
-            labelOfOldPassword.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelOfOldPassword.Location = new Point(130, 129);
-            labelOfOldPassword.Name = "labelOfOldPassword";
-            labelOfOldPassword.Size = new Size(270, 45);
-            labelOfOldPassword.TabIndex = 2;
-            labelOfOldPassword.Text = "Старый пароль:";
+            LabelOfOldPassword.AutoSize = true;
+            LabelOfOldPassword.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfOldPassword.Location = new Point(130, 129);
+            LabelOfOldPassword.Name = "LabelOfOldPassword";
+            LabelOfOldPassword.Size = new Size(270, 45);
+            LabelOfOldPassword.TabIndex = 0;
+            LabelOfOldPassword.Text = "Старый пароль:";
             // 
-            // labelOfNewPassword
+            // LabelOfNewPassword
             // 
-            labelOfNewPassword.AutoSize = true;
-            labelOfNewPassword.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelOfNewPassword.Location = new Point(130, 257);
-            labelOfNewPassword.Name = "labelOfNewPassword";
-            labelOfNewPassword.Size = new Size(262, 45);
-            labelOfNewPassword.TabIndex = 3;
-            labelOfNewPassword.Text = "Новый пароль:";
+            LabelOfNewPassword.AutoSize = true;
+            LabelOfNewPassword.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfNewPassword.Location = new Point(130, 257);
+            LabelOfNewPassword.Name = "LabelOfNewPassword";
+            LabelOfNewPassword.Size = new Size(262, 45);
+            LabelOfNewPassword.TabIndex = 0;
+            LabelOfNewPassword.Text = "Новый пароль:";
             // 
-            // labelOfСonfirmation
+            // LabelOfСonfirmation
             // 
-            labelOfСonfirmation.AutoSize = true;
-            labelOfСonfirmation.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelOfСonfirmation.Location = new Point(130, 386);
-            labelOfСonfirmation.Name = "labelOfСonfirmation";
-            labelOfСonfirmation.Size = new Size(408, 45);
-            labelOfСonfirmation.TabIndex = 4;
-            labelOfСonfirmation.Text = "Подтверждение пароля:";
+            LabelOfСonfirmation.AutoSize = true;
+            LabelOfСonfirmation.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfСonfirmation.Location = new Point(130, 386);
+            LabelOfСonfirmation.Name = "LabelOfСonfirmation";
+            LabelOfСonfirmation.Size = new Size(408, 45);
+            LabelOfСonfirmation.TabIndex = 0;
+            LabelOfСonfirmation.Text = "Подтверждение пароля:";
             // 
             // ButtonOfSaveInfo
             // 
@@ -92,10 +92,12 @@
             ButtonOfSaveInfo.Location = new Point(130, 522);
             ButtonOfSaveInfo.Name = "ButtonOfSaveInfo";
             ButtonOfSaveInfo.Size = new Size(263, 74);
-            ButtonOfSaveInfo.TabIndex = 6;
+            ButtonOfSaveInfo.TabIndex = 4;
             ButtonOfSaveInfo.Text = "Сохранить";
             ButtonOfSaveInfo.UseVisualStyleBackColor = false;
             ButtonOfSaveInfo.Click += ButtonOfSaveInfo_Click;
+            ButtonOfSaveInfo.Enter += TabSelection_Enter;
+            ButtonOfSaveInfo.Leave += TabSelection_Leave;
             // 
             // ButtonOfCancel
             // 
@@ -109,37 +111,42 @@
             ButtonOfCancel.Location = new Point(406, 522);
             ButtonOfCancel.Name = "ButtonOfCancel";
             ButtonOfCancel.Size = new Size(263, 74);
-            ButtonOfCancel.TabIndex = 7;
+            ButtonOfCancel.TabIndex = 5;
             ButtonOfCancel.Text = "Отменить";
             ButtonOfCancel.UseVisualStyleBackColor = false;
             ButtonOfCancel.Click += ButtonOfCancel_Click;
+            ButtonOfCancel.Enter += TabSelection_Enter;
+            ButtonOfCancel.Leave += TabSelection_Leave;
             // 
-            // textBoxForOldPassword
+            // TextBoxForOldPassword
             // 
-            textBoxForOldPassword.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxForOldPassword.Location = new Point(130, 188);
-            textBoxForOldPassword.Name = "textBoxForOldPassword";
-            textBoxForOldPassword.Size = new Size(539, 45);
-            textBoxForOldPassword.TabIndex = 8;
-            textBoxForOldPassword.UseSystemPasswordChar = true;
+            TextBoxForOldPassword.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxForOldPassword.Location = new Point(130, 188);
+            TextBoxForOldPassword.Name = "TextBoxForOldPassword";
+            TextBoxForOldPassword.Size = new Size(539, 45);
+            TextBoxForOldPassword.TabIndex = 1;
+            TextBoxForOldPassword.UseSystemPasswordChar = true;
+            TextBoxForOldPassword.TextChanged += IsTextChanged;
             // 
-            // textBoxForNewPassword
+            // TextBoxForNewPassword
             // 
-            textBoxForNewPassword.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxForNewPassword.Location = new Point(130, 317);
-            textBoxForNewPassword.Name = "textBoxForNewPassword";
-            textBoxForNewPassword.Size = new Size(539, 45);
-            textBoxForNewPassword.TabIndex = 9;
-            textBoxForNewPassword.UseSystemPasswordChar = true;
+            TextBoxForNewPassword.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxForNewPassword.Location = new Point(130, 317);
+            TextBoxForNewPassword.Name = "TextBoxForNewPassword";
+            TextBoxForNewPassword.Size = new Size(539, 45);
+            TextBoxForNewPassword.TabIndex = 2;
+            TextBoxForNewPassword.UseSystemPasswordChar = true;
+            TextBoxForNewPassword.TextChanged += IsTextChanged;
             // 
-            // textBoxOfConfirmation
+            // TextBoxOfConfirmation
             // 
-            textBoxOfConfirmation.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            textBoxOfConfirmation.Location = new Point(130, 445);
-            textBoxOfConfirmation.Name = "textBoxOfConfirmation";
-            textBoxOfConfirmation.Size = new Size(539, 45);
-            textBoxOfConfirmation.TabIndex = 10;
-            textBoxOfConfirmation.UseSystemPasswordChar = true;
+            TextBoxOfConfirmation.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfConfirmation.Location = new Point(130, 445);
+            TextBoxOfConfirmation.Name = "TextBoxOfConfirmation";
+            TextBoxOfConfirmation.Size = new Size(539, 45);
+            TextBoxOfConfirmation.TabIndex = 3;
+            TextBoxOfConfirmation.UseSystemPasswordChar = true;
+            TextBoxOfConfirmation.TextChanged += IsTextChanged;
             // 
             // UserChangePassword
             // 
@@ -147,15 +154,15 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
             ClientSize = new Size(800, 698);
-            Controls.Add(textBoxOfConfirmation);
-            Controls.Add(textBoxForNewPassword);
-            Controls.Add(textBoxForOldPassword);
+            Controls.Add(TextBoxOfConfirmation);
+            Controls.Add(TextBoxForNewPassword);
+            Controls.Add(TextBoxForOldPassword);
             Controls.Add(ButtonOfCancel);
             Controls.Add(ButtonOfSaveInfo);
-            Controls.Add(labelOfСonfirmation);
-            Controls.Add(labelOfNewPassword);
-            Controls.Add(labelOfOldPassword);
-            Controls.Add(labelOfChangePassword);
+            Controls.Add(LabelOfСonfirmation);
+            Controls.Add(LabelOfNewPassword);
+            Controls.Add(LabelOfOldPassword);
+            Controls.Add(LabelOfChangePassword);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "UserChangePassword";
@@ -167,14 +174,14 @@
 
         #endregion
 
-        private Label labelOfChangePassword;
-        private Label labelOfOldPassword;
-        private Label labelOfNewPassword;
-        private Label labelOfСonfirmation;
+        private Label LabelOfChangePassword;
+        private Label LabelOfOldPassword;
+        private Label LabelOfNewPassword;
+        private Label LabelOfСonfirmation;
         private Button ButtonOfSaveInfo;
         private Button ButtonOfCancel;
-        private TextBox textBoxForOldPassword;
-        private TextBox textBoxForNewPassword;
-        private TextBox textBoxOfConfirmation;
+        private TextBox TextBoxForOldPassword;
+        private TextBox TextBoxForNewPassword;
+        private TextBox TextBoxOfConfirmation;
     }
 }

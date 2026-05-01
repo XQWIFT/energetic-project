@@ -83,9 +83,9 @@ namespace EnergeticProjectX.Objects
         /// минимум 8 символов, наличие заглавной латинской буквы и цифры и совпадает с паролем для
         /// подтверждения - повторным вводом пароля.
         /// </summary>
-        /// <param name="password">Пароль от пользователя</param>
-        /// <param name="passwordConfirmation">Повторный ввод пароля от пользователя</param>
-        /// <returns>Подтверждение соответствия паролей и соответствие требования безопасности</returns>
+        /// <param name="password">Пароль от пользователя.</param>
+        /// <param name="passwordConfirmation">Повторный ввод пароля от пользователя.</param>
+        /// <returns>Подтверждение соответствия паролей и соответствие требования безопасности.</returns>
         public static (bool, bool) IsPasswordRelevant(string password, string passwordConfirmation)
         {
             var charPasswordArray = password.Trim().ToCharArray();
@@ -111,9 +111,9 @@ namespace EnergeticProjectX.Objects
         /// <summary>
         /// Проверка указанных личных данных на соответствие: отсутствие цифр.
         /// </summary>
-        /// <param name="inputData"></param>
+        /// <param name="inputData">Входные данные.</param>
         /// <returns>При успешной проверке выводится строка с заглавным первым элементом и
-        /// строчными остальными, иначе - null</returns>
+        /// строчными остальными, иначе - null.</returns>
         public static string? IsUserPersonalDataRelevant(string inputData)
         {
             if (string.IsNullOrWhiteSpace(inputData))

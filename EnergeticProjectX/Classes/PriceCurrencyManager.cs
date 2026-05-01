@@ -1,4 +1,5 @@
-﻿using EnergeticProjectX.Objects;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
+using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using System.Globalization;
 
@@ -50,38 +51,36 @@ namespace EnergeticProjectX.Classes
         /// <returns>При прохождении валидации выводится число с плавающей точкой, иначе - null.</returns>
         public static decimal? ValidatePurchasePrice(string purchasePriceString)
         {
-            if (string.IsNullOrEmpty(purchasePriceString))
+
+            if (string.IsNullOrWhiteSpace(purchasePriceString))
             {
-                MessageBox.Show(Resources.WaitingToEnterThePrice, Resources.TitleAlert,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowAlert(Resources.WaitingToEnterThePrice);
 
                 return null;
             }
 
-            if (!decimal.TryParse(purchasePriceString, out decimal purchasePrice))
+            var normalizedpurchasePriceString = purchasePriceString.Replace(',', '.').Replace(" ", "");
+
+            if (!decimal.TryParse(normalizedpurchasePriceString, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal purchasePrice))
             {
-                var isAllDigits = purchasePriceString.All(c => char.IsDigit(c) || c == ',' || c == '.');
+                var isAllDigits = normalizedpurchasePriceString.All(c => char.IsDigit(c) || c == ',' || c == '.');
 
                 if (isAllDigits)
-                    MessageBox.Show($"{Resources.PurchasePriceOverflowExc}.\n{Resources.TryAgain}", Resources.TitleWarning,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    EH.ShowWarning(Resources.PurchasePriceOverflowException, true);
                 else
-                    MessageBox.Show($"{Resources.PurchasePriceIsSupposedToBeNumber}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    EH.ShowError(Resources.PurchasePriceIsSupposedToBeNumber, true);
 
                 return null;
             }
             else if (purchasePrice <= MinPurchasePriceValue)
             {
-                MessageBox.Show($"{Resources.PurchasePriceIsNegative}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError(Resources.PurchasePriceShouldNotBeNegative, true);
 
                 return null;
             }
             else if (purchasePrice > MaxPurchasePriceValue)
             {
-                MessageBox.Show($"{Resources.PurchasePriceOverflowExc}.\n{Resources.TryAgain}", Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning(Resources.PurchasePriceOverflowException, true);
 
                 return null;
             }
@@ -112,7 +111,7 @@ namespace EnergeticProjectX.Classes
 
             var chosenCurrency = db.Currencies.FirstOrDefault(c => c.Currency_Id == user!.CurrencyId);
 
-            var priceInDefaultCurrency = Math.Round((decimal)chosenCurrency!.ExchangeRate * price, 2, MidpointRounding.AwayFromZero);
+            var priceInDefaultCurrency = Math.Round(chosenCurrency!.ExchangeRate * price, 2, MidpointRounding.AwayFromZero);
 
             return priceInDefaultCurrency;
         }
@@ -130,7 +129,7 @@ namespace EnergeticProjectX.Classes
 
             var chosenCurrency = db.Currencies.FirstOrDefault(c => c.Currency_Id == user!.CurrencyId);
 
-            var priceInChosenCurrency = Math.Round(priceInDefaultCurrency / (decimal)chosenCurrency!.ExchangeRate, 2, MidpointRounding.AwayFromZero);
+            var priceInChosenCurrency = Math.Round(priceInDefaultCurrency / chosenCurrency!.ExchangeRate, 2, MidpointRounding.AwayFromZero);
 
             return priceInChosenCurrency;
         }

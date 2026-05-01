@@ -12,8 +12,8 @@ namespace EnergeticProjectX.Classes
         /// Метод, который при удалении предмета из таблицы базы данных осуществляет проверку на сохранение
         /// соответствующих изменений. При ошибке сохранения в отладке выводится сообщение с описанием ошибки.
         /// </summary>
-        /// <param name="db">Контекст базы данных</param>
-        /// <param name="messageIfError">Сообщение в случае ошибки</param>
+        /// <param name="db">Контекст базы данных.</param>
+        /// <param name="messageIfError">Сообщение в случае ошибки.</param>
         public static void DBSaveChangesCleanUpHiddenItemsError(ApplicationContextDB db, string messageIfError)
         {
             try
@@ -30,8 +30,8 @@ namespace EnergeticProjectX.Classes
         /// Метод, который осуществляет проверку на сохранение изменений в базе данных. При ошибке выводится
         /// соответствующее сообщение.
         /// </summary>
-        /// <param name="db">Контекст базы данных</param>
-        /// <returns>Подтверждение сохранения данных</returns>
+        /// <param name="db">Контекст базы данных.</param>
+        /// <returns>Подтверждение сохранения данных.</returns>
         public static bool DBSaveChangesUniversalErrorCheck(ApplicationContextDB db)
         {
             try
@@ -40,7 +40,7 @@ namespace EnergeticProjectX.Classes
             }
             catch (Exception)
             {
-                ShowError($"{Resources.UniversalErrorBD}\n{Resources.TryAgain}");
+                ShowError(Resources.UniversalErrorDatabase, true);
 
                 return true;
             }
@@ -53,7 +53,7 @@ namespace EnergeticProjectX.Classes
         /// <param name="message">Информация для пользователя.</param>
         public static void ShowInformation(string message)
         {
-            MessageBox.Show(message, Resources.TitleWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(message, Resources.TitleInformation, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         /// <summary>
@@ -69,9 +69,26 @@ namespace EnergeticProjectX.Classes
         /// Метод для вывода сообщения об ошибке пользователю.
         /// </summary>
         /// <param name="message">Текст ошибки.</param>
-        public static void ShowError(string message)
+        /// <param name="messageTryAgain">Указание, необходимо ли добавить сообщение, чтобы пользовать попробовал ещё раз.</param>
+        public static void ShowError(string message, bool messageTryAgain = false)
         {
-            MessageBox.Show(message, Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (messageTryAgain)
+                MessageBox.Show(message + $"\n\n{Resources.TryAgain}", Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+                MessageBox.Show(message, Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        /// <summary>
+        /// Метод для вывода предупреждения пользователю.
+        /// </summary>
+        /// <param name="message">Текст предупреждения.</param>
+        /// <param name="messageTryAgain">Указание, необходимо ли добавить сообщение, чтобы пользовать попробовал ещё раз.</param>
+        public static void ShowWarning(string message, bool messageTryAgain = false)
+        {
+            if (messageTryAgain)
+                MessageBox.Show(message + $"\n\n{Resources.TryAgain}", Resources.TitleWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+                MessageBox.Show(message, Resources.TitleWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         /// <summary>
@@ -83,15 +100,6 @@ namespace EnergeticProjectX.Classes
             var answer = MessageBox.Show(message, Resources.TitleConfirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             return answer;
-        }
-
-        /// <summary>
-        /// Метод для вывода предупреждения пользователю.
-        /// </summary>
-        /// <param name="message">Текст предупреждения.</param>
-        public static void ShowWarning(string message)
-        {
-            MessageBox.Show(message, Resources.TitleWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }

@@ -1,15 +1,13 @@
-﻿using AdministratorPanelForm;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
-using WarehousemanPanelForm;
-using EH = EnergeticProjectX.Classes.ErrorHandler;
 
 namespace EnergeticProjectX.Forms
 {
     /// <summary>
-    /// Форма для пользовательских настроек.
+    /// Форма для пользовательских настроек приложения.
     /// </summary>
     public partial class Settings : Form
     {
@@ -22,15 +20,13 @@ namespace EnergeticProjectX.Forms
         private bool currencyChanged = false;
 
         /// <summary>
-        /// Конструктор для реализации настроек.
+        /// Конструктор для реализации формы пользовательских настроек.
         /// </summary>
         public Settings(string userLogin)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
-
-            LoggerService.Info($"Открыты настройки пользователя. Пользователь: {userLogin}");
 
             LoadCurrencies();
         }
@@ -44,9 +40,7 @@ namespace EnergeticProjectX.Forms
 
                 if (user == null)
                 {
-                    LoggerService.Error($"Пользователь не найден: {userLogin}");
-
-                    EH.ShowError($"{Resources.UserNotFound}\n{Resources.TryAgain}");
+                    EH.ShowError(Resources.UserNotFound, true);
 
                     return;
                 }
@@ -57,28 +51,22 @@ namespace EnergeticProjectX.Forms
 
                 if (startCurrency == null)
                 {
-                    LoggerService.Error($"Курс валюты не найден. Пользователь: {userLogin}");
-
-                    EH.ShowError($"{Resources.UserCurrencyNotFound}\n{Resources.TryAgain}");
+                    EH.ShowError(Resources.UserCurrencyNotFound, true);
 
                     return;
                 }
 
                 var currencies = db.Currencies.ToList();
                 ComboBoxOfCurrency.DataSource = currencies;
-                ComboBoxOfCurrency.DisplayMember = Resources.CurrencyName;
-                ComboBoxOfCurrency.ValueMember = Resources.Currency_Id;
+                ComboBoxOfCurrency.DisplayMember = nameof(Currency.CurrencyName);
+                ComboBoxOfCurrency.ValueMember = nameof(Currency.Currency_Id);
                 ComboBoxOfCurrency.SelectedValue = user.CurrencyId;
 
                 UpdateCurrencyInfo(startCurrency);
-
-                LoggerService.Debug($"Загружено {currencies.Count} валют. Текущая: {startCurrency.CurrencyName}");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LoggerService.Error("Ошибка загрузки валют.", ex);
-
-                EH.ShowError($"{Resources.ErrorWhileLoadingData}\n{Resources.TryAgain}");
+                EH.ShowError(Resources.ErrorWhileLoadingData, true);
 
                 return;
             }
@@ -129,37 +117,30 @@ namespace EnergeticProjectX.Forms
                 var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
                 if (user == null)
                 {
-                    LoggerService.Error($"{Resources.UserNotFound}: {userLogin}");
-                    EH.ShowError($"{Resources.UserNotFound}\n{Resources.TryAgain}");
+                    EH.ShowError(Resources.UserNotFound, true);
+
                     return;
                 }
 
                 user.CurrencyId = newCurrencyId;
 
                 if (EH.DBSaveChangesUniversalErrorCheck(db))
-                {
-                    LoggerService.Error("Не удалось сохранить настройки пользователя.");
                     return;
-                }
 
                 var newCurrency = db.Currencies.FirstOrDefault(c => c.Currency_Id == newCurrencyId);
 
-                LoggerService.Info($"Настройки пользователя {userLogin} сохранены. Новая валюта: {newCurrency?.CurrencyName}.");
-
-                EH.ShowInformation($"{Resources.SettingsSavedSuccessfully}\n" +
+                EH.ShowInformation($"{Resources.SettingsSuccessfullySaved}\n" +
                                    $"{Resources.NewCurrency}: {newCurrency?.CurrencyName}.\n" +
                                    $"{Resources.ExchangeRate}: {newCurrency?.ExchangeRate:F4}.");
 
                 originalCurrencyId = newCurrencyId;
                 currencyChanged = false;
 
-                LoadMainMenu();
+                OpenMainMenu();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LoggerService.Error($"Ошибка при сохранении настроек.", ex);
-
-                EH.ShowError($"{Resources.ErrorSave}\n{Resources.TryAgain}");
+                EH.ShowError(Resources.ErrorSave, true);
 
                 return;
             }
@@ -167,12 +148,10 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            LoggerService.Info("Настройки отменены пользователем.");
-
-            LoadMainMenu();
+            OpenMainMenu();
         }
 
-        private void LoadMainMenu()
+        private void OpenMainMenu()
         {
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
 
@@ -189,6 +168,22 @@ namespace EnergeticProjectX.Forms
                 var warehousemanPanel = new WarehousemanPanel(userLogin);
                 warehousemanPanel.ShowDialog();
                 Close();
+            }
+        }
+
+        private void TabSelection_Enter(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.LightSteelBlue;
+            }
+        }
+
+        private void TabSelection_Leave(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.Transparent;
             }
         }
     }

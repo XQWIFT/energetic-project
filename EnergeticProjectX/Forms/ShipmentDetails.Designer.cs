@@ -75,10 +75,10 @@
             // 
             LabelOfContent.AutoSize = true;
             LabelOfContent.Font = new Font("Segoe UI", 22F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfContent.Location = new Point(125, 87);
+            LabelOfContent.Location = new Point(125, 103);
             LabelOfContent.Name = "LabelOfContent";
             LabelOfContent.Size = new Size(296, 60);
-            LabelOfContent.TabIndex = 1;
+            LabelOfContent.TabIndex = 0;
             LabelOfContent.Text = "Содержание";
             // 
             // LabelOfUserData
@@ -88,7 +88,7 @@
             LabelOfUserData.Location = new Point(26, 199);
             LabelOfUserData.Name = "LabelOfUserData";
             LabelOfUserData.Size = new Size(173, 45);
-            LabelOfUserData.TabIndex = 2;
+            LabelOfUserData.TabIndex = 0;
             LabelOfUserData.Text = "Оформил";
             // 
             // LabelOfClient
@@ -98,7 +98,7 @@
             LabelOfClient.Location = new Point(26, 272);
             LabelOfClient.Name = "LabelOfClient";
             LabelOfClient.Size = new Size(205, 45);
-            LabelOfClient.TabIndex = 3;
+            LabelOfClient.TabIndex = 0;
             LabelOfClient.Text = "Получатель";
             // 
             // LabelOfRevenue
@@ -108,7 +108,7 @@
             LabelOfRevenue.Location = new Point(26, 342);
             LabelOfRevenue.Name = "LabelOfRevenue";
             LabelOfRevenue.Size = new Size(158, 45);
-            LabelOfRevenue.TabIndex = 4;
+            LabelOfRevenue.TabIndex = 0;
             LabelOfRevenue.Text = "Выручка";
             // 
             // LabelOfProfit
@@ -118,7 +118,7 @@
             LabelOfProfit.Location = new Point(26, 418);
             LabelOfProfit.Name = "LabelOfProfit";
             LabelOfProfit.Size = new Size(166, 45);
-            LabelOfProfit.TabIndex = 5;
+            LabelOfProfit.TabIndex = 0;
             LabelOfProfit.Text = "Прибыль";
             // 
             // LabelOfDate
@@ -128,7 +128,7 @@
             LabelOfDate.Location = new Point(26, 495);
             LabelOfDate.Name = "LabelOfDate";
             LabelOfDate.Size = new Size(94, 45);
-            LabelOfDate.TabIndex = 6;
+            LabelOfDate.TabIndex = 0;
             LabelOfDate.Text = "Дата";
             // 
             // TextBoxOfUserData
@@ -139,7 +139,7 @@
             TextBoxOfUserData.Name = "TextBoxOfUserData";
             TextBoxOfUserData.ReadOnly = true;
             TextBoxOfUserData.Size = new Size(283, 50);
-            TextBoxOfUserData.TabIndex = 7;
+            TextBoxOfUserData.TabIndex = 1;
             // 
             // TextBoxOfClient
             // 
@@ -149,7 +149,7 @@
             TextBoxOfClient.Name = "TextBoxOfClient";
             TextBoxOfClient.ReadOnly = true;
             TextBoxOfClient.Size = new Size(283, 50);
-            TextBoxOfClient.TabIndex = 8;
+            TextBoxOfClient.TabIndex = 2;
             // 
             // TextBoxOfRevenue
             // 
@@ -159,7 +159,7 @@
             TextBoxOfRevenue.Name = "TextBoxOfRevenue";
             TextBoxOfRevenue.ReadOnly = true;
             TextBoxOfRevenue.Size = new Size(283, 50);
-            TextBoxOfRevenue.TabIndex = 9;
+            TextBoxOfRevenue.TabIndex = 3;
             // 
             // TextBoxOfProfit
             // 
@@ -169,7 +169,7 @@
             TextBoxOfProfit.Name = "TextBoxOfProfit";
             TextBoxOfProfit.ReadOnly = true;
             TextBoxOfProfit.Size = new Size(283, 50);
-            TextBoxOfProfit.TabIndex = 10;
+            TextBoxOfProfit.TabIndex = 4;
             // 
             // TextBoxOfDate
             // 
@@ -179,7 +179,7 @@
             TextBoxOfDate.Name = "TextBoxOfDate";
             TextBoxOfDate.ReadOnly = true;
             TextBoxOfDate.Size = new Size(283, 50);
-            TextBoxOfDate.TabIndex = 11;
+            TextBoxOfDate.TabIndex = 5;
             // 
             // ButtonOfGoingBack
             // 
@@ -191,10 +191,12 @@
             ButtonOfGoingBack.Location = new Point(112, 595);
             ButtonOfGoingBack.Name = "ButtonOfGoingBack";
             ButtonOfGoingBack.Size = new Size(309, 76);
-            ButtonOfGoingBack.TabIndex = 12;
+            ButtonOfGoingBack.TabIndex = 6;
             ButtonOfGoingBack.Text = "Назад";
             ButtonOfGoingBack.UseVisualStyleBackColor = true;
             ButtonOfGoingBack.Click += ButtonOfGoingBack_Click;
+            ButtonOfGoingBack.Enter += TabSelection_Enter;
+            ButtonOfGoingBack.Leave += TabSelection_Leave;
             // 
             // ShipmentDetails
             // 

@@ -1,4 +1,4 @@
-﻿namespace AddClientForm
+﻿namespace EnergeticProjectX.Forms
 {
     partial class AddClient
     {
@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            labelOfAddClient = new Label();
+            LabelOfAddClient = new Label();
             LabelOfName = new Label();
             TextBoxOfName = new TextBox();
             LabelOfContractor = new Label();
-            labelOfINN = new Label();
+            LabelOfInn = new Label();
             LabelOfContactInfo = new Label();
             TextBoxOfINN = new TextBox();
             TextBoxOfContactInfo = new TextBox();
@@ -41,15 +41,15 @@
             ComboBoxOfContractor = new ComboBox();
             SuspendLayout();
             // 
-            // labelOfAddClient
+            // LabelOfAddClient
             // 
-            labelOfAddClient.AutoSize = true;
-            labelOfAddClient.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelOfAddClient.Location = new Point(192, 40);
-            labelOfAddClient.Name = "labelOfAddClient";
-            labelOfAddClient.Size = new Size(433, 54);
-            labelOfAddClient.TabIndex = 0;
-            labelOfAddClient.Text = "Добавление клиента";
+            LabelOfAddClient.AutoSize = true;
+            LabelOfAddClient.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfAddClient.Location = new Point(192, 40);
+            LabelOfAddClient.Name = "LabelOfAddClient";
+            LabelOfAddClient.Size = new Size(433, 54);
+            LabelOfAddClient.TabIndex = 0;
+            LabelOfAddClient.Text = "Добавление клиента";
             // 
             // LabelOfName
             // 
@@ -57,7 +57,7 @@
             LabelOfName.Location = new Point(111, 114);
             LabelOfName.Name = "LabelOfName";
             LabelOfName.Size = new Size(261, 45);
-            LabelOfName.TabIndex = 1;
+            LabelOfName.TabIndex = 0;
             LabelOfName.Text = "Наименование";
             // 
             // TextBoxOfName
@@ -66,7 +66,8 @@
             TextBoxOfName.Location = new Point(111, 171);
             TextBoxOfName.Name = "TextBoxOfName";
             TextBoxOfName.Size = new Size(583, 45);
-            TextBoxOfName.TabIndex = 2;
+            TextBoxOfName.TabIndex = 1;
+            TextBoxOfName.TextChanged += IsTextChanged;
             // 
             // LabelOfContractor
             // 
@@ -74,25 +75,25 @@
             LabelOfContractor.Location = new Point(111, 240);
             LabelOfContractor.Name = "LabelOfContractor";
             LabelOfContractor.Size = new Size(210, 45);
-            LabelOfContractor.TabIndex = 3;
+            LabelOfContractor.TabIndex = 0;
             LabelOfContractor.Text = "Контрагент";
             // 
-            // labelOfINN
+            // LabelOfInn
             // 
-            labelOfINN.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelOfINN.Location = new Point(111, 362);
-            labelOfINN.Name = "labelOfINN";
-            labelOfINN.Size = new Size(479, 45);
-            labelOfINN.TabIndex = 4;
-            labelOfINN.Text = "Идентификационный номер";
+            LabelOfInn.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfInn.Location = new Point(111, 362);
+            LabelOfInn.Name = "LabelOfInn";
+            LabelOfInn.Size = new Size(479, 45);
+            LabelOfInn.TabIndex = 0;
+            LabelOfInn.Text = "Идентификационный номер";
             // 
             // LabelOfContactInfo
             // 
             LabelOfContactInfo.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
             LabelOfContactInfo.Location = new Point(111, 495);
             LabelOfContactInfo.Name = "LabelOfContactInfo";
-            LabelOfContactInfo.Size = new Size(419, 57);
-            LabelOfContactInfo.TabIndex = 5;
+            LabelOfContactInfo.Size = new Size(419, 48);
+            LabelOfContactInfo.TabIndex = 0;
             LabelOfContactInfo.Text = "Контактная информация";
             // 
             // TextBoxOfINN
@@ -101,7 +102,8 @@
             TextBoxOfINN.Location = new Point(111, 423);
             TextBoxOfINN.Name = "TextBoxOfINN";
             TextBoxOfINN.Size = new Size(583, 45);
-            TextBoxOfINN.TabIndex = 7;
+            TextBoxOfINN.TabIndex = 3;
+            TextBoxOfINN.TextChanged += IsTextChanged;
             // 
             // TextBoxOfContactInfo
             // 
@@ -109,7 +111,7 @@
             TextBoxOfContactInfo.Location = new Point(111, 546);
             TextBoxOfContactInfo.Name = "TextBoxOfContactInfo";
             TextBoxOfContactInfo.Size = new Size(583, 45);
-            TextBoxOfContactInfo.TabIndex = 8;
+            TextBoxOfContactInfo.TabIndex = 4;
             // 
             // ButtonOfAddClient
             // 
@@ -123,10 +125,12 @@
             ButtonOfAddClient.Location = new Point(111, 635);
             ButtonOfAddClient.Name = "ButtonOfAddClient";
             ButtonOfAddClient.Size = new Size(288, 68);
-            ButtonOfAddClient.TabIndex = 9;
+            ButtonOfAddClient.TabIndex = 5;
             ButtonOfAddClient.Text = "Добавить";
             ButtonOfAddClient.UseVisualStyleBackColor = true;
             ButtonOfAddClient.Click += ButtonOfAddClient_Click;
+            ButtonOfAddClient.Enter += TabSelection_Enter;
+            ButtonOfAddClient.Leave += TabSelection_Leave;
             // 
             // ButtonOfCancel
             // 
@@ -139,10 +143,12 @@
             ButtonOfCancel.Location = new Point(405, 635);
             ButtonOfCancel.Name = "ButtonOfCancel";
             ButtonOfCancel.Size = new Size(289, 69);
-            ButtonOfCancel.TabIndex = 10;
+            ButtonOfCancel.TabIndex = 6;
             ButtonOfCancel.Text = "Отменить";
             ButtonOfCancel.UseVisualStyleBackColor = true;
             ButtonOfCancel.Click += ButtonOfCancel_Click;
+            ButtonOfCancel.Enter += TabSelection_Enter;
+            ButtonOfCancel.Leave += TabSelection_Leave;
             // 
             // ComboBoxOfContractor
             // 
@@ -153,7 +159,9 @@
             ComboBoxOfContractor.Location = new Point(111, 288);
             ComboBoxOfContractor.Name = "ComboBoxOfContractor";
             ComboBoxOfContractor.Size = new Size(583, 46);
-            ComboBoxOfContractor.TabIndex = 11;
+            ComboBoxOfContractor.TabIndex = 2;
+            ComboBoxOfContractor.SelectedIndexChanged += IsTextChanged;
+            ComboBoxOfContractor.TextChanged += IsTextChanged;
             // 
             // AddClient
             // 
@@ -167,11 +175,11 @@
             Controls.Add(TextBoxOfContactInfo);
             Controls.Add(TextBoxOfINN);
             Controls.Add(LabelOfContactInfo);
-            Controls.Add(labelOfINN);
+            Controls.Add(LabelOfInn);
             Controls.Add(LabelOfContractor);
             Controls.Add(TextBoxOfName);
             Controls.Add(LabelOfName);
-            Controls.Add(labelOfAddClient);
+            Controls.Add(LabelOfAddClient);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "AddClient";
@@ -183,11 +191,11 @@
 
         #endregion
 
-        private Label labelOfAddClient;
+        private Label LabelOfAddClient;
         private Label LabelOfName;
         private TextBox TextBoxOfName;
         private Label LabelOfContractor;
-        private Label labelOfINN;
+        private Label LabelOfInn;
         private Label LabelOfContactInfo;
         private TextBox TextBoxOfINN;
         private TextBox TextBoxOfContactInfo;

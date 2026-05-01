@@ -1,4 +1,5 @@
 using EnergeticProjectX.Properties;
+using EnergeticProjectX.Forms;
 
 namespace EnergeticProjectX.Classes
 {
@@ -17,17 +18,13 @@ namespace EnergeticProjectX.Classes
                 ApplicationConfiguration.Initialize();
 
                 var db = new ApplicationContextDB();
-                LoggerService.Debug("Контекст базы данных создан.");
 
                 ApplicationMethod.Initialize(db);
-                LoggerService.Info("Методы при вызове программы завершены.");
 
                 Application.Run(new AuthorizationForm());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LoggerService.Fatal($"Необработанное исключение: {ex}");
-
                 ErrorHandler.ShowError(Resources.CriticalError);
             }
         }

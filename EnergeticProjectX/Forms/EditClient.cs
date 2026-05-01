@@ -3,10 +3,9 @@ using EnergeticProjectX.Classes;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Enums;
-using ListOfClientsForm;
 using Microsoft.EntityFrameworkCore;
 
-namespace EditClientForm
+namespace EnergeticProjectX.Forms
 {
     /// <summary>
     /// Класс для редактирования данных клиента.
@@ -45,14 +44,9 @@ namespace EditClientForm
             ComboBoxOfContractor.Text = this.contractor;
             TextBoxOfINN.Text = this.iNN;
             TextBoxOfContactInfo.Text = this.contactInfo;
-
-            TextBoxOfName.TextChanged += TextBox_TextChanged!;
-            ComboBoxOfContractor.TextChanged += TextBox_TextChanged!;
-            TextBoxOfINN.TextChanged += TextBox_TextChanged!;
-            TextBoxOfContactInfo.TextChanged += TextBox_TextChanged!;
         }
 
-        private void TextBox_TextChanged(object sender, EventArgs e)
+        private void IsTextChanged(object sender, EventArgs e)
         {
             var allFieldsFilled = !string.IsNullOrWhiteSpace(TextBoxOfName.Text) &&
                                   !string.IsNullOrWhiteSpace(ComboBoxOfContractor.Text) &&
@@ -70,13 +64,13 @@ namespace EditClientForm
         {
             if (!Client.ValidateINN(TextBoxOfINN.Text.Trim(), ComboBoxOfContractor.Text))
             {
-                EH.ShowWarning($"{Client.GetINNErrorMessage(ComboBoxOfContractor.Text)}\n{Resources.TryAgain}");
+                EH.ShowWarning(Client.GetINNErrorMessage(ComboBoxOfContractor.Text), true);
 
                 TextBoxOfINN.Focus();
             }
             else if (db.Clients.Any(u => u.INN == TextBoxOfINN.Text.Trim()))
             {
-                EH.ShowWarning($"{Resources.INNAlreadyInDB}\n{Resources.TryAgain}");
+                EH.ShowWarning(Resources.InnAlreadyExists, true);
 
                 TextBoxOfINN.Focus();
             }
@@ -88,29 +82,24 @@ namespace EditClientForm
                 client.INN = TextBoxOfINN.Text.Trim();
                 client.ContactInfo = TextBoxOfContactInfo.Text.Trim();
 
-                EH.DBSaveChangesUniversalErrorCheck(db);
+                if (EH.DBSaveChangesUniversalErrorCheck(db))
+                    return;
 
-                Hide();
-                var listOfClients = new ListOfClients(userLogin);
-                listOfClients.ShowDialog();
-                Close();
+                OpenListOfClients();
             }
         }
 
         private void ButtonOfDeleteClient_Click(object sender, EventArgs e)
         {
-            var answer = EH.ShowConfirmation($"{Resources.SureWantToDeleteClient}\n{name}?\n\n{Resources.ConsequencesIfDeleteClient}");
+            var answer = EH.ShowConfirmation($"{Resources.SureWantToDeleteClient} {name}?\n\n{Resources.ConsequencesIfDeleteClient}");
 
             if (answer == DialogResult.Yes)
             {
                 try
                 {
-                    var client = db.Clients.Where(u => u.Client_Id == clientId)!.ExecuteDelete();
+                    var client = db.Clients.Where(u => u.Client_Id == clientId).ExecuteDelete();
 
-                    Hide();
-                    var listOfClients = new ListOfClients(userLogin);
-                    listOfClients.ShowDialog();
-                    Close();
+                    OpenListOfClients();
                 }
                 catch (Exception)
                 {
@@ -121,19 +110,37 @@ namespace EditClientForm
             }
             else
             {
-                Hide();
-                var listOfClients = new ListOfClients(userLogin);
-                listOfClients.ShowDialog();
-                Close();
+                OpenListOfClients();
             }
         }
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
+            OpenListOfClients();
+        }
+
+        private void OpenListOfClients()
+        {
             Hide();
             var listOfClients = new ListOfClients(userLogin);
             listOfClients.ShowDialog();
             Close();
+        }
+
+        private void TabSelection_Enter(object sender, EventArgs e)
+        {
+            if (sender is Control control)
+            {
+                control.BackColor = Color.LightSteelBlue;
+            }
+        }
+
+        private void TabSelection_Leave(object sender, EventArgs e)
+        {
+            if (sender is Control control)
+            {
+                control.BackColor = Color.Transparent;
+            }
         }
     }
 }

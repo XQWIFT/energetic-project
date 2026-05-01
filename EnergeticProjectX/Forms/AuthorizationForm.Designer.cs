@@ -1,5 +1,5 @@
 ﻿
-namespace EnergeticProjectX
+namespace EnergeticProjectX.Forms
 {
     partial class AuthorizationForm
     {
@@ -56,7 +56,7 @@ namespace EnergeticProjectX
             LabelOfLogin.Location = new Point(158, 220);
             LabelOfLogin.Name = "LabelOfLogin";
             LabelOfLogin.Size = new Size(149, 55);
-            LabelOfLogin.TabIndex = 1;
+            LabelOfLogin.TabIndex = 0;
             LabelOfLogin.Text = "Логин";
             LabelOfLogin.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -69,7 +69,8 @@ namespace EnergeticProjectX
             TextBoxForLogin.Location = new Point(363, 220);
             TextBoxForLogin.Name = "TextBoxForLogin";
             TextBoxForLogin.Size = new Size(474, 55);
-            TextBoxForLogin.TabIndex = 2;
+            TextBoxForLogin.TabIndex = 1;
+            TextBoxForLogin.TextChanged += IsTextChanged;
             // 
             // LabelOfPassword
             // 
@@ -77,7 +78,7 @@ namespace EnergeticProjectX
             LabelOfPassword.Location = new Point(158, 326);
             LabelOfPassword.Name = "LabelOfPassword";
             LabelOfPassword.Size = new Size(177, 50);
-            LabelOfPassword.TabIndex = 3;
+            LabelOfPassword.TabIndex = 0;
             LabelOfPassword.Text = "Пароль*";
             LabelOfPassword.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -89,8 +90,9 @@ namespace EnergeticProjectX
             TextBoxOfPassword.Location = new Point(363, 326);
             TextBoxOfPassword.Name = "TextBoxOfPassword";
             TextBoxOfPassword.Size = new Size(474, 55);
-            TextBoxOfPassword.TabIndex = 4;
+            TextBoxOfPassword.TabIndex = 2;
             TextBoxOfPassword.UseSystemPasswordChar = true;
+            TextBoxOfPassword.TextChanged += IsTextChanged;
             // 
             // ButtonOfInvolve
             // 
@@ -105,10 +107,12 @@ namespace EnergeticProjectX
             ButtonOfInvolve.Location = new Point(265, 511);
             ButtonOfInvolve.Name = "ButtonOfInvolve";
             ButtonOfInvolve.Size = new Size(437, 79);
-            ButtonOfInvolve.TabIndex = 5;
+            ButtonOfInvolve.TabIndex = 4;
             ButtonOfInvolve.Text = "Войти";
             ButtonOfInvolve.UseVisualStyleBackColor = true;
             ButtonOfInvolve.Click += ButtonOfInvolve_Click;
+            ButtonOfInvolve.Enter += TabSelection_Enter;
+            ButtonOfInvolve.Leave += TabSelection_Leave;
             // 
             // LabelOfRegistration
             // 
@@ -117,7 +121,7 @@ namespace EnergeticProjectX
             LabelOfRegistration.Location = new Point(215, 421);
             LabelOfRegistration.Name = "LabelOfRegistration";
             LabelOfRegistration.Size = new Size(565, 45);
-            LabelOfRegistration.TabIndex = 6;
+            LabelOfRegistration.TabIndex = 3;
             LabelOfRegistration.Text = "Нет аккаунта? Зарегистрироваться";
             LabelOfRegistration.Click += LabelOfRegistration_Click;
             // 
@@ -129,7 +133,7 @@ namespace EnergeticProjectX
             LabelOfRequiredFieldsInfo.Location = new Point(265, 478);
             LabelOfRequiredFieldsInfo.Name = "LabelOfRequiredFieldsInfo";
             LabelOfRequiredFieldsInfo.Size = new Size(276, 30);
-            LabelOfRequiredFieldsInfo.TabIndex = 7;
+            LabelOfRequiredFieldsInfo.TabIndex = 0;
             LabelOfRequiredFieldsInfo.Text = "*Все поля обязательные";
             // 
             // AuthorizationForm

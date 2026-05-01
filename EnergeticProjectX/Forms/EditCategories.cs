@@ -1,14 +1,12 @@
 ﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
-using AddCategoryForm;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
-using ProductCatalogForm;
 
-namespace EditCategoriesForm
+namespace EnergeticProjectX.Forms
 {
     /// <summary>
     /// Класс для изменения существующей категории.
@@ -30,121 +28,111 @@ namespace EditCategoriesForm
             this.userLogin = userLogin;
 
             LoadCategories();
-            AddCategory.LoadUnits(db, ComboBoxOfNewUnitData);
-
-            ComboBoxOfCategory.SelectedIndex = -1;
-            ComboBoxOfNewUnitData.SelectedIndex = -1;
-
-            ComboBoxOfNewUnitData.SelectedIndexChanged += ComboBoxes_SelectedIndexChanged!;
-            ComboBoxOfCategory.SelectedIndexChanged += ComboBoxes_SelectedIndexChanged!;
+            AddCategory.LoadUnits(db, ref ComboBoxOfNewUnitData);
         }
 
-        private void ComboBoxes_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ButtonOfDelete.Enabled = ComboBoxOfCategory.SelectedIndex != -1 &&
-                                     ComboBoxOfCategory.SelectedItem != null;
+            var chosenCategory = ComboBoxOfCategory.SelectedItem as Category;
 
-            ButtonOfSaveChanges.Enabled = ComboBoxOfCategory.SelectedIndex != -1 &&
-                                          ComboBoxOfCategory.SelectedItem != null &&
-                                          ComboBoxOfNewUnitData.SelectedIndex != -1 &&
-                                          ComboBoxOfNewUnitData.SelectedItem != null;
+            var hasUnit = ComboBoxOfNewUnitData.SelectedIndex != -1;
 
-            if (ComboBoxOfCategory.SelectedIndex != -1 && 
-                ComboBoxOfCategory.SelectedItem != null &&
-                ComboBoxOfCategory.SelectedItem is Category chosenCategory)
+            ButtonOfDeleteCategory.Enabled = chosenCategory != null;
+
+            ButtonOfSaveChanges.Enabled = chosenCategory != null && hasUnit;
+
+            if (chosenCategory != null)
             {
                 var currentUnit = db.Units.FirstOrDefault(u => u.Unit_Id == chosenCategory.Unit_Id);
 
-                textBoxForCurrentUnit.Text = currentUnit!.Name;
+                if (currentUnit != null)
+                {
+                    TextBoxForCurrentUnit.Text = currentUnit.Name;
+                }
+                else
+                {
+                    TextBoxForCurrentUnit.Text = string.Empty;
+
+                    EH.ShowError(Resources.ErrorUnitUpload, true);
+
+                    return;
+                }
             }
             else
             {
-                EH.ShowError($"{Resources.ErrorUnitUpload}\n{Resources.TryAgain}");
-
-                return;
+                TextBoxForCurrentUnit.Text = string.Empty;
             }
         }
 
-        /// <summary>
-        /// Загрузка категорий из базы данных.
-        /// </summary>
         private void LoadCategories()
         {
             var categories = db.Categories.Where(u => u.Status == CategoryStatus.Active).ToList();
 
             if (categories != null && categories.Count != 0)
             {
+                ComboBoxOfCategory.DisplayMember = nameof(Category.Name);
+                ComboBoxOfCategory.ValueMember = nameof(Category.Category_Id);
                 ComboBoxOfCategory.DataSource = categories;
-                ComboBoxOfCategory.DisplayMember = Resources.CategoryDisplayMember;
-                ComboBoxOfCategory.ValueMember = Resources.CategoryValueMember;
             }
             else
             {
-                EH.ShowError($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}");
+                EH.ShowError(Resources.ErrorCategoryUpload, true);
 
                 return;
             }
+
+            ComboBoxOfCategory.SelectedIndex = -1;
         }
 
         private void ButtonOfSaveChanges_Click(object sender, EventArgs e)
         {
-            if (ComboBoxOfCategory.SelectedItem == null || ComboBoxOfNewUnitData.SelectedItem == null)
+            if (ComboBoxOfCategory.SelectedValue == null || ComboBoxOfNewUnitData.SelectedValue == null)
             {
-                EH.ShowAlert(Resources.ChooseEditCategoryAndNewUnit);
+                EH.ShowAlert(Resources.ChooseCategoryAndNewUnitToEdit);
 
                 return;
             }
 
-            var chosenCategory = (Category)ComboBoxOfCategory.SelectedItem;
+            var newCategoryName = Interaction.InputBox(Resources.InputNewCategoryName, Resources.EditCategory, ComboBoxOfCategory.Text).Trim();
 
-            var newCategory = Interaction.InputBox(Resources.InputNewCategoryName, Resources.EditCategory, ComboBoxOfCategory.Text);
-
-            if (db.Categories.Any(c => c.Category_Id != chosenCategory.Category_Id && c.Status == CategoryStatus.Active && EF.Functions.ILike(c.Name, newCategory)))
+            if (db.Categories.Any(c => c.Status == CategoryStatus.Active && EF.Functions.ILike(c.Name, newCategoryName)))
             {
-                EH.ShowWarning(Resources.NewCategoryExists);
+                EH.ShowWarning(Resources.NewCategoryAlreadyExists, true);
+
+                return;
+            }
+            else if (string.IsNullOrWhiteSpace(newCategoryName))
+            {
+                EH.ShowWarning(Resources.NewCategoryNameShouldNotBeEmpty, true);
 
                 return;
             }
 
-            if (!string.IsNullOrWhiteSpace(newCategory))
+            var selectedUnitId = (Guid)ComboBoxOfNewUnitData.SelectedValue;
+            var chosenCategoryId = (Guid)ComboBoxOfCategory.SelectedValue;
+
+            var category = db.Categories.Find(chosenCategoryId);
+
+            if (category != null)
             {
-                if (!Guid.TryParse(ComboBoxOfNewUnitData.SelectedValue!.ToString(), out var selectedUnitId))
-                {
-                    EH.ShowError(Resources.ErrorUnitUpload);
+                category.Unit_Id = selectedUnitId;
+                category.Name = newCategoryName;
 
-                    return;
+                var question = EH.ShowConfirmation($"{Resources.SureWantToSaveCategoryChange}\n\n{Resources.SaveCategoryChangeConsequences}");
+
+                if (question == DialogResult.Yes)
+                {
+                    if (EH.DBSaveChangesUniversalErrorCheck(db))
+                        return;
+
+                    EH.ShowInformation(Resources.SuccessUpdateCategory);
                 }
 
-                var selectedCategory = (Category)ComboBoxOfCategory.SelectedItem;
-
-                var category = db.Categories.Find(selectedCategory.Category_Id);
-                if (category != null)
-                {
-                    selectedCategory.Unit_Id = selectedUnitId;
-                    selectedCategory.Name = newCategory;
-
-                    var question = EH.ShowConfirmation($"{Resources.SureWantToSaveCategoryChange}\n\n{Resources.ConsequencesSaveCategoryChange}");
-
-                    if (question == DialogResult.Yes)
-                    {
-                        if (EH.DBSaveChangesUniversalErrorCheck(db))
-                            return;
-
-                        EH.ShowInformation(Resources.SuccessUpdateCategory);
-                    }
-
-                    LoadCategories();
-                    AddCategory.LoadUnits(db, ComboBoxOfNewUnitData);
-
-                    Hide();
-                    var productCatalog = new ProductCatalog(userLogin);
-                    productCatalog.ShowDialog();
-                    Close();
-                }
+                OpenProductCatalog();
             }
             else
             {
-                EH.ShowError($"{Resources.ErrorSaveCategory}\n{Resources.TryAgain}");
+                EH.ShowError(Resources.ErrorSaveCategory, true);
 
                 return;
             }
@@ -152,20 +140,23 @@ namespace EditCategoriesForm
 
         private void ButtonOfDelete_Click(object sender, EventArgs e)
         {
-            if (ComboBoxOfCategory.SelectedItem == null)
+            if (ComboBoxOfCategory.SelectedValue == null)
             {
-                EH.ShowAlert(Resources.ChooseCategoryDelete);
+                EH.ShowAlert(Resources.ChooseCategoryToDeleteFirst);
+
+                ComboBoxOfCategory.Focus();
 
                 return;
             }
 
-            var question = EH.ShowConfirmation($"{Resources.AskForDeleteCategory}\n{ComboBoxOfCategory.Text}?");
+            var question = EH.ShowConfirmation($"{Resources.SureWantToDeleteCategory} {ComboBoxOfCategory.Text}?");
 
             if (question == DialogResult.Yes)
             {
-                var selectedCategory = (Category)ComboBoxOfCategory.SelectedItem;
+                var chosenCategoryId = (Guid)ComboBoxOfCategory.SelectedValue;
 
-                var category = db.Categories.Find(selectedCategory.Category_Id);
+                var category = db.Categories.Find(chosenCategoryId);
+
                 if (category != null)
                 {
                     category.Status = CategoryStatus.Hidden;
@@ -173,20 +164,40 @@ namespace EditCategoriesForm
                     if (EH.DBSaveChangesUniversalErrorCheck(db))
                         return;
 
-                    EH.ShowInformation(Resources.SuccessDeleteCategory);
+                    EH.ShowInformation(Resources.CategorySuccessfullyDeleted);
 
                     LoadCategories();
-                    ComboBoxOfCategory.SelectedIndex = -1;
                 }
             }
         }
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
+            OpenProductCatalog();
+        }
+
+        private void OpenProductCatalog()
+        {
             Hide();
             var productCatalog = new ProductCatalog(userLogin);
             productCatalog.ShowDialog();
             Close();
+        }
+
+        private void TabSelection_Enter(object sender, EventArgs e)
+        {
+            if (sender is Control control)
+            {
+                control.BackColor = Color.LightSteelBlue;
+            }
+        }
+
+        private void TabSelection_Leave(object sender, EventArgs e)
+        {
+            if (sender is Control control)
+            {
+                control.BackColor = Color.Transparent;
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace AddProductForm
+﻿namespace EnergeticProjectX.Forms
 {
     partial class AddProduct
     {
@@ -30,7 +30,7 @@
         {
             ComboBoxOfCategory = new ComboBox();
             ButtonOfCancel = new Button();
-            ButtonOfAdd = new Button();
+            ButtonOfAddProduct = new Button();
             TextBoxOfPurchasePrice = new TextBox();
             LabelOfUnit = new Label();
             LabelOfPrice = new Label();
@@ -50,7 +50,9 @@
             ComboBoxOfCategory.Location = new Point(416, 187);
             ComboBoxOfCategory.Name = "ComboBoxOfCategory";
             ComboBoxOfCategory.Size = new Size(402, 46);
-            ComboBoxOfCategory.TabIndex = 22;
+            ComboBoxOfCategory.TabIndex = 2;
+            ComboBoxOfCategory.SelectedIndexChanged += IsComboBoxOfCategoryChanged;
+            ComboBoxOfCategory.TextChanged += IsTextChanged;
             // 
             // ButtonOfCancel
             // 
@@ -63,27 +65,31 @@
             ButtonOfCancel.Location = new Point(435, 412);
             ButtonOfCancel.Name = "ButtonOfCancel";
             ButtonOfCancel.Size = new Size(310, 69);
-            ButtonOfCancel.TabIndex = 21;
+            ButtonOfCancel.TabIndex = 6;
             ButtonOfCancel.Text = "Отменить";
             ButtonOfCancel.UseVisualStyleBackColor = true;
             ButtonOfCancel.Click += ButtonOfCancel_Click;
+            ButtonOfCancel.Enter += TabSelection_Enter;
+            ButtonOfCancel.Leave += TabSelection_Leave;
             // 
-            // ButtonOfAdd
+            // ButtonOfAddProduct
             // 
-            ButtonOfAdd.Enabled = false;
-            ButtonOfAdd.FlatAppearance.BorderColor = Color.Black;
-            ButtonOfAdd.FlatAppearance.BorderSize = 4;
-            ButtonOfAdd.FlatAppearance.MouseDownBackColor = Color.Gray;
-            ButtonOfAdd.FlatAppearance.MouseOverBackColor = Color.LightGray;
-            ButtonOfAdd.FlatStyle = FlatStyle.Flat;
-            ButtonOfAdd.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfAdd.Location = new Point(110, 412);
-            ButtonOfAdd.Name = "ButtonOfAdd";
-            ButtonOfAdd.Size = new Size(309, 68);
-            ButtonOfAdd.TabIndex = 20;
-            ButtonOfAdd.Text = "Добавить";
-            ButtonOfAdd.UseVisualStyleBackColor = true;
-            ButtonOfAdd.Click += ButtonOfAdd_Click;
+            ButtonOfAddProduct.Enabled = false;
+            ButtonOfAddProduct.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfAddProduct.FlatAppearance.BorderSize = 4;
+            ButtonOfAddProduct.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfAddProduct.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfAddProduct.FlatStyle = FlatStyle.Flat;
+            ButtonOfAddProduct.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            ButtonOfAddProduct.Location = new Point(110, 412);
+            ButtonOfAddProduct.Name = "ButtonOfAddProduct";
+            ButtonOfAddProduct.Size = new Size(309, 68);
+            ButtonOfAddProduct.TabIndex = 5;
+            ButtonOfAddProduct.Text = "Добавить";
+            ButtonOfAddProduct.UseVisualStyleBackColor = true;
+            ButtonOfAddProduct.Click += ButtonOfAdd_Click;
+            ButtonOfAddProduct.Enter += TabSelection_Enter;
+            ButtonOfAddProduct.Leave += TabSelection_Leave;
             // 
             // TextBoxOfPurchasePrice
             // 
@@ -91,7 +97,8 @@
             TextBoxOfPurchasePrice.Location = new Point(416, 334);
             TextBoxOfPurchasePrice.Name = "TextBoxOfPurchasePrice";
             TextBoxOfPurchasePrice.Size = new Size(402, 45);
-            TextBoxOfPurchasePrice.TabIndex = 18;
+            TextBoxOfPurchasePrice.TabIndex = 4;
+            TextBoxOfPurchasePrice.TextChanged += IsTextChanged;
             // 
             // LabelOfUnit
             // 
@@ -99,7 +106,7 @@
             LabelOfUnit.Location = new Point(67, 259);
             LabelOfUnit.Name = "LabelOfUnit";
             LabelOfUnit.Size = new Size(337, 45);
-            LabelOfUnit.TabIndex = 17;
+            LabelOfUnit.TabIndex = 0;
             LabelOfUnit.Text = "Единица измерения";
             // 
             // LabelOfPrice
@@ -108,7 +115,7 @@
             LabelOfPrice.Location = new Point(67, 334);
             LabelOfPrice.Name = "LabelOfPrice";
             LabelOfPrice.Size = new Size(309, 45);
-            LabelOfPrice.TabIndex = 16;
+            LabelOfPrice.TabIndex = 0;
             LabelOfPrice.Text = "Закупочная цена,";
             // 
             // LabelOfCategory
@@ -117,7 +124,7 @@
             LabelOfCategory.Location = new Point(67, 187);
             LabelOfCategory.Name = "LabelOfCategory";
             LabelOfCategory.Size = new Size(298, 45);
-            LabelOfCategory.TabIndex = 15;
+            LabelOfCategory.TabIndex = 0;
             LabelOfCategory.Text = "Категория товара";
             // 
             // TextBoxOfName
@@ -126,7 +133,8 @@
             TextBoxOfName.Location = new Point(416, 119);
             TextBoxOfName.Name = "TextBoxOfName";
             TextBoxOfName.Size = new Size(402, 45);
-            TextBoxOfName.TabIndex = 14;
+            TextBoxOfName.TabIndex = 1;
+            TextBoxOfName.TextChanged += IsTextChanged;
             // 
             // LabelOfName
             // 
@@ -134,7 +142,7 @@
             LabelOfName.Location = new Point(67, 119);
             LabelOfName.Name = "LabelOfName";
             LabelOfName.Size = new Size(294, 45);
-            LabelOfName.TabIndex = 13;
+            LabelOfName.TabIndex = 0;
             LabelOfName.Text = "Название товара";
             // 
             // LabelOfAddProduct
@@ -144,7 +152,7 @@
             LabelOfAddProduct.Location = new Point(227, 34);
             LabelOfAddProduct.Name = "LabelOfAddProduct";
             LabelOfAddProduct.Size = new Size(408, 54);
-            LabelOfAddProduct.TabIndex = 12;
+            LabelOfAddProduct.TabIndex = 0;
             LabelOfAddProduct.Text = "Добавление товара";
             // 
             // TextBoxOfUnit
@@ -155,7 +163,7 @@
             TextBoxOfUnit.Name = "TextBoxOfUnit";
             TextBoxOfUnit.ReadOnly = true;
             TextBoxOfUnit.Size = new Size(402, 45);
-            TextBoxOfUnit.TabIndex = 23;
+            TextBoxOfUnit.TabIndex = 3;
             TextBoxOfUnit.TabStop = false;
             // 
             // LabelOfCurrencySymbol
@@ -165,7 +173,7 @@
             LabelOfCurrencySymbol.Location = new Point(357, 334);
             LabelOfCurrencySymbol.Name = "LabelOfCurrencySymbol";
             LabelOfCurrencySymbol.Size = new Size(38, 45);
-            LabelOfCurrencySymbol.TabIndex = 24;
+            LabelOfCurrencySymbol.TabIndex = 0;
             // 
             // AddProduct
             // 
@@ -177,7 +185,7 @@
             Controls.Add(TextBoxOfUnit);
             Controls.Add(ComboBoxOfCategory);
             Controls.Add(ButtonOfCancel);
-            Controls.Add(ButtonOfAdd);
+            Controls.Add(ButtonOfAddProduct);
             Controls.Add(TextBoxOfPurchasePrice);
             Controls.Add(LabelOfUnit);
             Controls.Add(LabelOfPrice);
@@ -198,7 +206,7 @@
 
         private ComboBox ComboBoxOfCategory;
         private Button ButtonOfCancel;
-        private Button ButtonOfAdd;
+        private Button ButtonOfAddProduct;
         private TextBox TextBoxOfPurchasePrice;
         private Label LabelOfUnit;
         private Label LabelOfPrice;

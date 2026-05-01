@@ -123,14 +123,14 @@
   <data name="CategoryValueMember" xml:space="preserve">
     <value>Category_Id</value>
   </data>
-  <data name="ChooseCategoryDelete" xml:space="preserve">
-    <value>Выберите категорию для удаления</value>
+  <data name="ChooseCategoryToDeleteFirst" xml:space="preserve">
+    <value>Сначала выберите категорию для удаления!</value>
   </data>
-  <data name="ChooseCategoryProduct" xml:space="preserve">
-    <value>Выберите категорию товара!</value>
+  <data name="ChooseCategoryProductFirst" xml:space="preserve">
+    <value>Сначала выберите категорию товара!</value>
   </data>
-  <data name="ChooseUnit" xml:space="preserve">
-    <value>Пожалуйста, выберите единицу измерения</value>
+  <data name="ChooseNewUnitToEditCategoryFirst" xml:space="preserve">
+    <value>Пожалуйста, сначала выберите новую или текущую единицу измерения для редактирования категории.</value>
   </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Редактирование категории</value>
@@ -153,16 +153,16 @@
   <data name="Login" xml:space="preserve">
     <value>Вы вошли в аккаунт</value>
   </data>
-  <data name="UnitNotFound" xml:space="preserve">
+  <data name="UnitForChosenCategoryNotFound" xml:space="preserve">
     <value>Единица измерения для соответствующей категории не найдена.</value>
   </data>
-  <data name="ChooseEditCategoryAndNewUnit" xml:space="preserve">
-    <value>Выберите категорию и/или новую единицу измерения для дальнейшего редактирования</value>
+  <data name="ChooseCategoryAndNewUnitToEdit" xml:space="preserve">
+    <value>Выберите категорию и/или новую единицу измерения для дальнейшего редактирования!</value>
   </data>
-  <data name="SuccessAddCategory" xml:space="preserve">
-    <value>Категория успешно добавлена!</value>
+  <data name="NewCategorySuccessfullyAdded" xml:space="preserve">
+    <value>Новая категория успешно добавлена!</value>
   </data>
-  <data name="SuccessDeleteCategory" xml:space="preserve">
+  <data name="CategorySuccessfullyDeleted" xml:space="preserve">
     <value>Категория успешно удалена!</value>
   </data>
   <data name="SuccessUpdateCategory" xml:space="preserve">
@@ -187,7 +187,7 @@
     <value>Пожалуйста, попробуйте ещё раз!</value>
   </data>
   <data name="IncorrectLoginOrPassword" xml:space="preserve">
-    <value>Неверный логин или пароль.</value>
+    <value>Неверный логин или пароль</value>
   </data>
   <data name="IncorrectPrice" xml:space="preserve">
     <value>Некорректная цена</value>
@@ -198,7 +198,7 @@
   <data name="UnitValueMember" xml:space="preserve">
     <value>Unit_Id</value>
   </data>
-  <data name="AskForDeleteCategory" xml:space="preserve">
+  <data name="SureWantToDeleteCategory" xml:space="preserve">
     <value>Вы уверены, что хотите удалить категорию:</value>
   </data>
   <data name="ConfirmationDelete" xml:space="preserve">
@@ -208,10 +208,10 @@
     <value>Неверный ID клиента!</value>
   </data>
   <data name="ProductNotFound" xml:space="preserve">
-    <value>Товар не найден!</value>
+    <value>Товар не найден.</value>
   </data>
   <data name="ErrorUploadData" xml:space="preserve">
-    <value>Ошибка загрузки данных:</value>
+    <value>Ошибка загрузки данных.</value>
   </data>
   <data name="SuccessUpdateProduct" xml:space="preserve">
     <value>Товар успешно обновлён!</value>
@@ -222,17 +222,17 @@
   <data name="ConfirmationCancel" xml:space="preserve">
     <value>Подтверждение отмены</value>
   </data>
-  <data name="AskOfCancelEdit" xml:space="preserve">
+  <data name="ConfirmationToCancelEdit" xml:space="preserve">
     <value>Вы уверены, что хотите отменить редактирование?</value>
   </data>
-  <data name="LostUnsavedChanges" xml:space="preserve">
-    <value>Все несохранённые изменения будут потеряны</value>
+  <data name="UnsavedChangesWillBeLost" xml:space="preserve">
+    <value>Все несохранённые изменения будут утеряны!</value>
   </data>
   <data name="TitleInformation" xml:space="preserve">
     <value>Информация</value>
   </data>
   <data name="HowMuchClientsUploaded" xml:space="preserve">
-    <value>Клиентов загружено</value>
+    <value>Клиентов загружено:</value>
   </data>
   <data name="Empty" xml:space="preserve">
     <value>пусто</value>
@@ -252,8 +252,8 @@
   <data name="ClientContactInfo" xml:space="preserve">
     <value>ContactInfo</value>
   </data>
-  <data name="ChooseClientForEdit" xml:space="preserve">
-    <value>Выберите клиента для редактирования.</value>
+  <data name="ChooseClientToEditFirst" xml:space="preserve">
+    <value>Сначала выберите клиента для редактирования!</value>
   </data>
   <data name="HowMuchUsersUploaded" xml:space="preserve">
     <value>Пользователей загружено:</value>
@@ -270,11 +270,11 @@
   <data name="ProductValueMember" xml:space="preserve">
     <value>Article</value>
   </data>
-  <data name="FillRequiredFields" xml:space="preserve">
-    <value>Заполните все обязательные поля</value>
+  <data name="ChooseClientAndProductFirst" xml:space="preserve">
+    <value>Сначала выберите клиента и товар для отгрузки!</value>
   </data>
   <data name="NotEnoughProductInStock" xml:space="preserve">
-    <value>Недостаточно товара на складе!</value>
+    <value>Недостаточно товара на складе для добавления в отгрузку!</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Пользователь не найден.</value>
@@ -283,12 +283,12 @@
     <value>Ошибка при сохранении</value>
   </data>
   <data name="ShipmentSuccessfullyProcessed" xml:space="preserve">
-    <value>Отгрузка успешно оформлена!</value>
+    <value>Отгрузка успешно оформлена.</value>
   </data>
-  <data name="SuccessDeleteProduct" xml:space="preserve">
+  <data name="ProductSuccessfullyDeleted" xml:space="preserve">
     <value>Товар успешно удален!</value>
   </data>
-  <data name="AskForDeleteProduct" xml:space="preserve">
+  <data name="ConfirmationToDeleteProduct" xml:space="preserve">
     <value>Вы уверены, что хотите удалить данный товар?</value>
   </data>
   <data name="InventNewPassword" xml:space="preserve">
@@ -303,8 +303,8 @@
   <data name="InventNewLogin" xml:space="preserve">
     <value>Пожалуйста, придумайте новый логин.</value>
   </data>
-  <data name="ExistsUsername" xml:space="preserve">
-    <value>Данный логин уже существует.</value>
+  <data name="UserLoginAlreadyExists" xml:space="preserve">
+    <value>Пользователь с таким логином уже существует! Пожалуйста, придумайте новый логин.</value>
   </data>
   <data name="ShipmentId" xml:space="preserve">
     <value>Shipment_Id</value>
@@ -333,7 +333,7 @@
   <data name="ThereIsSuchCategory" xml:space="preserve">
     <value>Категория с таким наименованием уже имеется в базе данных.</value>
   </data>
-  <data name="UniversalErrorBD" xml:space="preserve">
+  <data name="UniversalErrorDatabase" xml:space="preserve">
     <value>Ошибка сохранения данных в базу данных.</value>
   </data>
   <data name="OldAndNewPasswordsTheSame" xml:space="preserve">
@@ -352,13 +352,13 @@
     <value>Ошибка создания артикула для товара! Превышено допустимое число товара.</value>
   </data>
   <data name="INNRequirementsTenDigits" xml:space="preserve">
-    <value>Идентификационный номер юридического лица должен быть представлен комбинацией из 10 цифр.</value>
+    <value>Идентификационный номер юридического лица должен быть представлен комбинацией из 10 цифр</value>
   </data>
   <data name="INNRequirementsTwelveDigits" xml:space="preserve">
-    <value>Идентификационный номер физического лица лица или ИП должен быть представлен комбинацией из 12 цифр.</value>
+    <value>Идентификационный номер физического лица лица или ИП должен быть представлен комбинацией из 12 цифр</value>
   </data>
   <data name="INNFormatError" xml:space="preserve">
-    <value>Неверный формат данных для ИНН.</value>
+    <value>Неверный формат данных для ИНН</value>
   </data>
   <data name="ClientContractorLegalEntity" xml:space="preserve">
     <value>Юр. лицо</value>
@@ -381,7 +381,7 @@
   <data name="PurchasePriceIsSupposedToBeNumber" xml:space="preserve">
     <value>Закупочная цена должна быть числом!</value>
   </data>
-  <data name="PurchasePriceIsNegative" xml:space="preserve">
+  <data name="PurchasePriceShouldNotBeNegative" xml:space="preserve">
     <value>Закупочная цена должна быть положительным числом!</value>
   </data>
   <data name="SureWantToDeleteClient" xml:space="preserve">
@@ -399,11 +399,11 @@
   <data name="ErrorDefaultCurrencyUpload" xml:space="preserve">
     <value>Ошибка назначения валюты по умолчанию.</value>
   </data>
-  <data name="InputPersonalDataIrrelevant" xml:space="preserve">
-    <value>Личные данные должны содержать только буквы. </value>
+  <data name="PersonalDataIsIrrelevant" xml:space="preserve">
+    <value>Личные данные должны содержать только буквы.</value>
   </data>
-  <data name="INNAlreadyInDB" xml:space="preserve">
-    <value>Данный ИНН уже соответствует другому клиенту.</value>
+  <data name="InnAlreadyExists" xml:space="preserve">
+    <value>Данный ИНН уже соответствует другому клиенту!</value>
   </data>
   <data name="StockQuantityName" xml:space="preserve">
     <value>StockQuantity</value>
@@ -415,7 +415,7 @@
     <value>Данная категория уже существует.</value>
   </data>
   <data name="CategoryGetIdError" xml:space="preserve">
-    <value>Ошибка получения данных о выбранной категории.</value>
+    <value>Ошибка получения данных о выбранной категории</value>
   </data>
   <data name="Product" xml:space="preserve">
     <value>Товар</value>
@@ -432,7 +432,7 @@
   <data name="StockQuantityByDefault" xml:space="preserve">
     <value>Текущий остаток: 0 (по умолчанию)</value>
   </data>
-  <data name="PurchasePriceRus" xml:space="preserve">
+  <data name="PurchasePrice" xml:space="preserve">
     <value>Закупочная цена</value>
   </data>
   <data name="SalePrice" xml:space="preserve">
@@ -447,13 +447,13 @@
   <data name="ConsequencesIfDeleteClient" xml:space="preserve">
     <value>Если данному клиенту недавно были совершены отгрузки товаров, удалить данные не получится!</value>
   </data>
-  <data name="NewCategoryExists" xml:space="preserve">
-    <value>Категория, которую Вы хотите добавить, уже существует.</value>
+  <data name="NewCategoryAlreadyExists" xml:space="preserve">
+    <value>Новая категория, которую Вы хотите добавить, уже существует!</value>
   </data>
   <data name="SureWantToSaveCategoryChange" xml:space="preserve">
     <value>Вы действительно хотите сохранить данные изменения?</value>
   </data>
-  <data name="ConsequencesSaveCategoryChange" xml:space="preserve">
+  <data name="SaveCategoryChangeConsequences" xml:space="preserve">
     <value>При сохранении изменений данная категория изменится у всех товаров этой категории!</value>
   </data>
   <data name="UserCurrencyNotFound" xml:space="preserve">
@@ -508,7 +508,7 @@
     <value>Форма оформления отгрузки открыта пользователем:</value>
   </data>
   <data name="ClientsLoadError" xml:space="preserve">
-    <value>Ошибка при загрузке клиентов</value>
+    <value>Ошибка при загрузке клиентов.</value>
   </data>
   <data name="ProductLoadError" xml:space="preserve">
     <value>Ошибка при загрузке товаров</value>
@@ -531,14 +531,14 @@
   <data name="TryToAdd" xml:space="preserve">
     <value>Попытка добавления товара.</value>
   </data>
-  <data name="Available" xml:space="preserve">
-    <value>Доступно на складе</value>
+  <data name="AvailableInWarehouse" xml:space="preserve">
+    <value>Доступно на складе:</value>
   </data>
   <data name="AddedToShipment" xml:space="preserve">
     <value>добавлен в отгрузку</value>
   </data>
   <data name="ProductAddToShipmentError" xml:space="preserve">
-    <value>Ошибка при добавлении товара в отгрузку!</value>
+    <value>Ошибка при добавлении товара в отгрузку</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Дата</value>
@@ -552,11 +552,11 @@
   <data name="CriticalErrorWhenMakingShipment" xml:space="preserve">
     <value>Критическая ошибка при создании отгрузки</value>
   </data>
-  <data name="NoProductsInShipment" xml:space="preserve">
-    <value>В текущей отгрузке отсутствуют товары.</value>
+  <data name="AddProductsInShipmentFirst" xml:space="preserve">
+    <value>Сначала добавьте товары для оформления отгрузки!</value>
   </data>
-  <data name="ProductNumber" xml:space="preserve">
-    <value>Количество товара</value>
+  <data name="ProductsNumber" xml:space="preserve">
+    <value>Количество товара:</value>
   </data>
   <data name="SureWantToMakeShipment" xml:space="preserve">
     <value>Вы действительно хотите оформить отгрузку?</value>
@@ -582,8 +582,8 @@
   <data name="ProductRowSelected" xml:space="preserve">
     <value>Строка с товаром выделена.</value>
   </data>
-  <data name="ErrorProductDelete" xml:space="preserve">
-    <value>Ошибка удаления товара.</value>
+  <data name="ErrorProductDeleteFromShipment" xml:space="preserve">
+    <value>Ошибка удаления товара из отгрузки.</value>
   </data>
   <data name="ProductRemoveFromShipmentError" xml:space="preserve">
     <value>Ошибка удаления товара из отгрузки</value>
@@ -591,8 +591,8 @@
   <data name="ProductRemovedFromShipment" xml:space="preserve">
     <value>Товар успешно удалён из отгрузки!</value>
   </data>
-  <data name="SelectProductToDelete" xml:space="preserve">
-    <value>Выделите товар для удаления.</value>
+  <data name="SelectProductToDeleteFirst" xml:space="preserve">
+    <value>Сначала выберите товар для удаления!</value>
   </data>
   <data name="ArticleRus" xml:space="preserve">
     <value>Артикул</value>
@@ -600,8 +600,8 @@
   <data name="NameRus" xml:space="preserve">
     <value>Название</value>
   </data>
-  <data name="PurchasePriceOverflowExc" xml:space="preserve">
-    <value>Введено слишком большое число</value>
+  <data name="PurchasePriceOverflowException" xml:space="preserve">
+    <value>Введено слишком большое число!</value>
   </data>
   <data name="CorrectDateFormat" xml:space="preserve">
     <value>dd.MM.yyyy</value>
@@ -630,14 +630,14 @@
   <data name="AddedRus" xml:space="preserve">
     <value>Добавлено</value>
   </data>
-  <data name="NotEnoughInStockQuantityRus" xml:space="preserve">
-    <value>Недостаточно товара на складе</value>
+  <data name="StockQuantityIsNotEnough" xml:space="preserve">
+    <value>Недостаточно товара на складе.</value>
   </data>
-  <data name="TryToPointRus" xml:space="preserve">
-    <value>Попытка указать</value>
+  <data name="TryToPoint" xml:space="preserve">
+    <value>Попытка указать:</value>
   </data>
-  <data name="DiscountDateCannotBeCreationDate" xml:space="preserve">
-    <value>Снижение цены должно быть произойти не раньше, чем через два месяца после создания</value>
+  <data name="DiscountDateShouldNotBeEarlierThanCreationDate" xml:space="preserve">
+    <value>Снижение цены должно быть произойти не раньше, чем через два месяца после создания.</value>
   </data>
   <data name="ShipmentJournalOpened" xml:space="preserve">
     <value>Журнал отгрузок открыт пользователем:</value>
@@ -667,7 +667,7 @@
     <value>Сохранить отчёт как:</value>
   </data>
   <data name="ErrorExportReport" xml:space="preserve">
-    <value>Ошибка при экспорте отчёта</value>
+    <value>Ошибка при экспорте отчёта.</value>
   </data>
   <data name="ReportExported" xml:space="preserve">
     <value>Совершён экспорт отчёта:</value>
@@ -681,7 +681,7 @@
   <data name="TotalShipments" xml:space="preserve">
     <value>Число отгрузок:</value>
   </data>
-  <data name="ReportExportedSuccessfully" xml:space="preserve">
+  <data name="ReportSuccessfullyExported" xml:space="preserve">
     <value>Отчёт успешно экспортирован!</value>
   </data>
   <data name="SelectShipmentForDetails" xml:space="preserve">
@@ -732,10 +732,7 @@
   <data name="IncorrectToDateChoice" xml:space="preserve">
     <value>Некорректный выбор начальной даты.</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ErrorSaveShipment" xml:space="preserve">
+  <data name="SaveShipmentError" xml:space="preserve">
     <value>Ошибка при сохранении отгрузки.</value>
   </data>
   <data name="EndDateCannotBeInPast" xml:space="preserve">
@@ -750,7 +747,7 @@
   <data name="SelectCurrency" xml:space="preserve">
     <value>Выберите валюту!</value>
   </data>
-  <data name="SettingsSavedSuccessfully" xml:space="preserve">
+  <data name="SettingsSuccessfullySaved" xml:space="preserve">
     <value>Настройки успешно сохранены!</value>
   </data>
   <data name="NewCurrency" xml:space="preserve">
@@ -758,5 +755,74 @@
   </data>
   <data name="ExchangeRate" xml:space="preserve">
     <value>Курс валюты</value>
+  </data>
+  <data name="UploadingExchangeRates" xml:space="preserve">
+    <value>Обновление курсов валют...</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Пожалуйста, подождите!</value>
+  </data>
+  <data name="ExchangeRatesUploaded" xml:space="preserve">
+    <value>Курсы валют обновлены!</value>
+  </data>
+  <data name="ExchangeRatesNotUploaded" xml:space="preserve">
+    <value>Курсы валют не обновлены!</value>
+  </data>
+  <data name="TryAgainLater" xml:space="preserve">
+    <value>Попробуйте, пожалуйста, позже!</value>
+  </data>
+  <data name="HowMuchExchangeRatesUploaded" xml:space="preserve">
+    <value>Обновлено валют:</value>
+  </data>
+  <data name="ApplicationWillContinue" xml:space="preserve">
+    <value>Приложение продолжит работу.</value>
+  </data>
+  <data name="NotManagedToUploadExchangeRates" xml:space="preserve">
+    <value>Не удалось обновить курсы валют!</value>
+  </data>
+  <data name="Category_Id" xml:space="preserve">
+    <value>Category_Id</value>
+  </data>
+  <data name="ErrorReadingFile" xml:space="preserve">
+    <value>Ошибка чтения файла</value>
+  </data>
+  <data name="AddProductError" xml:space="preserve">
+    <value>Ошибка добавления товара в поставку</value>
+  </data>
+  <data name="InputCorrectQuantity" xml:space="preserve">
+    <value>Введите корректное количество товара для поставки</value>
+  </data>
+  <data name="AlreadyInSupply" xml:space="preserve">
+    <value>уже добавлен в поставку</value>
+  </data>
+  <data name="FileForSupplyNoProducts" xml:space="preserve">
+    <value>Переданный файл не содержит товаров</value>
+  </data>
+  <data name="Loaded" xml:space="preserve">
+    <value>Загружено</value>
+  </data>
+  <data name="ProductsFromFile" xml:space="preserve">
+    <value>товаров из файла</value>
+  </data>
+  <data name="NoProductsLoaded" xml:space="preserve">
+    <value>Ни один товар не был загружен</value>
+  </data>
+  <data name="NoProductsToAdd" xml:space="preserve">
+    <value>Сначала добавьте товары в поставку</value>
+  </data>
+  <data name="Sum" xml:space="preserve">
+    <value>Сумма поставки</value>
+  </data>
+  <data name="ProductsQuantity" xml:space="preserve">
+    <value>Количество товара</value>
+  </data>
+  <data name="SupplySuccessfullyProcessed" xml:space="preserve">
+    <value>Поставка успешно оформлена</value>
+  </data>
+  <data name="SureWantToMakeSupply" xml:space="preserve">
+    <value>Оформить действительно хотите оформить поставку</value>
+  </data>
+  <data name="NewCategoryNameShouldNotBeEmpty" xml:space="preserve">
+    <value>Название категории не может быть пустым.</value>
   </data>
 </root>

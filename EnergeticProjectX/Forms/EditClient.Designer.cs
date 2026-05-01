@@ -1,4 +1,4 @@
-﻿namespace EditClientForm
+﻿namespace EnergeticProjectX.Forms
 {
     partial class EditClient
     {
@@ -51,7 +51,8 @@
             ComboBoxOfContractor.Location = new Point(127, 267);
             ComboBoxOfContractor.Name = "ComboBoxOfContractor";
             ComboBoxOfContractor.Size = new Size(540, 46);
-            ComboBoxOfContractor.TabIndex = 22;
+            ComboBoxOfContractor.TabIndex = 2;
+            ComboBoxOfContractor.TextChanged += IsTextChanged;
             // 
             // ButtonOfCancel
             // 
@@ -64,10 +65,12 @@
             ButtonOfCancel.Location = new Point(401, 572);
             ButtonOfCancel.Name = "ButtonOfCancel";
             ButtonOfCancel.Size = new Size(266, 69);
-            ButtonOfCancel.TabIndex = 21;
+            ButtonOfCancel.TabIndex = 6;
             ButtonOfCancel.Text = "Отменить";
             ButtonOfCancel.UseVisualStyleBackColor = true;
             ButtonOfCancel.Click += ButtonOfCancel_Click;
+            ButtonOfCancel.Enter += TabSelection_Enter;
+            ButtonOfCancel.Leave += TabSelection_Leave;
             // 
             // ButtonOfSaveChanges
             // 
@@ -81,10 +84,12 @@
             ButtonOfSaveChanges.Location = new Point(127, 572);
             ButtonOfSaveChanges.Name = "ButtonOfSaveChanges";
             ButtonOfSaveChanges.Size = new Size(259, 68);
-            ButtonOfSaveChanges.TabIndex = 20;
+            ButtonOfSaveChanges.TabIndex = 5;
             ButtonOfSaveChanges.Text = "Сохранить";
             ButtonOfSaveChanges.UseVisualStyleBackColor = true;
             ButtonOfSaveChanges.Click += ButtonOfSaveChanges_Click;
+            ButtonOfSaveChanges.Enter += TabSelection_Enter;
+            ButtonOfSaveChanges.Leave += TabSelection_Leave;
             // 
             // TextBoxOfContactInfo
             // 
@@ -92,7 +97,8 @@
             TextBoxOfContactInfo.Location = new Point(127, 493);
             TextBoxOfContactInfo.Name = "TextBoxOfContactInfo";
             TextBoxOfContactInfo.Size = new Size(540, 45);
-            TextBoxOfContactInfo.TabIndex = 19;
+            TextBoxOfContactInfo.TabIndex = 4;
+            TextBoxOfContactInfo.TextChanged += IsTextChanged;
             // 
             // TextBoxOfINN
             // 
@@ -100,15 +106,16 @@
             TextBoxOfINN.Location = new Point(127, 386);
             TextBoxOfINN.Name = "TextBoxOfINN";
             TextBoxOfINN.Size = new Size(540, 45);
-            TextBoxOfINN.TabIndex = 18;
+            TextBoxOfINN.TabIndex = 3;
+            TextBoxOfINN.TextChanged += IsTextChanged;
             // 
             // LabelOfContactInfo
             // 
             LabelOfContactInfo.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
             LabelOfContactInfo.Location = new Point(127, 446);
             LabelOfContactInfo.Name = "LabelOfContactInfo";
-            LabelOfContactInfo.Size = new Size(419, 54);
-            LabelOfContactInfo.TabIndex = 17;
+            LabelOfContactInfo.Size = new Size(419, 44);
+            LabelOfContactInfo.TabIndex = 0;
             LabelOfContactInfo.Text = "Контактная информация";
             // 
             // LabelOfINN
@@ -117,7 +124,7 @@
             LabelOfINN.Location = new Point(121, 338);
             LabelOfINN.Name = "LabelOfINN";
             LabelOfINN.Size = new Size(477, 45);
-            LabelOfINN.TabIndex = 16;
+            LabelOfINN.TabIndex = 0;
             LabelOfINN.Text = "Идентификационный номер";
             // 
             // LabelOfContractor
@@ -126,7 +133,7 @@
             LabelOfContractor.Location = new Point(121, 219);
             LabelOfContractor.Name = "LabelOfContractor";
             LabelOfContractor.Size = new Size(207, 45);
-            LabelOfContractor.TabIndex = 15;
+            LabelOfContractor.TabIndex = 0;
             LabelOfContractor.Text = "Контрагент";
             // 
             // TextBoxOfName
@@ -135,7 +142,8 @@
             TextBoxOfName.Location = new Point(127, 158);
             TextBoxOfName.Name = "TextBoxOfName";
             TextBoxOfName.Size = new Size(540, 45);
-            TextBoxOfName.TabIndex = 14;
+            TextBoxOfName.TabIndex = 1;
+            TextBoxOfName.TextChanged += IsTextChanged;
             // 
             // LabelOfName
             // 
@@ -143,17 +151,17 @@
             LabelOfName.Location = new Point(121, 110);
             LabelOfName.Name = "LabelOfName";
             LabelOfName.Size = new Size(265, 45);
-            LabelOfName.TabIndex = 13;
+            LabelOfName.TabIndex = 0;
             LabelOfName.Text = "Наименование";
             // 
             // LabelOfEditClient
             // 
             LabelOfEditClient.AutoSize = true;
-            LabelOfEditClient.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfEditClient.Location = new Point(141, 36);
+            LabelOfEditClient.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfEditClient.Location = new Point(181, 48);
             LabelOfEditClient.Name = "LabelOfEditClient";
-            LabelOfEditClient.Size = new Size(515, 54);
-            LabelOfEditClient.TabIndex = 12;
+            LabelOfEditClient.Size = new Size(460, 48);
+            LabelOfEditClient.TabIndex = 0;
             LabelOfEditClient.Text = "Редактирование клиента";
             // 
             // ButtonOfDeleteClient
@@ -167,10 +175,12 @@
             ButtonOfDeleteClient.Location = new Point(201, 657);
             ButtonOfDeleteClient.Name = "ButtonOfDeleteClient";
             ButtonOfDeleteClient.Size = new Size(377, 68);
-            ButtonOfDeleteClient.TabIndex = 23;
+            ButtonOfDeleteClient.TabIndex = 7;
             ButtonOfDeleteClient.Text = "Удалить клиента";
             ButtonOfDeleteClient.UseVisualStyleBackColor = true;
             ButtonOfDeleteClient.Click += ButtonOfDeleteClient_Click;
+            ButtonOfDeleteClient.Enter += TabSelection_Enter;
+            ButtonOfDeleteClient.Leave += TabSelection_Leave;
             // 
             // EditClient
             // 

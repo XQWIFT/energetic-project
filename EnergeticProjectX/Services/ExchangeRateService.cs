@@ -22,41 +22,39 @@ namespace EnergeticProjectX.Services
             {
                 LoggerService.Debug("Начало обновления курсов валют с ЦБ РФ.");
 
-                var httpClient = new HttpClient
-                {
-                    Timeout = TimeSpan.FromSeconds(10)
-                };
-
+                var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
                 var json = httpClient.GetStringAsync(CBR_API_URL).Result;
 
                 var response = JsonSerializer.Deserialize<CbrResponse>(json);
 
                 if (response?.Valute == null || response.Valute.Count == 0)
                 {
-                    LoggerService.Warning("Не поступило ответа или произошла ошибка при парсинге.");
+                    LoggerService.Warning("Ответ не поступил или произошла ошибка при конвертации.");
 
                     return 0;
                 }
 
                 LoggerService.Debug($"Получено курсов из ЦБ: {response.Valute.Count}");
 
-                int updatedCount = 0;
+                var allCurrencies = db.Currencies.ToList();
 
+                var updatedCount = 0;
                 var updateDate = DateTime.UtcNow;
 
                 foreach (var cbrCurrency in response.Valute.Values)
                 {
-                    var currency = db.Currencies.FirstOrDefault(c => c.Code.Equals(cbrCurrency.CharCode, StringComparison.CurrentCultureIgnoreCase));
+                    var matchedCurrency = allCurrencies.FirstOrDefault(c =>
+                        c.Code?.Equals(cbrCurrency.CharCode, StringComparison.OrdinalIgnoreCase) == true);
 
-                    if (currency != null)
+                    if (matchedCurrency != null)
                     {
-                        currency.ExchangeRate = cbrCurrency.Value / cbrCurrency.Nominal;
-                        currency.DataOfUpdate = updateDate;
+                        matchedCurrency.ExchangeRate = cbrCurrency.Value / cbrCurrency.Nominal;
+                        matchedCurrency.DataOfUpdate = updateDate;
                         updatedCount++;
 
                         LoggerService.Debug($"Обновлён курс {cbrCurrency.CharCode}: " +
                                            $"{cbrCurrency.Value} / {cbrCurrency.Nominal} = " +
-                                           $"{currency.ExchangeRate:F4}");
+                                           $"{matchedCurrency.ExchangeRate:F4}");
                     }
                 }
 
@@ -65,11 +63,11 @@ namespace EnergeticProjectX.Services
                     if (EH.DBSaveChangesUniversalErrorCheck(db))
                         return 0;
 
-                    LoggerService.Info($"Курсы валют обновлены. Обновлено: {updatedCount} валют. Дата: {updateDate:dd.MM.yyyy HH:mm}");
+                    LoggerService.Info($"Курсы валют обновлены. Количество обновлённых валют: {updatedCount}. Дата: {updateDate:dd.MM.yyyy HH:mm}");
                 }
                 else
                 {
-                    LoggerService.Warning("Не найдено совпадений валют между ЦБ и нашей БД");
+                    LoggerService.Warning("Не найдено совпадений валют между данными от Центробанка и базой данных.");
                 }
 
                 return updatedCount;
@@ -77,7 +75,6 @@ namespace EnergeticProjectX.Services
             catch (Exception ex)
             {
                 LoggerService.Error("Необработанная ошибка при обновлении курсов", ex);
-
                 return 0;
             }
         }

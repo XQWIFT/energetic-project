@@ -1,4 +1,4 @@
-﻿namespace AddCategoryForm
+﻿namespace EnergeticProjectX.Forms
 {
     partial class AddCategory
     {
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             LabelOfAddCategory = new Label();
-            TextBoxForName = new TextBox();
+            TextBoxOfCategoryName = new TextBox();
             LabelOfNameCategory = new Label();
             LabelOfUnit = new Label();
             ButtonOfCancel = new Button();
@@ -47,13 +47,14 @@
             LabelOfAddCategory.TabIndex = 0;
             LabelOfAddCategory.Text = "Добавление категории";
             // 
-            // TextBoxForName
+            // TextBoxOfCategoryName
             // 
-            TextBoxForName.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            TextBoxForName.Location = new Point(129, 202);
-            TextBoxForName.Name = "TextBoxForName";
-            TextBoxForName.Size = new Size(641, 50);
-            TextBoxForName.TabIndex = 1;
+            TextBoxOfCategoryName.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfCategoryName.Location = new Point(129, 202);
+            TextBoxOfCategoryName.Name = "TextBoxOfCategoryName";
+            TextBoxOfCategoryName.Size = new Size(641, 50);
+            TextBoxOfCategoryName.TabIndex = 1;
+            TextBoxOfCategoryName.TextChanged += IsTextChanged;
             // 
             // LabelOfNameCategory
             // 
@@ -61,7 +62,7 @@
             LabelOfNameCategory.Location = new Point(126, 149);
             LabelOfNameCategory.Name = "LabelOfNameCategory";
             LabelOfNameCategory.Size = new Size(340, 50);
-            LabelOfNameCategory.TabIndex = 2;
+            LabelOfNameCategory.TabIndex = 0;
             LabelOfNameCategory.Text = "Название категории";
             // 
             // LabelOfUnit
@@ -70,7 +71,7 @@
             LabelOfUnit.Location = new Point(129, 278);
             LabelOfUnit.Name = "LabelOfUnit";
             LabelOfUnit.Size = new Size(339, 53);
-            LabelOfUnit.TabIndex = 3;
+            LabelOfUnit.TabIndex = 0;
             LabelOfUnit.Text = "Единица измерения";
             // 
             // ButtonOfCancel
@@ -84,10 +85,12 @@
             ButtonOfCancel.Location = new Point(454, 430);
             ButtonOfCancel.Name = "ButtonOfCancel";
             ButtonOfCancel.Size = new Size(316, 69);
-            ButtonOfCancel.TabIndex = 11;
+            ButtonOfCancel.TabIndex = 4;
             ButtonOfCancel.Text = "Отменить";
             ButtonOfCancel.UseVisualStyleBackColor = true;
             ButtonOfCancel.Click += ButtonOfCancel_Click;
+            ButtonOfCancel.Enter += TabSelection_Enter;
+            ButtonOfCancel.Leave += TabSelection_Leave;
             // 
             // ButtonOfAddCategory
             // 
@@ -101,10 +104,12 @@
             ButtonOfAddCategory.Location = new Point(129, 430);
             ButtonOfAddCategory.Name = "ButtonOfAddCategory";
             ButtonOfAddCategory.Size = new Size(298, 69);
-            ButtonOfAddCategory.TabIndex = 12;
+            ButtonOfAddCategory.TabIndex = 3;
             ButtonOfAddCategory.Text = "Добавить";
             ButtonOfAddCategory.UseVisualStyleBackColor = true;
             ButtonOfAddCategory.Click += ButtonOfAddCategory_Click;
+            ButtonOfAddCategory.Enter += TabSelection_Enter;
+            ButtonOfAddCategory.Leave += TabSelection_Leave;
             // 
             // ComboBoxOfUnit
             // 
@@ -114,7 +119,9 @@
             ComboBoxOfUnit.Location = new Point(129, 334);
             ComboBoxOfUnit.Name = "ComboBoxOfUnit";
             ComboBoxOfUnit.Size = new Size(641, 53);
-            ComboBoxOfUnit.TabIndex = 13;
+            ComboBoxOfUnit.TabIndex = 2;
+            ComboBoxOfUnit.SelectedIndexChanged += IsTextChanged;
+            ComboBoxOfUnit.TextChanged += IsTextChanged;
             // 
             // AddCategory
             // 
@@ -127,7 +134,7 @@
             Controls.Add(ButtonOfCancel);
             Controls.Add(LabelOfUnit);
             Controls.Add(LabelOfNameCategory);
-            Controls.Add(TextBoxForName);
+            Controls.Add(TextBoxOfCategoryName);
             Controls.Add(LabelOfAddCategory);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -141,7 +148,7 @@
         #endregion
 
         private Label LabelOfAddCategory;
-        private TextBox TextBoxForName;
+        private TextBox TextBoxOfCategoryName;
         private Label LabelOfNameCategory;
         private Label LabelOfUnit;
         private Button ButtonOfCancel;

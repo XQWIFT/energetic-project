@@ -1,14 +1,15 @@
 ﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
+using PCM = EnergeticProjectX.Classes.PriceCurrencyManager;
+using TH = EnergeticProjectX.Classes.TimeHandler;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
-using ProductCatalogForm;
 
-namespace AddProductForm
+namespace EnergeticProjectX.Forms
 {
     /// <summary>
-    /// Класс для добавления нового товара
+    /// Форма для добавления нового товара.
     /// </summary>
     public partial class AddProduct : Form
     {
@@ -17,66 +18,68 @@ namespace AddProductForm
         readonly string userLogin;
 
         /// <summary>
-        /// Конструктор добавления нового товара
+        /// Конструктор для реализации формы добавления нового товара.
         /// </summary>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
         public AddProduct(string userLogin)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
 
-            TextBoxOfName.TextChanged += IsTextChanged!;
-            ComboBoxOfCategory.TextChanged += IsTextChanged!;
-            TextBoxOfPurchasePrice.TextChanged += IsTextChanged!;
-            ComboBoxOfCategory.SelectedIndexChanged += IsTextChanged!;
-            ComboBoxOfCategory.SelectedIndexChanged += IsComboBoxOfCategoryChanged!;
-
-            LoadChosenCurrency();
+            LoadChosenCurrency(db, ref LabelOfCurrencySymbol, userLogin);
             LoadCategories();
-
-            ComboBoxOfCategory.SelectedIndex = -1;
         }
 
         private void IsTextChanged(object sender, EventArgs e)
         {
-            var allFieldsFilled = !string.IsNullOrWhiteSpace(TextBoxOfName.Text) &&
-                                  !string.IsNullOrWhiteSpace(ComboBoxOfCategory.Text) &&
-                                  !string.IsNullOrWhiteSpace(TextBoxOfPurchasePrice.Text);
-
-            ButtonOfAdd.Enabled = allFieldsFilled;
+            ButtonOfAddProduct.Enabled = !string.IsNullOrWhiteSpace(TextBoxOfName.Text) &&
+                                         !string.IsNullOrWhiteSpace(ComboBoxOfCategory.Text) &&
+                                         !string.IsNullOrWhiteSpace(TextBoxOfPurchasePrice.Text);
         }
+
         private void LoadCategories()
         {
-            ComboBoxOfCategory.SelectedIndexChanged -= IsComboBoxOfCategoryChanged!;
-
-            var categories = db.Categories.Where(u => u.Status == CategoryStatus.Active).ToList();
-
-            if (categories != null)
+            try
             {
+                ComboBoxOfCategory.SelectedIndexChanged -= IsComboBoxOfCategoryChanged!;
+
+                var categories = db.Categories.Where(u => u.Status == CategoryStatus.Active).ToList();
+
+                ComboBoxOfCategory.DisplayMember = nameof(Category.Name);
+                ComboBoxOfCategory.ValueMember = nameof(Category.Category_Id);
                 ComboBoxOfCategory.DataSource = categories;
-                ComboBoxOfCategory.DisplayMember = Resources.CategoryDisplayMember;
-                ComboBoxOfCategory.ValueMember = Resources.CategoryValueMember;
 
                 ComboBoxOfCategory.SelectedIndex = -1;
                 TextBoxOfUnit.Text = string.Empty;
 
-                ComboBoxOfCategory.SelectedIndexChanged += IsComboBoxOfCategoryChanged!;
+                if (categories.Count == 0)
+                {
+                    EH.ShowError(Resources.ErrorCategoryUpload, true);
+                }
             }
-            else
+            catch (Exception)
             {
-                EH.ShowError($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}");
-
-                return;
+                EH.ShowError(Resources.ErrorCategoryUpload, true);
+            }
+            finally
+            {
+                ComboBoxOfCategory.SelectedIndexChanged += IsComboBoxOfCategoryChanged!;
             }
         }
 
-        private void LoadChosenCurrency()
+        /// <summary>
+        /// Метод, который загружает символ выбранной у пользователя валюты в соответствующее поле.
+        /// </summary>
+        /// <param name="db">Контекст базы данных.</param>
+        /// <param name="label">Соответствующее поле.</param>
+        public static void LoadChosenCurrency(ApplicationContextDB db, ref Label label, string userLogin)
         {
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
 
             if (user == null)
             {
-                EH.ShowError($"{Resources.UserNotFound}\n{Resources.TryAgain}");
+                EH.ShowError(Resources.UserNotFound, true);
 
                 return;
             }
@@ -85,79 +88,72 @@ namespace AddProductForm
 
             if (currency == null)
             {
-                EH.ShowError($"{Resources.ErrorUserDataUpload}\n{Resources.TryAgain}");
+                EH.ShowError(Resources.ErrorUserDataUpload, true);
 
                 return;
             }
 
-            LabelOfCurrencySymbol.Text = currency.CurrencySymbol;
+            label.Text = currency.CurrencySymbol;
         }
 
         private void IsComboBoxOfCategoryChanged(object sender, EventArgs e)
         {
             if (ComboBoxOfCategory.SelectedItem is not Category selectedCategory)
             {
-                EH.ShowError($"{Resources.ErrorCategoryUpload}\n{Resources.TryAgain}");
+                EH.ShowError(Resources.ErrorCategoryUpload, true);
 
                 return;
             }
 
-            var categoryId = selectedCategory.Category_Id;
-
             var unit = db.Units.FirstOrDefault(u => u.Unit_Id == selectedCategory.Unit_Id);
 
             if (unit != null)
-                TextBoxOfUnit.Text = unit.Name.ToString();
+                TextBoxOfUnit.Text = unit.Name;
             else
-                EH.ShowError($"{Resources.UnitNotFound}\n{Resources.TryAgain}");
+                EH.ShowError(Resources.UnitForChosenCategoryNotFound, true);
         }
 
         private void ButtonOfAdd_Click(object sender, EventArgs e)
         {
             if (ComboBoxOfCategory.SelectedValue == null)
             {
-                EH.ShowAlert(Resources.ChooseCategoryProduct);
+                EH.ShowAlert(Resources.ChooseCategoryProductFirst);
 
                 return;
             }
 
-            var purchasePrice = PriceCurrencyManager.ValidatePurchasePrice(TextBoxOfPurchasePrice.Text.Trim());
+            var purchasePrice = PCM.ValidatePurchasePrice(TextBoxOfPurchasePrice.Text.Replace(" ", ""));
+
             if (purchasePrice == null)
                 return;
 
-            if (!Guid.TryParse(ComboBoxOfCategory.SelectedValue.ToString()!, out Guid selectedCategoryId))
-            {
-                EH.ShowError($"{Resources.CategoryGetIdError}\n{Resources.TryAgain}");
-
-                return;
-            }
+            var purchasePriceInDefaultCurrency = PCM.SetPriceToDefaultCurrency(db, (decimal)purchasePrice, userLogin);
 
             var product = new Product
             {
                 Article = GenerateUniqueProductArticle(db),
-                Name = TextBoxOfName.Text,
-                CategoryId = selectedCategoryId,
-                PurchasePrice = PriceCurrencyManager.SetPriceToDefaultCurrency(db, (decimal)purchasePrice, userLogin),
-                SalePrice = PriceCurrencyManager.GetSalePriceInDefaultCurrency(PriceCurrencyManager.SetPriceToDefaultCurrency(db, (decimal)purchasePrice, userLogin)),
+                Name = TextBoxOfName.Text.Trim(),
+                CategoryId = (Guid)ComboBoxOfCategory.SelectedValue,
+                PurchasePrice = purchasePriceInDefaultCurrency,
+                SalePrice = PCM.GetSalePriceInDefaultCurrency(purchasePriceInDefaultCurrency),
                 CreationDate = DateTime.UtcNow,
-                DiscountDate = DateOnly.FromDateTime(DateTime.Now).AddMonths(2)
+                DiscountDate = TH.GetDiscountUtcDate()
             };
             
             db.Products.Add(product);
             if (EH.DBSaveChangesUniversalErrorCheck(db))
                 return;
 
+            var salePriceInChosenCurrency = PCM.SetPriceToChosenCurrency(db, product.SalePrice, userLogin);
+
             EH.ShowInformation($"{Resources.Product} {product.Name} {Resources.AddProductSuccess}:\n\n" +
-                               $"{Resources.CreationData}: {DateTime.Now}\n" +
-                               $"{Resources.DiscountDate}: {product.DiscountDate}\n" +
-                               $"{Resources.PurchasePriceRus}: {PriceCurrencyManager.PriceToCorrectFormat(db, (decimal)purchasePrice, userLogin)}\n" +
-                               $"{Resources.SalePrice}: {PriceCurrencyManager.PriceToCorrectFormat(db, Product.priceIncreaseCoefficient * (decimal)purchasePrice, userLogin)}\n" +
+                               $"{Resources.CreationData}: {TH.UtcToLocalDateTime(DateTime.UtcNow):dd.MM.yyyy HH:mm}\n" +
+                               $"{Resources.DiscountDate}: {TH.UtcDateToLocalDateOnly(product.DiscountDate)}\n" +
+                               $"{Resources.PurchasePrice}: {PCM.PriceToCorrectFormat(db, (decimal)purchasePrice, userLogin)}\n" +
+                               $"{Resources.SalePrice}: {PCM.PriceToCorrectFormat(db, salePriceInChosenCurrency, userLogin)}\n" +
                                $"{Resources.StockQuantityByDefault}");
 
-            Hide();
-            var productCatalog = new ProductCatalog(userLogin);
-            productCatalog.ShowDialog();
-            Close();
+            ReturnToMainMenu();
         }
 
         private static string GenerateUniqueProductArticle(ApplicationContextDB db)
@@ -178,10 +174,31 @@ namespace AddProductForm
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
+            ReturnToMainMenu();
+        }
+
+        private void ReturnToMainMenu()
+        {
             Hide();
             var productCatalog = new ProductCatalog(userLogin);
             productCatalog.ShowDialog();
             Close();
+        }
+
+        private void TabSelection_Enter(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.LightSteelBlue;
+            }
+        }
+
+        private void TabSelection_Leave(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.Transparent;
+            }
         }
     }
 }

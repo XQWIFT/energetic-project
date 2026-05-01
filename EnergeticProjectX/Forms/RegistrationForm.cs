@@ -1,102 +1,90 @@
-﻿using EnergeticProjectX;
-using WarehousemanPanelForm;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 
-namespace Registration
+namespace EnergeticProjectX.Forms
 {
     /// <summary>
-    /// Форма регистрации нового пользователя. Роль по умолчанию - Кладовщик
+    /// Форма для регистрации нового пользователя.
     /// </summary>
     public partial class RegistrationForm : Form
     {
         private readonly ApplicationContextDB db = new();
 
         /// <summary>
-        /// Основной конструктор формы регистрации
+        /// Конструктор для реализации формы регистрации.
         /// </summary>
         public RegistrationForm()
         {
             InitializeComponent();
-
-            textBoxOfName.TextChanged += TextBox_TextChanged!;
-            textBoxOfSurname.TextChanged += TextBox_TextChanged!;
-            textBoxOfLogin.TextChanged += TextBox_TextChanged!;
-            textBoxOfPassword.TextChanged += TextBox_TextChanged!;
-            textBoxOfPasswordConfirmation.TextChanged += TextBox_TextChanged!;
         }
 
-        private void TextBox_TextChanged(object sender, EventArgs e)
+        private void IsTextChanged(object sender, EventArgs e)
         {
-            var allFieldsFilled = !string.IsNullOrWhiteSpace(textBoxOfName.Text) &&
-                                  !string.IsNullOrWhiteSpace(textBoxOfSurname.Text) &&
-                                  !string.IsNullOrWhiteSpace(textBoxOfLogin.Text) &&
-                                  !string.IsNullOrWhiteSpace(textBoxOfPassword.Text) &&
-                                  !string.IsNullOrWhiteSpace(textBoxOfPasswordConfirmation.Text);
-
-            ButtonOfRegistration.Enabled = allFieldsFilled;
+            ButtonOfRegistration.Enabled = !string.IsNullOrWhiteSpace(TextBoxOfName.Text) &&
+                                           !string.IsNullOrWhiteSpace(TextBoxOfSurname.Text) &&
+                                           !string.IsNullOrWhiteSpace(TextBoxOfLogin.Text) &&
+                                           !string.IsNullOrWhiteSpace(TextBoxOfPassword.Text) &&
+                                           !string.IsNullOrWhiteSpace(TextBoxOfPasswordConfirmation.Text);
         }
 
         private void ButtonOfRegistration_Click(object sender, EventArgs e)
         {
-            var firstname = User.IsUserPersonalDataRelevant(textBoxOfName.Text);
-            var surname = User.IsUserPersonalDataRelevant(textBoxOfName.Text);
-            var patronymic = User.IsUserPersonalDataRelevant(textBoxOfName.Text);
+            var firstname = User.IsUserPersonalDataRelevant(TextBoxOfName.Text);
+            var surname = User.IsUserPersonalDataRelevant(TextBoxOfName.Text);
+            var patronymic = User.IsUserPersonalDataRelevant(TextBoxOfName.Text);
 
-            if (firstname == null || surname == null || patronymic == null)
+            if (firstname == null || surname == null)
             {
-                MessageBox.Show($"{Resources.InputPersonalDataIrrelevant}\n{Resources.TryAgain}", Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning(Resources.PersonalDataIsIrrelevant, true);
 
                 if (firstname == null)
                 {
-                    textBoxOfName.Clear();
-                    textBoxOfName.Focus();
+                    TextBoxOfName.Clear();
+                    TextBoxOfName.Focus();
                 }
-                if (surname == null)
-                    textBoxOfSurname.Clear();
-                if (patronymic == null)
-                    textBoxOfPatronymic.Clear();
+                else if (surname == null)
+                {
+                    TextBoxOfSurname.Clear();
+                    TextBoxOfSurname.Focus();
+                }
 
                 return;
             }
 
-            var logins = db.Users.Select(u => u.Login).ToList();
-
-            var password = textBoxOfPassword.Text;
-            var login = textBoxOfLogin.Text;
-            var passwordConfirmation = textBoxOfPasswordConfirmation.Text;
+            var password = TextBoxOfPassword.Text.Trim();
+            var login = TextBoxOfLogin.Text.Trim();
+            var passwordConfirmation = TextBoxOfPasswordConfirmation.Text.Trim();
 
             var userLoginFree = IsUserLoginFree(login, db);
             var (passwordsMatch, passwordSatisfyRequirements) = User.IsPasswordRelevant(password, passwordConfirmation);
 
             if (userLoginFree && passwordsMatch && passwordSatisfyRequirements)
             {
-                var currencyByDefault = db.Currencies.FirstOrDefault(u => u.Code == Resources.RUB);
+                var currencyByDefault = db.Currencies.FirstOrDefault(u => u.Code == "RUB");
 
                 if (currencyByDefault == null)
                 {
-                    MessageBox.Show($"{Resources.ErrorDefaultCurrencyUpload}\n{Resources.TryAgain}", Resources.TitleError,
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    EH.ShowError(Resources.ErrorDefaultCurrencyUpload, true);
 
                     return;
                 }
 
                 var user = new User
                 {
-                    Surname = textBoxOfSurname.Text.Trim(),
-                    Name = textBoxOfName.Text.Trim(),
-                    Patronymic = textBoxOfPatronymic.Text.Trim() ?? null,
-                    Login = textBoxOfLogin.Text.Trim(),
-                    Password = BCryptRealization.PasswordHash(textBoxOfPassword.Text.Trim()),
+                    Surname = TextBoxOfSurname.Text.Trim(),
+                    Name = TextBoxOfName.Text.Trim(),
+                    Patronymic = TextBoxOfPatronymic.Text.Trim() ?? null,
+                    Login = TextBoxOfLogin.Text.Trim(),
+                    Password = BCryptRealization.PasswordHash(TextBoxOfPassword.Text.Trim()),
                     UserRole = UserRole.Warehouseman,
                     CurrencyId = currencyByDefault.Currency_Id
                 };
 
                 db.Users.Add(user);
-                if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                if (EH.DBSaveChangesUniversalErrorCheck(db))
                     return;
 
                 Hide();
@@ -106,37 +94,34 @@ namespace Registration
             }
             else if (!userLoginFree)
             {
-                MessageBox.Show($"{Resources.ExistsUsername}\n{Resources.InventNewLogin}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError(Resources.UserLoginAlreadyExists);
 
-                textBoxOfLogin.Clear();
-                textBoxOfLogin.Focus();
+                TextBoxOfLogin.Clear();
+                TextBoxOfLogin.Focus();
             }
             else if (!passwordSatisfyRequirements)
             {
-                MessageBox.Show($"{Resources.TooSimplePassword}\n{Resources.InventNewPassword}", Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowWarning(Resources.TooSimplePassword, true);
 
-                textBoxOfPassword.Clear();
-                textBoxOfPasswordConfirmation.Clear();
-                textBoxOfPassword.Focus();
+                TextBoxOfPassword.Clear();
+                TextBoxOfPasswordConfirmation.Clear();
+                TextBoxOfPassword.Focus();
             }
             else if (!passwordsMatch)
             {
-                MessageBox.Show($"{Resources.UnmatchedPasswords}\n{Resources.TryAgain}", Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowWarning(Resources.UnmatchedPasswords, true);
 
-                textBoxOfPassword.Clear();
-                textBoxOfPasswordConfirmation.Clear();
-                textBoxOfPassword.Focus();
+                TextBoxOfPassword.Clear();
+                TextBoxOfPasswordConfirmation.Clear();
+                TextBoxOfPassword.Focus();
             }
         }
 
         /// <summary>
         /// Проверка, свободен ли указанный пользователем логин для регистрации.
         /// </summary>
-        /// <param name="login">Логин нового пользователя</param>
-        /// <param name="db">Контекст базы данных</param>
+        /// <param name="login">Логин нового пользователя.</param>
+        /// <param name="db">Контекст базы данных.</param>
         public static bool IsUserLoginFree(string login, ApplicationContextDB db)
         {
             var logins = db.Users.Select(u => u.Login).ToList();
@@ -150,6 +135,22 @@ namespace Registration
             var authorizationForm = new AuthorizationForm();
             authorizationForm.ShowDialog();
             Close();
+        }
+
+        private void TabSelection_Enter(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.LightSteelBlue;
+            }
+        }
+
+        private void TabSelection_Leave(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.Transparent;
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace ShipmentJournalForm
+﻿namespace EnergeticProjectX.Forms
 {
     partial class ShipmentJournal
     {
@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewOfShipments = new DataGridView();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DGVOfShipments = new DataGridView();
             ButtonOfMainMenu = new Button();
             ButtonOfContent = new Button();
             ButtonOfExport = new Button();
@@ -41,53 +41,56 @@
             LabelOfRussianTill = new Label();
             LabelOfRussianC = new Label();
             LabelOfChoosingDates = new Label();
-            ((System.ComponentModel.ISupportInitialize)DataGridViewOfShipments).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DGVOfShipments).BeginInit();
             PanelOfSearch.SuspendLayout();
             SuspendLayout();
             // 
-            // DataGridViewOfShipments
+            // DGVOfShipments
             // 
-            DataGridViewOfShipments.AllowUserToAddRows = false;
-            DataGridViewOfShipments.AllowUserToDeleteRows = false;
-            DataGridViewOfShipments.AllowUserToResizeColumns = false;
-            DataGridViewOfShipments.AllowUserToResizeRows = false;
-            DataGridViewOfShipments.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            DataGridViewOfShipments.BackgroundColor = SystemColors.ControlLight;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            DataGridViewOfShipments.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            DataGridViewOfShipments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.Window;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            DataGridViewOfShipments.DefaultCellStyle = dataGridViewCellStyle2;
-            DataGridViewOfShipments.EnableHeadersVisualStyles = false;
-            DataGridViewOfShipments.Location = new Point(12, 79);
-            DataGridViewOfShipments.MultiSelect = false;
-            DataGridViewOfShipments.Name = "DataGridViewOfShipments";
-            DataGridViewOfShipments.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.ButtonHighlight;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            DataGridViewOfShipments.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            DataGridViewOfShipments.RowHeadersVisible = false;
-            DataGridViewOfShipments.RowHeadersWidth = 62;
-            DataGridViewOfShipments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DataGridViewOfShipments.Size = new Size(995, 580);
-            DataGridViewOfShipments.TabIndex = 0;
+            DGVOfShipments.AllowUserToAddRows = false;
+            DGVOfShipments.AllowUserToDeleteRows = false;
+            DGVOfShipments.AllowUserToResizeColumns = false;
+            DGVOfShipments.AllowUserToResizeRows = false;
+            DGVOfShipments.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            DGVOfShipments.BackgroundColor = SystemColors.ControlLight;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            DGVOfShipments.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            DGVOfShipments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Window;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.Window;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            DGVOfShipments.DefaultCellStyle = dataGridViewCellStyle5;
+            DGVOfShipments.EnableHeadersVisualStyles = false;
+            DGVOfShipments.Location = new Point(12, 79);
+            DGVOfShipments.MultiSelect = false;
+            DGVOfShipments.Name = "DGVOfShipments";
+            DGVOfShipments.ReadOnly = true;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.ButtonHighlight;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            DGVOfShipments.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            DGVOfShipments.RowHeadersVisible = false;
+            DGVOfShipments.RowHeadersWidth = 62;
+            DGVOfShipments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DGVOfShipments.Size = new Size(995, 580);
+            DGVOfShipments.TabIndex = 0;
+            DGVOfShipments.CellMouseClick += DataGridViewOfShipments_CellMouseClick;
+            DGVOfShipments.CellMouseDoubleClick += DataGridViewOfShipments_CellMouseClick;
+            DGVOfShipments.CellMouseEnter += DataGridViewOfShipments_CellMouseEnter;
             // 
             // ButtonOfMainMenu
             // 
@@ -97,13 +100,15 @@
             ButtonOfMainMenu.FlatStyle = FlatStyle.Flat;
             ButtonOfMainMenu.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
             ButtonOfMainMenu.ForeColor = Color.Black;
-            ButtonOfMainMenu.Location = new Point(50, 685);
+            ButtonOfMainMenu.Location = new Point(38, 685);
             ButtonOfMainMenu.Name = "ButtonOfMainMenu";
             ButtonOfMainMenu.Size = new Size(296, 80);
             ButtonOfMainMenu.TabIndex = 3;
             ButtonOfMainMenu.Text = "Главное меню";
             ButtonOfMainMenu.UseVisualStyleBackColor = true;
             ButtonOfMainMenu.Click += ButtonOfMainMenu_Click;
+            ButtonOfMainMenu.Enter += TabSelection_Enter;
+            ButtonOfMainMenu.Leave += TabSelection_Leave;
             // 
             // ButtonOfContent
             // 
@@ -116,11 +121,13 @@
             ButtonOfContent.ForeColor = Color.Black;
             ButtonOfContent.Location = new Point(693, 685);
             ButtonOfContent.Name = "ButtonOfContent";
-            ButtonOfContent.Size = new Size(278, 80);
-            ButtonOfContent.TabIndex = 4;
+            ButtonOfContent.Size = new Size(289, 80);
+            ButtonOfContent.TabIndex = 5;
             ButtonOfContent.Text = "Подробности";
             ButtonOfContent.UseVisualStyleBackColor = true;
             ButtonOfContent.Click += ButtonOfContent_Click;
+            ButtonOfContent.Enter += TabSelection_Enter;
+            ButtonOfContent.Leave += TabSelection_Leave;
             // 
             // ButtonOfExport
             // 
@@ -131,13 +138,15 @@
             ButtonOfExport.FlatStyle = FlatStyle.Flat;
             ButtonOfExport.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
             ButtonOfExport.ForeColor = Color.Black;
-            ButtonOfExport.Location = new Point(363, 685);
+            ButtonOfExport.Location = new Point(352, 685);
             ButtonOfExport.Name = "ButtonOfExport";
-            ButtonOfExport.Size = new Size(313, 80);
-            ButtonOfExport.TabIndex = 5;
+            ButtonOfExport.Size = new Size(324, 80);
+            ButtonOfExport.TabIndex = 4;
             ButtonOfExport.Text = "Экспорт отчёта";
             ButtonOfExport.UseVisualStyleBackColor = true;
             ButtonOfExport.Click += ButtonOfExport_Click;
+            ButtonOfExport.Enter += TabSelection_Enter;
+            ButtonOfExport.Leave += TabSelection_Leave;
             // 
             // PanelOfSearch
             // 
@@ -154,20 +163,31 @@
             // DateTimePickerTo
             // 
             DateTimePickerTo.CalendarFont = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            DateTimePickerTo.CustomFormat = "dd.MM.yyyy";
             DateTimePickerTo.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            DateTimePickerTo.Format = DateTimePickerFormat.Custom;
             DateTimePickerTo.Location = new Point(673, 18);
+            DateTimePickerTo.MaxDate = new DateTime(2100, 1, 1, 0, 0, 0, 0);
+            DateTimePickerTo.MinDate = new DateTime(2010, 1, 1, 0, 0, 0, 0);
             DateTimePickerTo.Name = "DateTimePickerTo";
             DateTimePickerTo.Size = new Size(300, 39);
-            DateTimePickerTo.TabIndex = 4;
+            DateTimePickerTo.TabIndex = 2;
+            DateTimePickerTo.ValueChanged += DateTimePickerTo_ValueChanged;
             // 
             // DateTimePickerFrom
             // 
             DateTimePickerFrom.CalendarFont = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            DateTimePickerFrom.CustomFormat = "dd.MM.yyyy";
             DateTimePickerFrom.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            DateTimePickerFrom.Format = DateTimePickerFormat.Custom;
             DateTimePickerFrom.Location = new Point(343, 18);
+            DateTimePickerFrom.MaxDate = new DateTime(2100, 1, 1, 0, 0, 0, 0);
+            DateTimePickerFrom.MinDate = new DateTime(2020, 1, 1, 0, 0, 0, 0);
             DateTimePickerFrom.Name = "DateTimePickerFrom";
             DateTimePickerFrom.Size = new Size(244, 39);
-            DateTimePickerFrom.TabIndex = 3;
+            DateTimePickerFrom.TabIndex = 1;
+            DateTimePickerFrom.Value = new DateTime(2026, 5, 1, 1, 19, 14, 0);
+            DateTimePickerFrom.ValueChanged += DateTimePickerFrom_ValueChanged;
             // 
             // LabelOfRussianTill
             // 
@@ -176,7 +196,7 @@
             LabelOfRussianTill.Location = new Point(602, 13);
             LabelOfRussianTill.Name = "LabelOfRussianTill";
             LabelOfRussianTill.Size = new Size(65, 45);
-            LabelOfRussianTill.TabIndex = 2;
+            LabelOfRussianTill.TabIndex = 0;
             LabelOfRussianTill.Text = "До";
             // 
             // LabelOfRussianC
@@ -186,7 +206,7 @@
             LabelOfRussianC.Location = new Point(297, 13);
             LabelOfRussianC.Name = "LabelOfRussianC";
             LabelOfRussianC.Size = new Size(40, 45);
-            LabelOfRussianC.TabIndex = 1;
+            LabelOfRussianC.TabIndex = 0;
             LabelOfRussianC.Text = "С";
             // 
             // LabelOfChoosingDates
@@ -207,7 +227,7 @@
             ClientSize = new Size(1019, 794);
             Controls.Add(PanelOfSearch);
             Controls.Add(ButtonOfExport);
-            Controls.Add(DataGridViewOfShipments);
+            Controls.Add(DGVOfShipments);
             Controls.Add(ButtonOfMainMenu);
             Controls.Add(ButtonOfContent);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -215,13 +235,13 @@
             Name = "ShipmentJournal";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Журнал отгрузок";
-            ((System.ComponentModel.ISupportInitialize)DataGridViewOfShipments).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DGVOfShipments).EndInit();
             PanelOfSearch.ResumeLayout(false);
             PanelOfSearch.PerformLayout();
             ResumeLayout(false);
         }
 
-        private DataGridView DataGridViewOfShipments;
+        private DataGridView DGVOfShipments;
         private Button ButtonOfMainMenu;
         private Button ButtonOfContent;
         private Button ButtonOfExport;

@@ -1,26 +1,28 @@
-﻿using EnergeticProjectX.Classes;
+﻿using PCM = EnergeticProjectX.Classes.PriceCurrencyManager;
+using EH = EnergeticProjectX.Classes.ErrorHandler;
+using EnergeticProjectX.Classes;
 using EnergeticProjectX.Models;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
-using AdministratorPanelForm;
-using EnergeticProjectX.Forms;
 using System.Text;
 
-namespace ShipmentJournalForm
+namespace EnergeticProjectX.Forms
 {
     /// <summary>
-    /// Форма журнала отгрузок для администратора.
+    /// Форма журнала отгрузок для отображения совершённых отгрузок.
     /// </summary>
     public partial class ShipmentJournal : Form
     {
         private readonly ApplicationContextDB db = new();
+
         private readonly string userLogin;
 
         private Shipment? selectedShipment;
+
         private List<ShipmentJournalDisplayModel> allShipments = [];
 
         /// <summary>
-        /// Конструктор для реализации формы.
+        /// Конструктор для реализации формы журнала отгрузок.
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
         public ShipmentJournal(string userLogin)
@@ -29,34 +31,63 @@ namespace ShipmentJournalForm
 
             this.userLogin = userLogin;
 
-            LoggerService.Info($"{Resources.ShipmentJournalOpened} {userLogin}");
-
-            DateTimePickerFrom.Value = DateTime.Today;
-            DateTimePickerTo.Value = DateTime.Today.AddDays(1);
-
-            DateTimePickerFrom.Format = DateTimePickerFormat.Custom;
-            DateTimePickerFrom.CustomFormat = Resources.CorrectDateFormat;
-            DateTimePickerTo.Format = DateTimePickerFormat.Custom;
-            DateTimePickerTo.CustomFormat = Resources.CorrectDateFormat;
-
-            DataGridViewOfShipments.CellClick += DataGridViewOfShipments_CellClick;
-            DateTimePickerFrom.ValueChanged += DateTimePickerFrom_ValueChanged;
-            DateTimePickerTo.ValueChanged += DateTimePickerTo_ValueChanged;
+            DateTimePickerFrom.Value = DateTime.Today.AddDays(-7);
+            DateTimePickerTo.Value = DateTime.Today;
 
             LoadShipments();
+            UpdateButtonStates();
 
             selectedShipment = null;
+        }
+
+        private void DataGridViewOfShipments_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex < 0)
+            {
+                selectedShipment = null;
+                UpdateButtonStates();
+                return;
+            }
+
+            DGVOfShipments.ClearSelection();
+            DGVOfShipments.Rows[e.RowIndex].Selected = true;
+
+            DGVOfShipments.ClearSelection();
+            DGVOfShipments.Rows[e.RowIndex].Selected = true;
+
+            if (e.RowIndex < allShipments.Count &&
+                DGVOfShipments.Rows[e.RowIndex].DataBoundItem is ShipmentJournalDisplayModel model)
+            {
+                selectedShipment = db.Shipments.FirstOrDefault(s => s.Shipment_Id == model.ShipmentId);
+            }
+            else
+            {
+                selectedShipment = null;
+            }
 
             UpdateButtonStates();
+        }
+
+        private void DataGridViewOfShipments_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                var cell = DGVOfShipments.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                var cellValue = cell.Value?.ToString() ?? string.Empty;
+
+                var columnName = DGVOfShipments.Columns[e.ColumnIndex].HeaderText;
+
+                var tooltipText = $"{columnName}: {cellValue}";
+
+                cell.ToolTipText = tooltipText;
+            }
         }
 
         private void LoadShipments()
         {
             try
             {
-                LoggerService.Debug($"{Resources.StartLoadingShipments}.\n{Resources.RangeRus}:" +
-                                    $"{DateTimePickerFrom.Value:dd.MM.yyyy} - {DateTimePickerTo.Value:dd.MM.yyyy}");
-
                 var query = db.Shipments.AsQueryable();
 
                 if (DateTimePickerFrom.Value.Date != DateTime.Today.Date)
@@ -73,104 +104,74 @@ namespace ShipmentJournalForm
 
                 var shipmentsList = query.OrderByDescending(s => s.CreationDate).ToList();
 
-                LoggerService.Debug($"{Resources.ShipmentsLoaded} {shipmentsList.Count}");
-
                 allShipments = [];
 
                 foreach (var shipment in shipmentsList)
                 {
-                    try
+                    var user = db.Users.FirstOrDefault(u => u.User_Id == shipment.User_Id);
+
+                    if (user == null)
                     {
-                        var user = db.Users.FirstOrDefault(u => u.User_Id == shipment.User_Id);
-                        var userName = user != null ? $"{user.Surname} {user.Name}".Trim(): Resources.Notstated;
+                        EH.ShowError(Resources.UserNotFound, true);
 
-                        var client = db.Clients.FirstOrDefault(c => c.Client_Id == shipment.Client_Id);
-
-                        var shipmentItems = db.ShipmentItems.Where(si => si.Shipment_Id == shipment.Shipment_Id).ToList();
-
-                        var totalRevenue = shipmentItems.Sum(si => si.FixedSalePrice * si.Quantity);
-
-                        var totalCost = shipmentItems.Sum(si => si.FixedPurchasePrice * si.Quantity);
-
-                        var profit = totalRevenue - totalCost;
-
-                        var totalRevenueString = PriceCurrencyManager.PriceToCorrectFormat(db, PriceCurrencyManager.SetPriceToChosenCurrency(db, totalRevenue, userLogin), userLogin);
-
-                        var totalProfitString = PriceCurrencyManager.PriceToCorrectFormat(db, PriceCurrencyManager.SetPriceToChosenCurrency(db, profit, userLogin), userLogin);
-
-                        allShipments.Add(new ShipmentJournalDisplayModel
-                        {
-                            ShipmentId = shipment.Shipment_Id,
-                            UserName = userName,
-                            ClientName = client?.Name ?? Resources.Notstated,
-                            Date = DateOnly.FromDateTime(shipment.CreationDate),
-                            Revenue = totalRevenueString,
-                            Profit = totalProfitString,
-                            RevenueValue = totalRevenue,
-                            ProfitValue = profit
-
-                        });
-
-                        LoggerService.Debug($"{Resources.ShipmentLoaded} {shipment.Shipment_Id}:\n{Resources.Revenue}:{totalRevenueString}\n" +
-                                            $"{Resources.TotalProfit}: {totalProfitString}");
+                        return;
                     }
-                    catch (Exception ex)
+
+                    var userFirstnameAndSurname = $"{user.Surname} {user.Name}".Trim();
+
+                    var client = db.Clients.FirstOrDefault(c => c.Client_Id == shipment.Client_Id);
+
+                    if (client == null)
                     {
-                        LoggerService.Error($"{Resources.ErrorWhileLoadingShipment} {shipment.Shipment_Id}", ex);
+                        EH.ShowError(Resources.ClientsLoadError, true);
+
+                        return;
                     }
+
+                    var shipmentItems = db.ShipmentItems.Where(si => si.Shipment_Id == shipment.Shipment_Id).ToList();
+
+                    var totalRevenue = 0m;
+                    var totalCost = 0m;
+
+                    foreach (var shipmentItem in shipmentItems)
+                    {
+                        totalRevenue += PCM.SetPriceToChosenCurrency(db, shipmentItem.FixedSalePrice, userLogin) * shipmentItem.Quantity;
+
+                        totalCost += PCM.SetPriceToChosenCurrency(db, shipmentItem.FixedPurchasePrice, userLogin) * shipmentItem.Quantity;
+                    }
+
+                    var profit = totalRevenue - totalCost;
+
+                    var totalRevenueString = PCM.PriceToCorrectFormat(db, PCM.SetPriceToChosenCurrency(db, totalRevenue, userLogin), userLogin);
+
+                    var totalProfitString = PCM.PriceToCorrectFormat(db, PCM.SetPriceToChosenCurrency(db, profit, userLogin), userLogin);
+
+                    allShipments.Add(new ShipmentJournalDisplayModel
+                    {
+                        ShipmentId = shipment.Shipment_Id,
+                        UserName = userFirstnameAndSurname,
+                        ClientName = client.Name,
+                        Date = DateOnly.FromDateTime(shipment.CreationDate),
+                        Revenue = totalRevenueString,
+                        Profit = totalProfitString,
+                        RevenueValue = totalRevenue,
+                        ProfitValue = profit
+
+                    });
                 }
 
-                DataGridViewOfShipments.DataSource = null;
-                DataGridViewOfShipments.DataSource = allShipments;
-
-                LoggerService.Info($"{Resources.ShipmentsLoaded} {allShipments.Count}");
-
-                if (allShipments.Count == 0)
-                {
-                    LoggerService.Info(Resources.ShipmentNotFounded);
-                }
+                DGVOfShipments.DataSource = null;
+                DGVOfShipments.DataSource = allShipments;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LoggerService.Error(Resources.CriticalErrorWhenLoadingShipments, ex);
-
-                MessageBox.Show($"{Resources.ErrorWhileLoadingData}\n{Resources.TryAgain}", Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError(Resources.ErrorWhileLoadingData, true);
 
                 allShipments = [];
-                DataGridViewOfShipments.DataSource = allShipments;
+                DGVOfShipments.DataSource = allShipments;
 
                 return;
             }
-        }
-
-        private void DataGridViewOfShipments_CellClick(object? sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0)
-            {
-                selectedShipment = null;
-                UpdateButtonStates();
-                return;
-            }
-
-            DataGridViewOfShipments.ClearSelection();
-            DataGridViewOfShipments.Rows[e.RowIndex].Selected = true;
-
-            DataGridViewOfShipments.ClearSelection();
-            DataGridViewOfShipments.Rows[e.RowIndex].Selected = true;
-
-            if (e.RowIndex < allShipments.Count &&
-                DataGridViewOfShipments.Rows[e.RowIndex].DataBoundItem is ShipmentJournalDisplayModel model)
-            {
-                selectedShipment = db.Shipments.FirstOrDefault(s => s.Shipment_Id == model.ShipmentId);
-
-                LoggerService.Debug($"{Resources.ShipmentSelected}: {selectedShipment?.Shipment_Id}");
-            }
-            else
-            {
-                selectedShipment = null;
-            }
-
-            UpdateButtonStates();
         }
 
         private void UpdateButtonStates()
@@ -179,6 +180,7 @@ namespace ShipmentJournalForm
 
             var hasDateRange = DateTimePickerFrom.Value != DateTime.Today ||
                                DateTimePickerTo.Value != DateTime.Today;
+
             var hasData = allShipments.Count > 0;
 
             ButtonOfExport.Enabled = hasDateRange && hasData;
@@ -186,8 +188,6 @@ namespace ShipmentJournalForm
 
         private void ButtonOfMainMenu_Click(object sender, EventArgs e)
         {
-            LoggerService.Info(Resources.ReturnToMainMenu);
-
             Hide();
             var administratorPanel = new AdministratorPanel(userLogin);
             administratorPanel.ShowDialog();
@@ -198,7 +198,7 @@ namespace ShipmentJournalForm
         {
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"{Resources.CreatedBy};{Resources.Client};{Resources.Date}; {Resources.Revenue};{Resources.Profit}");
+            stringBuilder.AppendLine($"{Resources.CreatedBy};{Resources.Client};{Resources.Date};{Resources.Revenue};{Resources.Profit}");
 
             var totalRevenue = 0m;
             var totalProfit = 0m;
@@ -211,8 +211,26 @@ namespace ShipmentJournalForm
                 totalProfit += shipment.ProfitValue;
             }
 
-            var totalRevenueDisplay = PriceCurrencyManager.PriceToCorrectFormat(db, PriceCurrencyManager.SetPriceToChosenCurrency(db, totalRevenue, userLogin), userLogin);
-            var totalProfitDisplay = PriceCurrencyManager.PriceToCorrectFormat(db, PriceCurrencyManager.SetPriceToChosenCurrency(db, totalProfit, userLogin), userLogin);
+            var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
+
+            if (user == null)
+            {
+                EH.ShowError(Resources.UserNotFound, true);
+
+                return;
+            }
+
+            var currency = db.Currencies.FirstOrDefault(c => c.Currency_Id == user.CurrencyId);
+
+            if (currency == null)
+            {
+                EH.ShowError(Resources.UserCurrencyNotFound, true);
+
+                return;
+            }
+
+            var totalRevenueDisplay = PCM.PriceToCorrectFormat(db, PCM.SetPriceToChosenCurrency(db, totalRevenue, userLogin), userLogin);
+            var totalProfitDisplay = PCM.PriceToCorrectFormat(db, PCM.SetPriceToChosenCurrency(db, totalProfit, userLogin), userLogin);
 
             stringBuilder.AppendLine();
             stringBuilder.AppendLine($"{Resources.TotalRevenue};{totalRevenueDisplay}");
@@ -221,22 +239,15 @@ namespace ShipmentJournalForm
 
             File.WriteAllText(filePath, stringBuilder.ToString(), new UTF8Encoding(true));
 
-            LoggerService.Info($"{Resources.ReportExported}: {filePath}\n{Resources.TotalRevenue}: {totalRevenueDisplay}\n{Resources.TotalProfit}: {totalProfitDisplay}");
-
-            MessageBox.Show($"{Resources.ReportExportedSuccessfully}\n\n{Resources.TotalRevenue}: {totalRevenueDisplay} ₽\n{Resources.TotalProfit}: {totalProfitDisplay} ₽\n" +
-                            $"{Resources.TotalShipments}: {allShipments.Count}", Resources.TitleSuccess, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            EH.ShowInformation($"{Resources.ReportSuccessfullyExported}\n\n{Resources.TotalRevenue}: {totalRevenueDisplay} {currency.CurrencySymbol}\n" +
+                               $"{Resources.TotalProfit}: {totalProfitDisplay} ₽\n" + $"{Resources.TotalShipments}: {allShipments.Count}");
         }
 
         private void DateTimePickerTo_ValueChanged(object? sender, EventArgs e)
         {
             if (DateTimePickerTo.Value < DateTimePickerFrom.Value)
             {
-                LoggerService.Warning($"{Resources.IncorrectDataPeriod}: " +
-                                     $"From={DateTimePickerFrom.Value:dd.MM.yyyy}, " +
-                                     $"To={DateTimePickerTo.Value:dd.MM.yyyy}");
-
-                MessageBox.Show($"{Resources.IncorrectPeriodOfDates}\n{Resources.TryAgain}", Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning(Resources.IncorrectPeriodOfDates, true);
 
                 DateTimePickerTo.Value = DateTimePickerFrom.Value;
 
@@ -251,10 +262,7 @@ namespace ShipmentJournalForm
         {
             if (DateTimePickerFrom.Value.Date > DateTime.Today)
             {
-                LoggerService.Warning($"Некорректный выбор начальной даты: {DateTimePickerFrom.Value:dd.MM.yyyy}");
-
-                MessageBox.Show($"{Resources.StartDateCannotBeInFuture}\n{Resources.TryAgain}", Resources.TitleWarning,
-                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning(Resources.StartDateCannotBeInFuture, true);
 
                 DateTimePickerFrom.Value = DateTime.Today;
                 return;
@@ -268,24 +276,21 @@ namespace ShipmentJournalForm
         {
             try
             {
-                LoggerService.Info($"{Resources.ExportReportStarted}: {DateTimePickerFrom.Value:dd.MM.yyyy} - {DateTimePickerTo.Value:dd.MM.yyyy}");
-
                 var fileName = $"ShipmentReport_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
 
-                using SaveFileDialog saveDialog = new();
-                saveDialog.Filter = "CSV files|*.csv|All files|*.*";
-                saveDialog.FileName = fileName;
-                saveDialog.Title = Resources.SaveReportAs;
+                var saveDialog = new SaveFileDialog
+                {
+                    Filter = "CSV files|*.csv|All files|*.*",
+                    FileName = fileName,
+                    Title = Resources.SaveReportAs
+                };
 
                 if (saveDialog.ShowDialog() == DialogResult.OK)
                     ExportToCsv(saveDialog.FileName);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LoggerService.Error(Resources.ErrorExportReport, ex);
-
-                MessageBox.Show($"{Resources.ErrorExportReport}\n{ex.Message}",
-                               Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError(Resources.ErrorExportReport, true);
 
                 return;
             }
@@ -295,17 +300,31 @@ namespace ShipmentJournalForm
         {
             if (selectedShipment == null)
             {
-                MessageBox.Show(Resources.SelectShipmentForDetails, Resources.TitleWarning,
-                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowAlert(Resources.SelectShipmentForDetails);
+
                 return;
             }
-
-            LoggerService.Info($"{Resources.OpenShipmentDetails}: {selectedShipment}");
 
             Hide();
             var shipmentDetails = new ShipmentDetails(userLogin, selectedShipment);
             shipmentDetails.ShowDialog();
             Close();
+        }
+
+        private void TabSelection_Enter(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.LightSteelBlue;
+            }
+        }
+
+        private void TabSelection_Leave(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.Transparent;
+            }
         }
     }
 }

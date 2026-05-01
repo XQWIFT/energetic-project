@@ -29,7 +29,7 @@ namespace EnergeticProjectX.Objects
         /// Наименование товара.
         /// </summary>  
         [Column("name")]
-        [StringLength(30)]
+        [StringLength(100)]
         [Required]
         public required string Name { get; set; }
 

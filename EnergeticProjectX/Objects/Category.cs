@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using EnergeticProjectX.Classes;
-using EnergeticProjectX.Properties;
 using EnergeticProjectX.Enums;
 
 namespace EnergeticProjectX.Objects

@@ -1,26 +1,23 @@
-﻿using EnergeticProjectX.Classes;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
+using EnergeticProjectX.Classes;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Enums;
 using Microsoft.EntityFrameworkCore;
-using ProductCatalogForm;
 
-namespace AddCategoryForm
+namespace EnergeticProjectX.Forms
 {
     /// <summary>
-    /// Класс для добавления новой категории
+    /// Класс для добавления новой категории.
     /// </summary>
     public partial class AddCategory : Form
     {
-        /// <summary>
-        /// Логин пользователя который управляет программой
-        /// </summary>
         private readonly string userLogin;
 
         private readonly ApplicationContextDB db = new();
 
         /// <summary>
-        /// Основной конструктор добавления новой категории 
+        /// Основной конструктор добавления новой категории.
         /// </summary>
         public AddCategory(string userLogin)
         {
@@ -28,79 +25,67 @@ namespace AddCategoryForm
 
             this.userLogin = userLogin;
 
-            TextBoxForName.TextChanged += IsTextChanged!;
-            ComboBoxOfUnit.TextChanged += IsTextChanged!;
-            ComboBoxOfUnit.SelectedIndexChanged += IsTextChanged!;
-
-            LoadUnits(db, ComboBoxOfUnit);
-
-            ComboBoxOfUnit.SelectedIndex = -1;
+            LoadUnits(db, ref ComboBoxOfUnit);
         }
 
         /// <summary>
-        /// Загрузка единиц измерений в выпадающий список
+        /// Загрузка единиц измерений в выпадающий список.
         /// </summary>
-        /// <param name="db">Контекст базы данных</param>
-        /// <param name="comboBoxName">Название выпадающего списка</param>
-        public static void LoadUnits(ApplicationContextDB db, ComboBox comboBoxName)
+        /// <param name="db">Контекст базы данных.</param>
+        /// <param name="comboBox">Название выпадающего списка.</param>
+        public static void LoadUnits(ApplicationContextDB db, ref ComboBox comboBox)
         {
             var units = db.Units.ToList();
 
             if (units != null && units.Count != 0)
             {
-                comboBoxName.DataSource = units;
-                comboBoxName.DisplayMember = Resources.UnitDisplayMember;
-                comboBoxName.ValueMember = Resources.UnitValueMember;
+                comboBox.DataSource = units;
+                comboBox.DisplayMember = nameof(Unit.Name);
+                comboBox.ValueMember = nameof(Unit.Unit_Id);
             }
             else
             {
-                MessageBox.Show($"{Resources.ErrorUnitUpload}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError(Resources.ErrorUnitUpload, true);
 
                 return;
             }
+
+            comboBox.SelectedIndex = -1;
         }
 
         private void IsTextChanged(object sender, EventArgs e)
         {
-            var allFieldsFilled = !string.IsNullOrWhiteSpace(TextBoxForName.Text) &&
-                                  !string.IsNullOrWhiteSpace(ComboBoxOfUnit.Text);
-
-            ButtonOfAddCategory.Enabled = allFieldsFilled;
+            ButtonOfAddCategory.Enabled = !string.IsNullOrWhiteSpace(TextBoxOfCategoryName.Text) &&
+                                          !string.IsNullOrWhiteSpace(ComboBoxOfUnit.Text);
         }
 
         private void ButtonOfAddCategory_Click(object sender, EventArgs e)
         {
             if (ComboBoxOfUnit.SelectedValue == null)
             {
-                MessageBox.Show(Resources.ChooseUnit, Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowAlert(Resources.ChooseNewUnitToEditCategoryFirst);
 
                 return;
             }
 
-            Guid selectedUnitId = (Guid)ComboBoxOfUnit.SelectedValue;
-
             var newCategory = new Category
             {
-                Name = TextBoxForName.Text.Trim(),
-                Unit_Id = selectedUnitId
+                Name = TextBoxOfCategoryName.Text.Trim(),
+                Unit_Id = (Guid)ComboBoxOfUnit.SelectedValue
             };
 
             if (db.Categories.Any(c => c.Status == CategoryStatus.Active && EF.Functions.ILike(c.Name, newCategory.Name)))
             {
-                MessageBox.Show(Resources.NewCategoryExists, Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning(Resources.NewCategoryAlreadyExists, true);
+
                 return;
             }
 
-
             db.Categories.Add(newCategory);
-            if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+            if (EH.DBSaveChangesUniversalErrorCheck(db))
                 return;
 
-            MessageBox.Show(Resources.SuccessAddCategory, Resources.TitleInformation,
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+            EH.ShowInformation(Resources.NewCategorySuccessfullyAdded);
 
             Hide();
             var productCatalog = new ProductCatalog(userLogin);
@@ -114,6 +99,22 @@ namespace AddCategoryForm
             var productCatalog = new ProductCatalog(userLogin);
             productCatalog.ShowDialog();
             Close();
+        }
+
+        private void TabSelection_Enter(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.LightSteelBlue;
+            }
+        }
+
+        private void TabSelection_Leave(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.Transparent;
+            }
         }
     }
 }

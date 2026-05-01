@@ -1,4 +1,4 @@
-﻿namespace EditProductForms
+﻿namespace EnergeticProjectX.Forms
 {
     partial class EditProduct
     {
@@ -51,6 +51,7 @@
             LabelOfPurchasePrice = new Label();
             LabelOfCurrencySymbolFirst = new Label();
             LabelOfCurrencySymbolSecond = new Label();
+            TextBoxOfCategory = new TextBox();
             SuspendLayout();
             // 
             // ComboBoxOfCategory
@@ -123,6 +124,7 @@
             TextBoxOfName.ReadOnly = true;
             TextBoxOfName.Size = new Size(496, 50);
             TextBoxOfName.TabIndex = 26;
+            TextBoxOfName.TextChanged += IsTextChanged;
             // 
             // LabelOfName
             // 
@@ -154,6 +156,7 @@
             TextBoxOfUnit.Size = new Size(496, 50);
             TextBoxOfUnit.TabIndex = 34;
             TextBoxOfUnit.TabStop = false;
+            TextBoxOfUnit.TextChanged += IsTextChanged;
             // 
             // ButtonOfChange
             // 
@@ -249,6 +252,7 @@
             TextBoxOfDiscountDate.ReadOnly = true;
             TextBoxOfDiscountDate.Size = new Size(496, 50);
             TextBoxOfDiscountDate.TabIndex = 44;
+            TextBoxOfDiscountDate.TextChanged += IsTextChanged;
             // 
             // ButtonOfProductDelete
             // 
@@ -274,6 +278,7 @@
             TextBoxOfPurchasePrice.ReadOnly = true;
             TextBoxOfPurchasePrice.Size = new Size(496, 50);
             TextBoxOfPurchasePrice.TabIndex = 46;
+            TextBoxOfPurchasePrice.TextChanged += IsTextChanged;
             // 
             // LabelOfPurchasePrice
             // 
@@ -303,12 +308,24 @@
             LabelOfCurrencySymbolSecond.Size = new Size(0, 45);
             LabelOfCurrencySymbolSecond.TabIndex = 49;
             // 
+            // TextBoxOfCategory
+            // 
+            TextBoxOfCategory.BackColor = Color.White;
+            TextBoxOfCategory.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            TextBoxOfCategory.Location = new Point(400, 232);
+            TextBoxOfCategory.Name = "TextBoxOfCategory";
+            TextBoxOfCategory.ReadOnly = true;
+            TextBoxOfCategory.Size = new Size(496, 50);
+            TextBoxOfCategory.TabIndex = 50;
+            TextBoxOfCategory.TextChanged += IsTextChanged;
+            // 
             // EditProduct
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
             ClientSize = new Size(932, 1034);
+            Controls.Add(TextBoxOfCategory);
             Controls.Add(LabelOfCurrencySymbolSecond);
             Controls.Add(LabelOfCurrencySymbolFirst);
             Controls.Add(LabelOfPurchasePrice);
@@ -365,5 +382,6 @@
         private Label LabelOfPurchasePrice;
         private Label LabelOfCurrencySymbolFirst;
         private Label LabelOfCurrencySymbolSecond;
+        private TextBox TextBoxOfCategory;
     }
 }

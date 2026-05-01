@@ -1,24 +1,25 @@
-﻿using AdministratorPanelForm;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Models;
 using EnergeticProjectX.Classes;
 
-namespace ListOfUsersForm
+namespace EnergeticProjectX.Forms
 {
     /// <summary>
-    /// Класс для просмотра списка пользователей системы
+    /// Форма для просмотра списка пользователей системы.
     /// </summary>
     public partial class ListOfUsers : Form
     {
         private readonly ApplicationContextDB contextOfUser = new();
+
         private readonly BindingSource bindingSource = [];
 
         private readonly string userLogin;
 
         /// <summary>
-        /// Конструктор для просмотра таблицы пользователей системыv
+        /// Конструктор для реализации формы просмотра таблицы пользователей системы.
         /// </summary>
-        /// <param name="userLogin">Логин авторизованного пользователя</param>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
         public ListOfUsers(string userLogin)
         {
             InitializeComponent();
@@ -27,11 +28,7 @@ namespace ListOfUsersForm
 
             LoadUsers();
         }
-
-        /// <summary>
-        /// Загрузка данных пользователей в таблицу
-        /// </summary>
-        public void LoadUsers()
+        private void LoadUsers()
         {
             try
             {
@@ -45,18 +42,42 @@ namespace ListOfUsersForm
                     })
                     .ToList();
 
-                DataGridOfUsers.DataSource = bindingSource;
+                DGVOfUsers.DataSource = bindingSource;
                 bindingSource.ResetBindings(false);
 
-                MessageBox.Show($"{Resources.HowMuchUsersUploaded} {contextOfUser.Users.Count()}", Resources.TitleInformation,
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                EH.ShowInformation($"{Resources.HowMuchUsersUploaded} {contextOfUser.Users.Count()}");
             }
             catch (Exception)
             {
-                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError(Resources.ErrorUploadData, true);
 
                 return;
+            }
+        }
+
+        private void DGVOfUsers_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                var cell = DGVOfUsers.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                var cellValue = cell.Value?.ToString() ?? string.Empty;
+                var columnName = DGVOfUsers.Columns[e.ColumnIndex].HeaderText;
+
+                var toolTipText = $"{columnName}: {cellValue}";
+                cell.ToolTipText = toolTipText;
+            }
+        }
+
+        private void DGVOfUsers_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < DGVOfUsers.Rows.Count)
+            {
+                DGVOfUsers.ClearSelection();
+
+                DGVOfUsers.Rows[e.RowIndex].Selected = true;
+
+                DGVOfUsers.CurrentCell = DGVOfUsers.Rows[e.RowIndex].Cells[e.ColumnIndex];
             }
         }
 
@@ -66,6 +87,22 @@ namespace ListOfUsersForm
             var administratorPanel = new AdministratorPanel(userLogin);
             administratorPanel.ShowDialog();
             Close();
+        }
+
+        private void TabSelection_Enter(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.LightSteelBlue;
+            }
+        }
+
+        private void TabSelection_Leave(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.Transparent;
+            }
         }
     }
 }

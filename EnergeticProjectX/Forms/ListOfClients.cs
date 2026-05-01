@@ -1,15 +1,14 @@
-﻿using AdministratorPanelForm;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
 using System.Data;
-using AddClientForm;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Models;
-using EditClientForm;
 using EnergeticProjectX.Classes;
+using EnergeticProjectX.Objects;
 
-namespace ListOfClientsForm
+namespace EnergeticProjectX.Forms
 {
     /// <summary>
-    /// Класс для работы с таблицей клиентов
+    /// Форма для работы с таблицей клиентов.
     /// </summary>
     public partial class ListOfClients : Form
     {
@@ -19,9 +18,9 @@ namespace ListOfClientsForm
         private readonly string userLogin;
 
         /// <summary>
-        /// Конструктор для работы с таблицей клиентов
+        /// Конструктор для реализации работы формы с таблицей клиентов.
         /// </summary>
-        /// <param name="userLogin">Логин авторизованного пользователя</param>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
         public ListOfClients(string userLogin)
         {
             InitializeComponent();
@@ -29,8 +28,6 @@ namespace ListOfClientsForm
             this.userLogin = userLogin;
 
             LoadUsers();
-
-            DataGridOfClients.SelectionChanged += DataGridOfClients_SelectionChanged!;
         }
 
         private void LoadUsers()
@@ -47,18 +44,88 @@ namespace ListOfClientsForm
                     })
                     .ToList();
 
-                DataGridOfClients.DataSource = bindingSource;
+                DGVOfClients.DataSource = bindingSource;
                 bindingSource.ResetBindings(false);
 
-                MessageBox.Show($"{Resources.HowMuchClientsUploaded}: {db.Clients.Count()}", Resources.TitleInformation,
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                EH.ShowInformation($"{Resources.HowMuchClientsUploaded} {db.Clients.Count()}");
             }
             catch (Exception)
             {
-                MessageBox.Show($"{Resources.ErrorUploadData}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError(Resources.ErrorUploadData, true);
 
                 return;
+            }
+        }
+
+        private void DGVOfClients_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                var cell = DGVOfClients.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                var cellValue = cell.Value?.ToString() ?? string.Empty;
+                var columnName = DGVOfClients.Columns[e.ColumnIndex].HeaderText;
+
+                var toolTipText = $"{columnName}: {cellValue}";
+                cell.ToolTipText = toolTipText;
+            }
+        }
+
+        private void DGVOfClients_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < DGVOfClients.Rows.Count)
+            {
+                DGVOfClients.ClearSelection();
+
+                DGVOfClients.Rows[e.RowIndex].Selected = true;
+
+                DGVOfClients.CurrentCell = DGVOfClients.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            }
+        }
+
+        private void DGVOfClients_SelectionChanged(object sender, EventArgs e)
+        {
+            var isFullRowSelected = false;
+
+            if (DGVOfClients.SelectedRows.Count > 0)
+            {
+                var selectedRow = DGVOfClients.SelectedRows[0];
+
+                var allCellsSelected = true;
+                foreach (DataGridViewCell cell in selectedRow.Cells)
+                {
+                    if (!cell.Selected)
+                    {
+                        allCellsSelected = false;
+                        break;
+                    }
+                }
+                isFullRowSelected = allCellsSelected;
+            }
+
+            ButtonOfClient.Enabled = isFullRowSelected;
+        }
+
+        private void ButtonOfClient_Click(object sender, EventArgs e)
+        {
+            if (DGVOfClients.CurrentRow != null)
+            {
+                var selectedRow = DGVOfClients.CurrentRow;
+
+                var Name = selectedRow.Cells[nameof(Client.Name)].Value!.ToString()!;
+                var Contractor = selectedRow.Cells[nameof(Client.Contractor)].Value!.ToString()!;
+                var Inn = selectedRow.Cells[nameof(Client.INN)].Value!.ToString()!;
+                var ClientId = db.Clients.FirstOrDefault(u => u.INN == Inn)!.Client_Id;
+                var ContactInfo = selectedRow.Cells[nameof(Client.ContactInfo)].Value!.ToString()!;
+
+                Hide();
+                var editClient = new EditClient(userLogin, ClientId, Name, Contractor, Inn, ContactInfo);
+                editClient.ShowDialog();
+                Close();
+            }
+            else
+            {
+                EH.ShowAlert(Resources.ChooseClientToEditFirst);
             }
         }
 
@@ -78,75 +145,19 @@ namespace ListOfClientsForm
             Close();
         }
 
-        private void DataGridOfClients_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        private void TabSelection_Enter(object sender, EventArgs e)
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            if (sender is Button button)
             {
-                var cell = DataGridOfClients.Rows[e.RowIndex].Cells[e.ColumnIndex];
-
-                var cellValue = cell.Value?.ToString() ?? Resources.Empty;
-                var columnName = DataGridOfClients.Columns[e.ColumnIndex].HeaderText;
-
-                var toolTipText = $"{columnName}: {cellValue}";
-                cell.ToolTipText = toolTipText;
+                button.BackColor = Color.LightSteelBlue;
             }
         }
 
-        private void DataGridOfClients_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void TabSelection_Leave(object sender, EventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < DataGridOfClients.Rows.Count)
+            if (sender is Button button)
             {
-                DataGridOfClients.ClearSelection();
-
-                DataGridOfClients.Rows[e.RowIndex].Selected = true;
-
-                DataGridOfClients.CurrentCell = DataGridOfClients.Rows[e.RowIndex].Cells[e.ColumnIndex];
-            }
-        }
-
-        private void DataGridOfClients_SelectionChanged(object sender, EventArgs e)
-        {
-            var isFullRowSelected = false;
-
-            if (DataGridOfClients.SelectedRows.Count > 0)
-            {
-                var selectedRow = DataGridOfClients.SelectedRows[0];
-
-                var allCellsSelected = true;
-                foreach (DataGridViewCell cell in selectedRow.Cells)
-                {
-                    if (!cell.Selected)
-                    {
-                        allCellsSelected = false;
-                        break;
-                    }
-                }
-                isFullRowSelected = allCellsSelected;
-            }
-
-            ButtonOfClient.Enabled = isFullRowSelected;
-        }
-
-        private void ButtonOfClient_Click(object sender, EventArgs e)
-        {
-            if (DataGridOfClients.CurrentRow != null)
-            {
-                DataGridViewRow selectedRow = DataGridOfClients.CurrentRow;
-
-                var Name = selectedRow.Cells[Resources.ClientRowName].Value!.ToString()!;
-                var Contractor = selectedRow.Cells[Resources.ClientRowContractor].Value!.ToString()!;
-                var Inn = selectedRow.Cells[Resources.ClientINN].Value!.ToString()!;
-                var ClientId = db.Clients.FirstOrDefault(u => u.INN == Inn)!.Client_Id;
-                var ContactInfo = selectedRow.Cells[Resources.ClientContactInfo].Value!.ToString()!;
-
-                Hide();
-                var editClient = new EditClient(userLogin, ClientId, Name, Contractor, Inn, ContactInfo);
-                editClient.ShowDialog();
-                Close();
-            }
-            else
-            {
-                MessageBox.Show(Resources.ChooseClientForEdit);
+                button.BackColor = Color.Transparent;
             }
         }
     }

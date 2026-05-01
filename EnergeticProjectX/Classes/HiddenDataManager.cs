@@ -13,13 +13,13 @@ namespace EnergeticProjectX.Classes
         /// <returns>Информация для подключения.</returns>
         public static string GetConnectionString()
         {
-            string filePath = Path.Combine(AppContext.BaseDirectory, "secrets.json");
+            var filePath = Path.Combine(AppContext.BaseDirectory, "secrets.json");
 
-            string json = File.ReadAllText(filePath);
+            var json = File.ReadAllText(filePath);
 
             var options = JsonSerializer.Deserialize<OptionsDB>(json);
 
-            return $"Host={options!.Host};Port={options.Port};Database={options.Database};Username={options.Username};Password={options.Password};Include Error Detail=true";
+            return $"Host={options!.Host};Port={options.Port};Database={options.Database};Username={options.Username};Password={options.Password};SSL Mode={options.SSLMode}";
         }
     }
 }

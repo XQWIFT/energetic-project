@@ -1,4 +1,4 @@
-﻿namespace ProductCatalogForm
+﻿namespace EnergeticProjectX.Forms
 {
     partial class ProductCatalog
     {
@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             ButtonOfAddCategory = new Button();
             ButtonOfAddProduct = new Button();
             ButtonOfMainMenu = new Button();
@@ -60,10 +60,12 @@
             ButtonOfAddCategory.Location = new Point(89, 718);
             ButtonOfAddCategory.Name = "ButtonOfAddCategory";
             ButtonOfAddCategory.Size = new Size(384, 69);
-            ButtonOfAddCategory.TabIndex = 6;
+            ButtonOfAddCategory.TabIndex = 5;
             ButtonOfAddCategory.Text = "Добавить категорию";
             ButtonOfAddCategory.UseVisualStyleBackColor = true;
             ButtonOfAddCategory.Click += ButtonOfAddCategory_Click;
+            ButtonOfAddCategory.Enter += TabSelection_Enter;
+            ButtonOfAddCategory.Leave += TabSelection_Leave;
             // 
             // ButtonOfAddProduct
             // 
@@ -92,10 +94,12 @@
             ButtonOfMainMenu.Location = new Point(16, 636);
             ButtonOfMainMenu.Name = "ButtonOfMainMenu";
             ButtonOfMainMenu.Size = new Size(286, 66);
-            ButtonOfMainMenu.TabIndex = 4;
+            ButtonOfMainMenu.TabIndex = 2;
             ButtonOfMainMenu.Text = "Главное меню";
             ButtonOfMainMenu.UseVisualStyleBackColor = true;
             ButtonOfMainMenu.Click += ButtonOfMainMenu_Click;
+            ButtonOfMainMenu.Enter += TabSelection_Enter;
+            ButtonOfMainMenu.Leave += TabSelection_Leave;
             // 
             // ButtonOfProductCard
             // 
@@ -109,10 +113,12 @@
             ButtonOfProductCard.Location = new Point(683, 636);
             ButtonOfProductCard.Name = "ButtonOfProductCard";
             ButtonOfProductCard.Size = new Size(297, 66);
-            ButtonOfProductCard.TabIndex = 7;
+            ButtonOfProductCard.TabIndex = 4;
             ButtonOfProductCard.Text = "Карточка товара";
             ButtonOfProductCard.UseVisualStyleBackColor = true;
             ButtonOfProductCard.Click += ButtonOfProductCard_Click;
+            ButtonOfProductCard.Enter += TabSelection_Enter;
+            ButtonOfProductCard.Leave += TabSelection_Leave;
             // 
             // DataGridOfProducts
             // 
@@ -124,14 +130,14 @@
             DataGridOfProducts.BackgroundColor = SystemColors.ControlLight;
             DataGridOfProducts.BorderStyle = BorderStyle.Fixed3D;
             DataGridOfProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            DataGridOfProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            DataGridOfProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             DataGridOfProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DataGridOfProducts.EnableHeadersVisualStyles = false;
             DataGridOfProducts.GridColor = SystemColors.WindowText;
@@ -140,18 +146,23 @@
             DataGridOfProducts.Name = "DataGridOfProducts";
             DataGridOfProducts.ReadOnly = true;
             DataGridOfProducts.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            DataGridOfProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DataGridOfProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             DataGridOfProducts.RowHeadersVisible = false;
             DataGridOfProducts.RowHeadersWidth = 62;
             DataGridOfProducts.Size = new Size(964, 540);
-            DataGridOfProducts.TabIndex = 8;
+            DataGridOfProducts.TabIndex = 0;
+            DataGridOfProducts.CellFormatting += DGVProducts_CellFormatting;
+            DataGridOfProducts.CellMouseClick += DGVProducts_CellMouseClick;
+            DataGridOfProducts.CellMouseDoubleClick += DGVProducts_CellMouseClick;
+            DataGridOfProducts.CellMouseEnter += DGVProducts_CellMouseEnter;
+            DataGridOfProducts.SelectionChanged += DGVProducts_SelectionChanged;
             // 
             // ButtonOfMakingShipment
             // 
@@ -164,10 +175,12 @@
             ButtonOfMakingShipment.Location = new Point(308, 636);
             ButtonOfMakingShipment.Name = "ButtonOfMakingShipment";
             ButtonOfMakingShipment.Size = new Size(369, 66);
-            ButtonOfMakingShipment.TabIndex = 9;
+            ButtonOfMakingShipment.TabIndex = 3;
             ButtonOfMakingShipment.Text = "Оформление отгрузки";
             ButtonOfMakingShipment.UseVisualStyleBackColor = true;
             ButtonOfMakingShipment.Click += ButtonOfMakingShipment_Click;
+            ButtonOfMakingShipment.Enter += TabSelection_Enter;
+            ButtonOfMakingShipment.Leave += TabSelection_Leave;
             // 
             // PanelSearch
             // 
@@ -224,10 +237,12 @@
             ButtonOfChangeCaterogies.Location = new Point(479, 718);
             ButtonOfChangeCaterogies.Name = "ButtonOfChangeCaterogies";
             ButtonOfChangeCaterogies.Size = new Size(422, 69);
-            ButtonOfChangeCaterogies.TabIndex = 10;
+            ButtonOfChangeCaterogies.TabIndex = 6;
             ButtonOfChangeCaterogies.Text = "Редактировать категории";
             ButtonOfChangeCaterogies.UseVisualStyleBackColor = true;
             ButtonOfChangeCaterogies.Click += ButtonOfChangeCaterogies_Click;
+            ButtonOfChangeCaterogies.Enter += TabSelection_Enter;
+            ButtonOfChangeCaterogies.Leave += TabSelection_Leave;
             // 
             // LabelOfCriticalStockQuantity
             // 
@@ -236,7 +251,7 @@
             LabelOfCriticalStockQuantity.Location = new Point(40, 807);
             LabelOfCriticalStockQuantity.Name = "LabelOfCriticalStockQuantity";
             LabelOfCriticalStockQuantity.Size = new Size(294, 56);
-            LabelOfCriticalStockQuantity.TabIndex = 12;
+            LabelOfCriticalStockQuantity.TabIndex = 0;
             LabelOfCriticalStockQuantity.Text = "Критический остаток";
             LabelOfCriticalStockQuantity.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -247,7 +262,7 @@
             LabelOfHavingDiscount.Location = new Point(640, 807);
             LabelOfHavingDiscount.Name = "LabelOfHavingDiscount";
             LabelOfHavingDiscount.Size = new Size(313, 56);
-            LabelOfHavingDiscount.TabIndex = 13;
+            LabelOfHavingDiscount.TabIndex = 0;
             LabelOfHavingDiscount.Text = "Скоро снижение цены";
             LabelOfHavingDiscount.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -258,7 +273,7 @@
             LabelOfHavingDiscountSoon.Location = new Point(340, 807);
             LabelOfHavingDiscountSoon.Name = "LabelOfHavingDiscountSoon";
             LabelOfHavingDiscountSoon.Size = new Size(294, 56);
-            LabelOfHavingDiscountSoon.TabIndex = 14;
+            LabelOfHavingDiscountSoon.TabIndex = 0;
             LabelOfHavingDiscountSoon.Text = "Цена уже снижена";
             LabelOfHavingDiscountSoon.TextAlign = ContentAlignment.MiddleCenter;
             // 

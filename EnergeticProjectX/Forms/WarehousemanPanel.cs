@@ -1,14 +1,11 @@
-﻿using UserChangePasswordForm;
-using EnergeticProjectX;
-using ProductCatalogForm;
-using MakingShipmentForm;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Properties;
 
-namespace WarehousemanPanelForm
+namespace EnergeticProjectX.Forms
 {
     /// <summary>
-    /// Класс для реализации главного меню кладовщика
+    /// Форма для реализации главного меню кладовщика.
     /// </summary>
     public partial class WarehousemanPanel : Form
     {
@@ -17,18 +14,30 @@ namespace WarehousemanPanelForm
         private readonly string userLogin;
 
         /// <summary>
-        /// Конструктор для главного меню кладовщика
+        /// Конструктор для реализации формы главного меню кладовщика.
         /// </summary>
-        /// <param name="userLogin">Логин авторизованного пользователя</param>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
         public WarehousemanPanel(string userLogin)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
 
-            var dataOfUser = db.Users.FirstOrDefault(u => u.Login == userLogin);
+            LoadUserData();
+        }
 
-            labelOfFullName.Text = $"{Resources.FullName}: {dataOfUser!.Surname} {dataOfUser.Name} {dataOfUser.Patronymic}";
+        private void LoadUserData()
+        {
+            var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
+
+            if (user == null)
+            {
+                EH.ShowError(Resources.UserNotFound, true);
+
+                return;
+            }
+
+            LabelOfFullName.Text = $"{Resources.FullName}: {user.Surname} {user.Name} {user.Patronymic}";
         }
 
         private void ButtonOfChangePassword_Click(object sender, EventArgs e)
@@ -66,9 +75,33 @@ namespace WarehousemanPanelForm
         private void ButtonOfSettings_Click(object sender, EventArgs e)
         {
             Hide();
-            var userSettings = new EnergeticProjectX.Forms.Settings(userLogin);
+            var userSettings = new Settings(userLogin);
             userSettings.ShowDialog();
             Close();
+        }
+
+        private void ButtonOfSupply_Click(object sender, EventArgs e)
+        {
+            Hide();
+            var makingSupply = new MakingSupply(userLogin);
+            makingSupply.ShowDialog();
+            Close();
+        }
+
+        private void TabSelection_Enter(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.LightSteelBlue;
+            }
+        }
+
+        private void TabSelection_Leave(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.Transparent;
+            }
         }
     }
 }

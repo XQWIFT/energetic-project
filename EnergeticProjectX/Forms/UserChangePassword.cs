@@ -1,75 +1,72 @@
-﻿using AdministratorPanelForm;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Enums;
-using WarehousemanPanelForm;
 
-namespace UserChangePasswordForm
+namespace EnergeticProjectX.Forms
 {
     /// <summary>
-    /// Форма по изменению пароля пользователя
+    /// Форма для изменения пароля пользователя.
     /// </summary>
     public partial class UserChangePassword : Form
     {
         private readonly ApplicationContextDB db = new();
 
-        private readonly BCryptRealization bc = new();
-
         private readonly string userLogin;
 
         /// <summary>
-        /// Конструктор изменения пароля
+        /// Конструктор для реализации формы изменения пароля.
         /// </summary>
+        /// <param name="userLogin">Логин авторизованного пользователя.</param>
         public UserChangePassword(string userLogin)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
+        }
 
-            textBoxForOldPassword.TextChanged += IsTextChanged!;
-            textBoxForNewPassword.TextChanged += IsTextChanged!;
-            textBoxOfConfirmation.TextChanged += IsTextChanged!;
+        private void IsTextChanged(object sender, EventArgs e)
+        {
+            ButtonOfSaveInfo.Enabled = !string.IsNullOrWhiteSpace(TextBoxForOldPassword.Text) &&
+                                       !string.IsNullOrWhiteSpace(TextBoxForNewPassword.Text) &&
+                                       !string.IsNullOrEmpty(TextBoxOfConfirmation.Text);
         }
 
         private void ButtonOfSaveInfo_Click(object sender, EventArgs e)
         {
-            var oldPassword = textBoxForOldPassword.Text.Trim();
-            var newPassword = textBoxForNewPassword.Text.Trim();
-            var confirmationPassword = textBoxOfConfirmation.Text.Trim();
+            var oldPassword = TextBoxForOldPassword.Text.Trim();
+            var newPassword = TextBoxForNewPassword.Text.Trim();
+            var confirmationPassword = TextBoxOfConfirmation.Text.Trim();
 
             ChangePassword(oldPassword, newPassword, confirmationPassword);
         }
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            ReturnToTheMainMenu(userLogin);
-        }
-
-        private void IsTextChanged(object sender, EventArgs e)
-        {
-            var allFieldsFilled = !string.IsNullOrWhiteSpace(textBoxForOldPassword.Text) &&
-                                  !string.IsNullOrWhiteSpace(textBoxForNewPassword.Text) &&
-                                  !string.IsNullOrEmpty(textBoxOfConfirmation.Text);
-
-            ButtonOfSaveInfo.Enabled = allFieldsFilled;
+            OpenMainMenu(userLogin);
         }
 
         private void ChangePassword(string oldPassword, string newPassword, string confirmationPassword)
         {
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
 
-            (var loginAndPasswordValid, var messageOfError) = IsAllPasswordsValid(oldPassword,
-                                                            newPassword, confirmationPassword, db, userLogin);
+            if (user == null)
+            {
+                EH.ShowError(Resources.UserNotFound, true);
+
+                return;
+            }
+
+            (var loginAndPasswordValid, var messageOfError) = IsAllPasswordsValid(oldPassword, newPassword, confirmationPassword, db, userLogin);
 
             if (loginAndPasswordValid)
             {
-                user!.Password = BCryptRealization.PasswordHash(newPassword);
+                user.Password = BCryptRealization.PasswordHash(newPassword);
 
-                if (ErrorHandler.DBSaveChangesUniversalErrorCheck(db))
+                if (EH.DBSaveChangesUniversalErrorCheck(db))
                     return;
 
-                MessageBox.Show(Resources.ChangePasswordEvent, Resources.TitleAlert,
-                                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                EH.ShowInformation(Resources.ChangePasswordEvent);
 
                 if (user.UserRole == UserRole.Administrator)
                 {
@@ -88,46 +85,42 @@ namespace UserChangePasswordForm
             }
             else if (messageOfError == Resources.UserNotFound)
             {
-                MessageBox.Show($"{Resources.UserNotFound}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError(Resources.UserNotFound, true);
+
                 return;
             }
             else if (messageOfError == Resources.IncorrectOldPassword)
             {
-                MessageBox.Show(Resources.IncorrectOldPassword, Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning(Resources.IncorrectOldPassword, true);
 
-                textBoxForOldPassword.Clear();
-                textBoxForNewPassword.Clear();
-                textBoxOfConfirmation.Clear();
-                textBoxForOldPassword.Focus();
+                TextBoxForOldPassword.Clear();
+                TextBoxForNewPassword.Clear();
+                TextBoxOfConfirmation.Clear();
+                TextBoxForOldPassword.Focus();
             }
             else if (messageOfError == Resources.UnmatchedNewPasswords)
             {
-                MessageBox.Show($"{Resources.UnmatchedNewPasswords}\n{Resources.TryAgain}", Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning(Resources.UnmatchedNewPasswords, true);
 
-                textBoxForNewPassword.Clear();
-                textBoxOfConfirmation.Clear();
-                textBoxForNewPassword.Focus();
+                TextBoxForNewPassword.Clear();
+                TextBoxOfConfirmation.Clear();
+                TextBoxForNewPassword.Focus();
             }
             else if (messageOfError == Resources.TooSimpleNewPassword)
             {
-                MessageBox.Show($"{Resources.TooSimpleNewPassword}\n{Resources.TryAgain}", Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning(Resources.TooSimpleNewPassword, true);
 
-                textBoxForNewPassword.Clear();
-                textBoxOfConfirmation.Clear();
-                textBoxForNewPassword.Focus();
+                TextBoxForNewPassword.Clear();
+                TextBoxOfConfirmation.Clear();
+                TextBoxForNewPassword.Focus();
             }
             else if (messageOfError == Resources.OldAndNewPasswordsTheSame)
             {
-                MessageBox.Show(Resources.OldAndNewPasswordsTheSame, Resources.TitleWarning,
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                EH.ShowWarning(Resources.OldAndNewPasswordsTheSame);
 
-                textBoxForNewPassword.Clear();
-                textBoxOfConfirmation.Clear();
-                textBoxForNewPassword.Focus();
+                TextBoxForNewPassword.Clear();
+                TextBoxOfConfirmation.Clear();
+                TextBoxForNewPassword.Focus();
             }
         }
 
@@ -135,11 +128,11 @@ namespace UserChangePasswordForm
         /// Проверка на авторизованного пользователя, на корректность ввода старого пароля, нового и повторного
         /// пароля, на совпадение старого и нового паролей.
         /// </summary>
-        /// <param name="oldPassword">Старый пароль</param>
-        /// <param name="newPassword">Новый пароль</param>
-        /// <param name="confirmationPassword">Повтор нового пароля</param>
-        /// <returns></returns>
-        public (bool success, string? errorMessage) IsAllPasswordsValid(string oldPassword, string newPassword,
+        /// <param name="oldPassword">Старый пароль.</param>
+        /// <param name="newPassword">Новый пароль.</param>
+        /// <param name="confirmationPassword">Повтор нового пароля.</param>
+        /// <returns>Подтверждение валидации и сообщение об ошибке при наличии.</returns>
+        public static (bool success, string? errorMessage) IsAllPasswordsValid(string oldPassword, string newPassword,
                                                 string confirmationPassword, ApplicationContextDB db, string userLogin)
         {
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
@@ -166,8 +159,8 @@ namespace UserChangePasswordForm
         /// Проверка пароля на соответствие требованиям безопасности: минимум 8 символов, хотя бы одна цифра
         /// и одна заглавная латинская буква.
         /// </summary>
-        /// <param name="newPassword">Новый пароль</param>
-        /// <returns>Подтверждение соответствия требованиям</returns>
+        /// <param name="newPassword">Новый пароль.</param>
+        /// <returns>Подтверждение соответствия требованиям.</returns>
         public static bool IsNewPasswordSatisfyRequirements(string newPassword)
         {
             if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 8)
@@ -190,14 +183,13 @@ namespace UserChangePasswordForm
             return hasDigit && hasCapitalLetter && hasAtLeastEightSymbols;
         }
 
-        private void ReturnToTheMainMenu(string userLogin)
+        private void OpenMainMenu(string userLogin)
         {
             var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
 
             if (user == null)
             {
-                MessageBox.Show($"{Resources.UserNotFound}\n{Resources.TryAgain}", Resources.TitleError,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EH.ShowError(Resources.UserNotFound, true);
 
                 return;
             }
@@ -215,6 +207,22 @@ namespace UserChangePasswordForm
                 var administratorPanel = new AdministratorPanel(userLogin);
                 administratorPanel.ShowDialog();
                 Close();
+            }
+        }
+
+        private void TabSelection_Enter(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.LightSteelBlue;
+            }
+        }
+
+        private void TabSelection_Leave(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.BackColor = Color.Transparent;
             }
         }
     }

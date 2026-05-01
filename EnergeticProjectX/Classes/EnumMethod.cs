@@ -19,7 +19,7 @@ namespace EnergeticProjectX.Classes
 
             var attribute = field?.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>();
 
-            string result = attribute?.Description ?? value.ToString();
+            var result = attribute?.Description ?? value.ToString();
 
             return result;
         }

@@ -1,4 +1,4 @@
-﻿namespace ListOfUsersForm
+﻿namespace EnergeticProjectX.Forms
 {
     partial class ListOfUsers
     {
@@ -28,50 +28,53 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridOfUsers = new DataGridView();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DGVOfUsers = new DataGridView();
             ReturnToAdministratorPanel = new Button();
-            ((System.ComponentModel.ISupportInitialize)DataGridOfUsers).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DGVOfUsers).BeginInit();
             SuspendLayout();
             // 
-            // DataGridOfUsers
+            // DGVOfUsers
             // 
-            DataGridOfUsers.AllowUserToAddRows = false;
-            DataGridOfUsers.AllowUserToDeleteRows = false;
-            DataGridOfUsers.AllowUserToResizeColumns = false;
-            DataGridOfUsers.AllowUserToResizeRows = false;
-            DataGridOfUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            DataGridOfUsers.BackgroundColor = SystemColors.ControlLight;
-            DataGridOfUsers.BorderStyle = BorderStyle.Fixed3D;
-            DataGridOfUsers.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            DataGridOfUsers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            DataGridOfUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DataGridOfUsers.GridColor = SystemColors.WindowText;
-            DataGridOfUsers.Location = new Point(39, 34);
-            DataGridOfUsers.MultiSelect = false;
-            DataGridOfUsers.Name = "DataGridOfUsers";
-            DataGridOfUsers.ReadOnly = true;
-            DataGridOfUsers.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            DataGridOfUsers.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
-            DataGridOfUsers.RowHeadersVisible = false;
-            DataGridOfUsers.RowHeadersWidth = 62;
-            DataGridOfUsers.Size = new Size(864, 611);
-            DataGridOfUsers.TabIndex = 0;
+            DGVOfUsers.AllowUserToAddRows = false;
+            DGVOfUsers.AllowUserToDeleteRows = false;
+            DGVOfUsers.AllowUserToResizeColumns = false;
+            DGVOfUsers.AllowUserToResizeRows = false;
+            DGVOfUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            DGVOfUsers.BackgroundColor = SystemColors.ControlLight;
+            DGVOfUsers.BorderStyle = BorderStyle.Fixed3D;
+            DGVOfUsers.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            DGVOfUsers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            DGVOfUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DGVOfUsers.GridColor = SystemColors.WindowText;
+            DGVOfUsers.Location = new Point(12, 12);
+            DGVOfUsers.MultiSelect = false;
+            DGVOfUsers.Name = "DGVOfUsers";
+            DGVOfUsers.ReadOnly = true;
+            DGVOfUsers.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DGVOfUsers.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            DGVOfUsers.RowHeadersVisible = false;
+            DGVOfUsers.RowHeadersWidth = 62;
+            DGVOfUsers.Size = new Size(922, 645);
+            DGVOfUsers.TabIndex = 0;
+            DGVOfUsers.CellMouseClick += DGVOfUsers_CellMouseClick;
+            DGVOfUsers.CellMouseDoubleClick += DGVOfUsers_CellMouseClick;
+            DGVOfUsers.CellMouseEnter += DGVOfUsers_CellMouseEnter;
             // 
             // ReturnToAdministratorPanel
             // 
@@ -81,13 +84,15 @@
             ReturnToAdministratorPanel.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ReturnToAdministratorPanel.FlatStyle = FlatStyle.Flat;
             ReturnToAdministratorPanel.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ReturnToAdministratorPanel.Location = new Point(256, 663);
+            ReturnToAdministratorPanel.Location = new Point(242, 672);
             ReturnToAdministratorPanel.Name = "ReturnToAdministratorPanel";
             ReturnToAdministratorPanel.Size = new Size(372, 78);
-            ReturnToAdministratorPanel.TabIndex = 3;
+            ReturnToAdministratorPanel.TabIndex = 1;
             ReturnToAdministratorPanel.Text = "Главное меню";
             ReturnToAdministratorPanel.UseVisualStyleBackColor = true;
             ReturnToAdministratorPanel.Click += ReturnToAdministratorPanel_Click;
+            ReturnToAdministratorPanel.Enter += TabSelection_Enter;
+            ReturnToAdministratorPanel.Leave += TabSelection_Leave;
             // 
             // ListOfUsers
             // 
@@ -96,19 +101,19 @@
             BackColor = Color.Lavender;
             ClientSize = new Size(946, 762);
             Controls.Add(ReturnToAdministratorPanel);
-            Controls.Add(DataGridOfUsers);
+            Controls.Add(DGVOfUsers);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "ListOfUsers";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Просмотр пользователей системы";
-            ((System.ComponentModel.ISupportInitialize)DataGridOfUsers).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DGVOfUsers).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private DataGridView DataGridOfUsers;
+        private DataGridView DGVOfUsers;
         private Button ReturnToAdministratorPanel;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WarehousemanPanelForm
+﻿namespace EnergeticProjectX.Forms
 {
     partial class WarehousemanPanel
     {
@@ -31,17 +31,17 @@
             ButtonOfLogOut = new Button();
             ShipmentsAndCustomers = new Label();
             ButtonOfProductCatalog = new Button();
-            labelOfProducts = new Label();
+            LabelOfProducts = new Label();
             LabelOfRole = new Label();
             LabelOfLoginAs = new Label();
             LabelOfCompanyName = new Label();
             ButtonOfChangePassword = new Button();
             ButtonOfMakingShipment = new Button();
-            labelOfAccount = new Label();
-            label1 = new Label();
+            LabelOfAccount = new Label();
+            LabelOfSupplies = new Label();
             ButtonOfSupply = new Button();
             ButtonOfSettings = new Button();
-            labelOfFullName = new Label();
+            LabelOfFullName = new Label();
             SuspendLayout();
             // 
             // ButtonOfLogOut
@@ -55,10 +55,12 @@
             ButtonOfLogOut.Location = new Point(150, 518);
             ButtonOfLogOut.Name = "ButtonOfLogOut";
             ButtonOfLogOut.Size = new Size(470, 59);
-            ButtonOfLogOut.TabIndex = 25;
+            ButtonOfLogOut.TabIndex = 4;
             ButtonOfLogOut.Text = "Выйти из аккаунта";
             ButtonOfLogOut.UseVisualStyleBackColor = true;
             ButtonOfLogOut.Click += ButtonOfLogOut_Click;
+            ButtonOfLogOut.Enter += TabSelection_Enter;
+            ButtonOfLogOut.Leave += TabSelection_Leave;
             // 
             // ShipmentsAndCustomers
             // 
@@ -67,7 +69,7 @@
             ShipmentsAndCustomers.Location = new Point(310, 291);
             ShipmentsAndCustomers.Name = "ShipmentsAndCustomers";
             ShipmentsAndCustomers.Size = new Size(162, 45);
-            ShipmentsAndCustomers.TabIndex = 22;
+            ShipmentsAndCustomers.TabIndex = 0;
             ShipmentsAndCustomers.Text = "Отгрузки";
             // 
             // ButtonOfProductCatalog
@@ -81,20 +83,22 @@
             ButtonOfProductCatalog.Location = new Point(150, 231);
             ButtonOfProductCatalog.Name = "ButtonOfProductCatalog";
             ButtonOfProductCatalog.Size = new Size(470, 57);
-            ButtonOfProductCatalog.TabIndex = 20;
+            ButtonOfProductCatalog.TabIndex = 1;
             ButtonOfProductCatalog.Text = "Каталог товаров";
             ButtonOfProductCatalog.UseVisualStyleBackColor = true;
             ButtonOfProductCatalog.Click += ButtonOfProductCatalog_Click;
+            ButtonOfProductCatalog.Enter += TabSelection_Enter;
+            ButtonOfProductCatalog.Leave += TabSelection_Leave;
             // 
-            // labelOfProducts
+            // LabelOfProducts
             // 
-            labelOfProducts.AutoSize = true;
-            labelOfProducts.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelOfProducts.Location = new Point(256, 183);
-            labelOfProducts.Name = "labelOfProducts";
-            labelOfProducts.Size = new Size(266, 45);
-            labelOfProducts.TabIndex = 19;
-            labelOfProducts.Text = "Товары и склад";
+            LabelOfProducts.AutoSize = true;
+            LabelOfProducts.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfProducts.Location = new Point(256, 183);
+            LabelOfProducts.Name = "LabelOfProducts";
+            LabelOfProducts.Size = new Size(266, 45);
+            LabelOfProducts.TabIndex = 0;
+            LabelOfProducts.Text = "Товары и склад";
             // 
             // LabelOfRole
             // 
@@ -103,7 +107,7 @@
             LabelOfRole.Location = new Point(310, 68);
             LabelOfRole.Name = "LabelOfRole";
             LabelOfRole.Size = new Size(204, 45);
-            LabelOfRole.TabIndex = 15;
+            LabelOfRole.TabIndex = 0;
             LabelOfRole.Text = "Кладовщик";
             // 
             // LabelOfLoginAs
@@ -113,7 +117,7 @@
             LabelOfLoginAs.Location = new Point(58, 68);
             LabelOfLoginAs.Name = "LabelOfLoginAs";
             LabelOfLoginAs.Size = new Size(254, 45);
-            LabelOfLoginAs.TabIndex = 14;
+            LabelOfLoginAs.TabIndex = 0;
             LabelOfLoginAs.Text = "Вы вошли как:";
             // 
             // LabelOfCompanyName
@@ -122,7 +126,7 @@
             LabelOfCompanyName.Location = new Point(29, 21);
             LabelOfCompanyName.Name = "LabelOfCompanyName";
             LabelOfCompanyName.Size = new Size(738, 56);
-            LabelOfCompanyName.TabIndex = 13;
+            LabelOfCompanyName.TabIndex = 0;
             LabelOfCompanyName.Text = " «ООО Птички-тупички | Складская система»";
             // 
             // ButtonOfChangePassword
@@ -136,10 +140,12 @@
             ButtonOfChangePassword.Location = new Point(150, 454);
             ButtonOfChangePassword.Name = "ButtonOfChangePassword";
             ButtonOfChangePassword.Size = new Size(470, 58);
-            ButtonOfChangePassword.TabIndex = 26;
+            ButtonOfChangePassword.TabIndex = 3;
             ButtonOfChangePassword.Text = "Сменить пароль";
             ButtonOfChangePassword.UseVisualStyleBackColor = true;
             ButtonOfChangePassword.Click += ButtonOfChangePassword_Click;
+            ButtonOfChangePassword.Enter += TabSelection_Enter;
+            ButtonOfChangePassword.Leave += TabSelection_Leave;
             // 
             // ButtonOfMakingShipment
             // 
@@ -152,29 +158,31 @@
             ButtonOfMakingShipment.Location = new Point(150, 339);
             ButtonOfMakingShipment.Name = "ButtonOfMakingShipment";
             ButtonOfMakingShipment.Size = new Size(470, 58);
-            ButtonOfMakingShipment.TabIndex = 27;
+            ButtonOfMakingShipment.TabIndex = 2;
             ButtonOfMakingShipment.Text = "Оформление отгрузки";
             ButtonOfMakingShipment.UseVisualStyleBackColor = true;
             ButtonOfMakingShipment.Click += ButtonOfMakingShipment_Click;
+            ButtonOfMakingShipment.Enter += TabSelection_Enter;
+            ButtonOfMakingShipment.Leave += TabSelection_Leave;
             // 
-            // labelOfAccount
+            // LabelOfAccount
             // 
-            labelOfAccount.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelOfAccount.Location = new Point(310, 400);
-            labelOfAccount.Name = "labelOfAccount";
-            labelOfAccount.Size = new Size(152, 51);
-            labelOfAccount.TabIndex = 28;
-            labelOfAccount.Text = "Аккаунт";
+            LabelOfAccount.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfAccount.Location = new Point(310, 400);
+            LabelOfAccount.Name = "LabelOfAccount";
+            LabelOfAccount.Size = new Size(152, 51);
+            LabelOfAccount.TabIndex = 0;
+            LabelOfAccount.Text = "Аккаунт";
             // 
-            // label1
+            // LabelOfSupplies
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label1.Location = new Point(294, 580);
-            label1.Name = "label1";
-            label1.Size = new Size(168, 45);
-            label1.TabIndex = 29;
-            label1.Text = "Поставки";
+            LabelOfSupplies.AutoSize = true;
+            LabelOfSupplies.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfSupplies.Location = new Point(294, 580);
+            LabelOfSupplies.Name = "LabelOfSupplies";
+            LabelOfSupplies.Size = new Size(168, 45);
+            LabelOfSupplies.TabIndex = 0;
+            LabelOfSupplies.Text = "Поставки";
             // 
             // ButtonOfSupply
             // 
@@ -187,9 +195,12 @@
             ButtonOfSupply.Location = new Point(150, 628);
             ButtonOfSupply.Name = "ButtonOfSupply";
             ButtonOfSupply.Size = new Size(470, 58);
-            ButtonOfSupply.TabIndex = 30;
+            ButtonOfSupply.TabIndex = 5;
             ButtonOfSupply.Text = "Оформить поставку";
             ButtonOfSupply.UseVisualStyleBackColor = true;
+            ButtonOfSupply.Click += ButtonOfSupply_Click;
+            ButtonOfSupply.Enter += TabSelection_Enter;
+            ButtonOfSupply.Leave += TabSelection_Leave;
             // 
             // ButtonOfSettings
             // 
@@ -202,20 +213,22 @@
             ButtonOfSettings.Location = new Point(150, 692);
             ButtonOfSettings.Name = "ButtonOfSettings";
             ButtonOfSettings.Size = new Size(470, 58);
-            ButtonOfSettings.TabIndex = 31;
+            ButtonOfSettings.TabIndex = 6;
             ButtonOfSettings.Text = "Настройки";
             ButtonOfSettings.UseVisualStyleBackColor = true;
             ButtonOfSettings.Click += ButtonOfSettings_Click;
+            ButtonOfSettings.Enter += TabSelection_Enter;
+            ButtonOfSettings.Leave += TabSelection_Leave;
             // 
-            // labelOfFullName
+            // LabelOfFullName
             // 
-            labelOfFullName.AutoSize = true;
-            labelOfFullName.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelOfFullName.Location = new Point(58, 113);
-            labelOfFullName.Name = "labelOfFullName";
-            labelOfFullName.Size = new Size(20, 90);
-            labelOfFullName.TabIndex = 32;
-            labelOfFullName.Text = "\r\n\r\n";
+            LabelOfFullName.AutoSize = true;
+            LabelOfFullName.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfFullName.Location = new Point(58, 113);
+            LabelOfFullName.Name = "LabelOfFullName";
+            LabelOfFullName.Size = new Size(20, 90);
+            LabelOfFullName.TabIndex = 0;
+            LabelOfFullName.Text = "\r\n\r\n";
             // 
             // WarehousemanPanel
             // 
@@ -223,17 +236,17 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
             ClientSize = new Size(802, 793);
-            Controls.Add(labelOfFullName);
+            Controls.Add(LabelOfFullName);
             Controls.Add(ButtonOfSettings);
             Controls.Add(ButtonOfSupply);
-            Controls.Add(label1);
-            Controls.Add(labelOfAccount);
+            Controls.Add(LabelOfSupplies);
+            Controls.Add(LabelOfAccount);
             Controls.Add(ButtonOfMakingShipment);
             Controls.Add(ButtonOfChangePassword);
             Controls.Add(ButtonOfLogOut);
             Controls.Add(ShipmentsAndCustomers);
             Controls.Add(ButtonOfProductCatalog);
-            Controls.Add(labelOfProducts);
+            Controls.Add(LabelOfProducts);
             Controls.Add(LabelOfRole);
             Controls.Add(LabelOfLoginAs);
             Controls.Add(LabelOfCompanyName);
@@ -250,16 +263,16 @@
         private Button ButtonOfLogOut;
         private Label ShipmentsAndCustomers;
         private Button ButtonOfProductCatalog;
-        private Label labelOfProducts;
+        private Label LabelOfProducts;
         private Label LabelOfRole;
         private Label LabelOfLoginAs;
         private Label LabelOfCompanyName;
         private Button ButtonOfChangePassword;
         private Button ButtonOfMakingShipment;
-        private Label labelOfAccount;
-        private Label label1;
+        private Label LabelOfAccount;
+        private Label LabelOfSupplies;
         private Button ButtonOfSupply;
         private Button ButtonOfSettings;
-        private Label labelOfFullName;
+        private Label LabelOfFullName;
     }
 }

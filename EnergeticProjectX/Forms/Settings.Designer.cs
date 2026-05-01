@@ -42,10 +42,10 @@
             // LabelOfSettings
             // 
             LabelOfSettings.AutoSize = true;
-            LabelOfSettings.Font = new Font("Segoe UI", 22F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfSettings.Location = new Point(205, 102);
+            LabelOfSettings.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfSettings.Location = new Point(247, 138);
             LabelOfSettings.Name = "LabelOfSettings";
-            LabelOfSettings.Size = new Size(570, 60);
+            LabelOfSettings.Size = new Size(513, 54);
             LabelOfSettings.TabIndex = 0;
             LabelOfSettings.Text = "Настройки пользователя";
             // 
@@ -56,7 +56,7 @@
             LabelOfCurrency.Location = new Point(89, 237);
             LabelOfCurrency.Name = "LabelOfCurrency";
             LabelOfCurrency.Size = new Size(305, 48);
-            LabelOfCurrency.TabIndex = 1;
+            LabelOfCurrency.TabIndex = 0;
             LabelOfCurrency.Text = "Текущая валюта";
             // 
             // LabelOfUploadDate
@@ -66,7 +66,7 @@
             LabelOfUploadDate.Location = new Point(89, 420);
             LabelOfUploadDate.Name = "LabelOfUploadDate";
             LabelOfUploadDate.Size = new Size(346, 48);
-            LabelOfUploadDate.TabIndex = 2;
+            LabelOfUploadDate.TabIndex = 0;
             LabelOfUploadDate.Text = "Обновление курса";
             // 
             // LabelOfEquivalentInRUB
@@ -76,7 +76,7 @@
             LabelOfEquivalentInRUB.Location = new Point(89, 331);
             LabelOfEquivalentInRUB.Name = "LabelOfEquivalentInRUB";
             LabelOfEquivalentInRUB.Size = new Size(293, 48);
-            LabelOfEquivalentInRUB.TabIndex = 3;
+            LabelOfEquivalentInRUB.TabIndex = 0;
             LabelOfEquivalentInRUB.Text = "Валютный курс";
             // 
             // TextBoxOfExchangeRate
@@ -87,7 +87,7 @@
             TextBoxOfExchangeRate.Name = "TextBoxOfExchangeRate";
             TextBoxOfExchangeRate.ReadOnly = true;
             TextBoxOfExchangeRate.Size = new Size(446, 50);
-            TextBoxOfExchangeRate.TabIndex = 4;
+            TextBoxOfExchangeRate.TabIndex = 2;
             // 
             // TextBoxOfCurrenciesUpload
             // 
@@ -97,7 +97,7 @@
             TextBoxOfCurrenciesUpload.Name = "TextBoxOfCurrenciesUpload";
             TextBoxOfCurrenciesUpload.ReadOnly = true;
             TextBoxOfCurrenciesUpload.Size = new Size(446, 50);
-            TextBoxOfCurrenciesUpload.TabIndex = 5;
+            TextBoxOfCurrenciesUpload.TabIndex = 3;
             // 
             // ButtonOfSaveChanges
             // 
@@ -108,13 +108,15 @@
             ButtonOfSaveChanges.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfSaveChanges.FlatStyle = FlatStyle.Flat;
             ButtonOfSaveChanges.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfSaveChanges.Location = new Point(127, 552);
+            ButtonOfSaveChanges.Location = new Point(128, 528);
             ButtonOfSaveChanges.Name = "ButtonOfSaveChanges";
-            ButtonOfSaveChanges.Size = new Size(333, 87);
-            ButtonOfSaveChanges.TabIndex = 6;
+            ButtonOfSaveChanges.Size = new Size(333, 77);
+            ButtonOfSaveChanges.TabIndex = 4;
             ButtonOfSaveChanges.Text = "Сохранить";
             ButtonOfSaveChanges.UseVisualStyleBackColor = true;
             ButtonOfSaveChanges.Click += ButtonOfSaveChanges_Click;
+            ButtonOfSaveChanges.Enter += TabSelection_Enter;
+            ButtonOfSaveChanges.Leave += TabSelection_Leave;
             // 
             // ButtonOfCancel
             // 
@@ -124,13 +126,15 @@
             ButtonOfCancel.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfCancel.FlatStyle = FlatStyle.Flat;
             ButtonOfCancel.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfCancel.Location = new Point(482, 552);
+            ButtonOfCancel.Location = new Point(483, 528);
             ButtonOfCancel.Name = "ButtonOfCancel";
-            ButtonOfCancel.Size = new Size(349, 87);
-            ButtonOfCancel.TabIndex = 7;
+            ButtonOfCancel.Size = new Size(349, 77);
+            ButtonOfCancel.TabIndex = 5;
             ButtonOfCancel.Text = "Отменить";
             ButtonOfCancel.UseVisualStyleBackColor = true;
             ButtonOfCancel.Click += ButtonOfCancel_Click;
+            ButtonOfCancel.Enter += TabSelection_Enter;
+            ButtonOfCancel.Leave += TabSelection_Leave;
             // 
             // ComboBoxOfCurrency
             // 
@@ -140,7 +144,7 @@
             ComboBoxOfCurrency.Location = new Point(458, 237);
             ComboBoxOfCurrency.Name = "ComboBoxOfCurrency";
             ComboBoxOfCurrency.Size = new Size(446, 53);
-            ComboBoxOfCurrency.TabIndex = 8;
+            ComboBoxOfCurrency.TabIndex = 1;
             ComboBoxOfCurrency.SelectedIndexChanged += ComboBoxOfCurrency_SelectedIndexChanged;
             // 
             // Settings

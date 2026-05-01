@@ -79,29 +79,27 @@ namespace EnergeticProjectX.Classes
         {
             try
             {
-                var lastUpdate = db.Currencies.Max(c => (DateTime?)c.DataOfUpdate);
+                var lastUpdate = db.Currencies.Max(c => c.DataOfUpdate);
 
-                if (ExchangeRateService.ShouldUpdateRates(lastUpdate, TimeSpan.FromHours(24)))
+                if (ExchangeRateService.ShouldUpdateRates(lastUpdate, TimeSpan.FromMinutes(1)))
                 {
-                    EH.ShowInformation("Обновление курсов валют...\nПожалуйста, подождите.");
+                    EH.ShowInformation($"{Resources.UploadingExchangeRates}\n\n{Resources.PleaseWait}");
+
+                    var currencyRUB = db.Currencies.FirstOrDefault(c => c.Code == "RUB");
+
+                    currencyRUB!.DataOfUpdate = DateTime.UtcNow;
 
                     var updated = ExchangeRateService.UpdateRatesFromCbr(db);
 
                     if (updated > 0)
                     {
-                        EH.ShowInformation($"Курсы обновлены!\n\nОбновлено: {updated} валют");
-                    }
-                    else
-                    {
-                        EH.ShowWarning("Курсы не обновлены.\nПопробуйте позже.");
+                        EH.ShowInformation($"{Resources.ExchangeRatesUploaded}\n\n{Resources.HowMuchExchangeRatesUploaded} {updated}");
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LoggerService.Error("Ошибка обновления курсов", ex);
-
-                EH.ShowWarning("Не удалось обновить курсы.\nПриложение продолжит работу.");
+                EH.ShowWarning($"{Resources.NotManagedToUploadExchangeRates}\n\n{Resources.ApplicationWillContinue}");
             }
         }
     }
