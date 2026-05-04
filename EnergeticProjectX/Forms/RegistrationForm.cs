@@ -1,8 +1,9 @@
 ﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
+using FH = EnergeticProjectX.Classes.FormHandler;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Classes;
-using EnergeticProjectX.Enums;
+using System.Text.RegularExpressions;
 
 namespace EnergeticProjectX.Forms
 {
@@ -11,7 +12,7 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class RegistrationForm : Form
     {
-        private readonly ApplicationContextDB db = new();
+        private static ApplicationContextDB Db => Program.Database;
 
         /// <summary>
         /// Конструктор для реализации формы регистрации.
@@ -32,15 +33,21 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfRegistration_Click(object sender, EventArgs e)
         {
-            var firstname = User.IsUserPersonalDataRelevant(TextBoxOfName.Text);
-            var surname = User.IsUserPersonalDataRelevant(TextBoxOfName.Text);
-            var patronymic = User.IsUserPersonalDataRelevant(TextBoxOfName.Text);
+            var firstname = UIHelper.IsUserPersonalDataRelevant(TextBoxOfName.Text);
+            var surname = UIHelper.IsUserPersonalDataRelevant(TextBoxOfSurname.Text);
+            var patronymic = UIHelper.IsUserPersonalDataRelevant(TextBoxOfPatronymic.Text);
 
             if (firstname == null || surname == null)
             {
                 EH.ShowWarning(Resources.PersonalDataIsIrrelevant, true);
 
-                if (firstname == null)
+                if (firstname == null && surname == null)
+                {
+                    TextBoxOfName.Clear();
+                    TextBoxOfSurname.Clear();
+                    TextBoxOfName.Focus();
+                }
+                else if (firstname == null)
                 {
                     TextBoxOfName.Clear();
                     TextBoxOfName.Focus();
@@ -54,16 +61,16 @@ namespace EnergeticProjectX.Forms
                 return;
             }
 
-            var password = TextBoxOfPassword.Text.Trim();
-            var login = TextBoxOfLogin.Text.Trim();
-            var passwordConfirmation = TextBoxOfPasswordConfirmation.Text.Trim();
+            var password = Regex.Replace(TextBoxOfPassword.Text, @"\s", "");
+            var login = Regex.Replace(TextBoxOfLogin.Text, @"\s", "");
+            var passwordConfirmation = Regex.Replace(TextBoxOfPasswordConfirmation.Text, @"\s", "");
 
-            var userLoginFree = IsUserLoginFree(login, db);
-            var (passwordsMatch, passwordSatisfyRequirements) = User.IsPasswordRelevant(password, passwordConfirmation);
+            var userLoginFree = IsUserLoginFree(login, Db);
+            var (passwordsMatch, passwordSatisfyRequirements) = UIHelper.IsPasswordRelevant(password, passwordConfirmation);
 
             if (userLoginFree && passwordsMatch && passwordSatisfyRequirements)
             {
-                var currencyByDefault = db.Currencies.FirstOrDefault(u => u.Code == "RUB");
+                var currencyByDefault = Db.Currencies.FirstOrDefault(u => u.Code == "RUB");
 
                 if (currencyByDefault == null)
                 {
@@ -74,23 +81,20 @@ namespace EnergeticProjectX.Forms
 
                 var user = new User
                 {
-                    Surname = TextBoxOfSurname.Text.Trim(),
-                    Name = TextBoxOfName.Text.Trim(),
-                    Patronymic = TextBoxOfPatronymic.Text.Trim() ?? null,
-                    Login = TextBoxOfLogin.Text.Trim(),
-                    Password = BCryptRealization.PasswordHash(TextBoxOfPassword.Text.Trim()),
-                    UserRole = UserRole.Warehouseman,
+                    Surname = surname,
+                    Name = firstname,
+                    Patronymic = patronymic ?? null,
+                    Login = login,
+                    Password = BCryptRealization.PasswordHash(password),
                     CurrencyId = currencyByDefault.Currency_Id
                 };
 
-                db.Users.Add(user);
-                if (EH.DBSaveChangesUniversalErrorCheck(db))
+                Db.Users.Add(user);
+                if (EH.DBSaveChangesUniversalErrorCheck(Db))
                     return;
 
-                Hide();
-                var warehousemanPanel = new WarehousemanPanel(user.Login);
-                warehousemanPanel.ShowDialog();
-                Close();
+                var warehousemanMainMenu = new WarehousemanMainMenu(user.Login);
+                FH.OpenForm(this, warehousemanMainMenu);
             }
             else if (!userLoginFree)
             {
@@ -120,21 +124,20 @@ namespace EnergeticProjectX.Forms
         /// <summary>
         /// Проверка, свободен ли указанный пользователем логин для регистрации.
         /// </summary>
-        /// <param name="login">Логин нового пользователя.</param>
+        /// <param name="login">Введённый пользователем логин.</param>
         /// <param name="db">Контекст базы данных.</param>
+        /// <returns>Подтверждение, есть ли соответствие с введённым логином в базе данных.</returns>
         public static bool IsUserLoginFree(string login, ApplicationContextDB db)
         {
             var logins = db.Users.Select(u => u.Login).ToList();
 
-            return (!logins.Contains(login));
+            return !logins.Contains(login);
         }
 
         private void LabelOfAuthorization_Click(object sender, EventArgs e)
         {
-            Hide();
             var authorizationForm = new AuthorizationForm();
-            authorizationForm.ShowDialog();
-            Close();
+            FH.OpenForm(this, authorizationForm);
         }
 
         private void TabSelection_Enter(object sender, EventArgs e)
@@ -150,6 +153,16 @@ namespace EnergeticProjectX.Forms
             if (sender is Button button)
             {
                 button.BackColor = Color.Transparent;
+            }
+        }
+
+        private void TextBoxOfPersonalData_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+
+                EH.ShowBlinkWarning(LabelOfWarning, "Личные данные должны содержать\nтолько буквы!");
             }
         }
     }

@@ -1,7 +1,10 @@
 using EH = EnergeticProjectX.Classes.ErrorHandler;
+using FH = EnergeticProjectX.Classes.FormHandler;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Enums;
+using EnergeticProjectX.Objects;
+using System.Text.RegularExpressions;
 
 namespace EnergeticProjectX.Forms
 {
@@ -10,7 +13,7 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class AuthorizationForm : Form
     {
-        private readonly ApplicationContextDB db = new();
+        private static ApplicationContextDB Db => Program.Database;
 
         /// <summary>
         /// Конструктор для реализации формы авторизации пользователя.
@@ -27,39 +30,30 @@ namespace EnergeticProjectX.Forms
         }
 
         /// <summary>
-        /// Метод для авторизации и проверка роли пользователя.
+        /// Метод для авторизации пользователя.
         /// </summary>
-        /// <param name="userLogin">Вводимый логин.</param>
-        /// <param name="password">Вводимый пароль.</param>
-        /// <param name="db">Контекст базы данных.</param>
-        public void Authorization(string userLogin, string password, ApplicationContextDB db)
+        /// <param name="user">Пользователь, соответствующий введённому логину.</param>
+        /// <param name="password">Пароль без пробелов, введённый в текстовое поле.</param>
+        public void Authorization(User user, string password)
         {
-            if (IsLoginAndPasswordValid(userLogin, password, db))
+            if (IsLoginAndPasswordValid(user, password))
             {
-                var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
-
-                if (user != null && user.UserRole == UserRole.Administrator)
+                if (user.UserRole == UserRoles.Administrator)
                 {
-                    Hide();
-                    var administratorPanel = new AdministratorPanel(user.Login);
-                    administratorPanel.ShowDialog();
-                    Close();
+                    var administratorMainMenu = new AdministratorMainMenu(user.Login);
+                    FH.OpenForm(this, administratorMainMenu);
                 }
-                else if (user != null && user.UserRole == UserRole.Warehouseman)
+                else if (user.UserRole == UserRoles.Warehouseman)
                 {
-                    Hide();
-                    var warehousemanPanel = new WarehousemanPanel(user.Login);
-                    warehousemanPanel.ShowDialog();
-                    Close();
+                    var warehousemanMainMenu = new WarehousemanMainMenu(user.Login);
+                    FH.OpenForm(this, warehousemanMainMenu);
                 }
                 else
-                {
-                    EH.ShowError(Resources.UserNotFound, true);
-                }
+                    return;
             }
             else
             {
-                EH.ShowError($"{Resources.IncorrectLoginOrPassword}.\n\n{Resources.TryAgain}");
+                EH.ShowError(Resources.IncorrectLoginOrPassword, true);
             }
 
             TextBoxForLogin.Clear();
@@ -70,33 +64,37 @@ namespace EnergeticProjectX.Forms
         /// <summary>
         /// Метод для сравнения логина и пароля с имеющимися в базе данных.
         /// </summary>
-        /// <param name="login">Введённый пользователем логин.</param>
+        /// <param name="user">Пользователь системы по найденному логину..</param>
         /// <param name="password">Введённый пользователем пароль.</param>
-        /// <param name="db">Контекст базы данных.</param>
         /// <returns>Подтверждение валидации.</returns>
-        public static bool IsLoginAndPasswordValid(string login, string password, ApplicationContextDB db)
+        public static bool IsLoginAndPasswordValid(User user, string password)
         {
-            var user = db.Users.FirstOrDefault(u => u.Login == login);
-
-            if (user != null && BCryptRealization.CheckPassword(password, user.Password))
+            if (BCryptRealization.CheckPassword(password, user.Password))
                 return true;
             return false;
         }
 
         private void ButtonOfInvolve_Click(object sender, EventArgs e)
         {
-            var login = TextBoxForLogin.Text.Trim();
-            var password = TextBoxOfPassword.Text.Trim();
+            var userLogin = Regex.Replace(TextBoxForLogin.Text, @"\s", "");
+            var password = Regex.Replace(TextBoxOfPassword.Text, @"\s", "");
 
-            Authorization(login, password, db);
+            var user = Db.Users.FirstOrDefault(u => u.Login == userLogin);
+
+            if (user == null)
+            {
+                EH.ShowWarning(Resources.UserNotFound, true);
+
+                return;
+            }
+
+            Authorization(user, password);
         }
 
         private void LabelOfRegistration_Click(object sender, EventArgs e)
         {
-            Hide();
             var registrationForm = new RegistrationForm();
-            registrationForm.ShowDialog();
-            Close();
+            FH.OpenForm(this, registrationForm);
         }
 
         private void TabSelection_Enter(object sender, EventArgs e)

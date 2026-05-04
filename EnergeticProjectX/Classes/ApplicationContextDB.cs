@@ -195,6 +195,12 @@ namespace EnergeticProjectX.Classes
                 .HasConversion<string>()
                 .IsRequired();
 
+            // Статус клиента ⟶ String
+            modelBuilder.Entity<Client>()
+                .Property(u => u.Status)
+                .HasConversion<string>()
+                .IsRequired();
+
             base.OnModelCreating(modelBuilder);
         }
     }

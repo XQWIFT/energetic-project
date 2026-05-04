@@ -5,23 +5,26 @@ namespace EnergeticProjectX.Classes
 {
     internal static class Program
     {
+        public static ApplicationContext AppContext { get; private set; }
+        public static ApplicationContextDB Database { get; private set; }
+
         /// <summary>
         ///  Главная точка входа в приложение.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            LoggerService.Info(Resources.SLApplicationRun);
-
             try
             {
                 ApplicationConfiguration.Initialize();
 
-                var db = new ApplicationContextDB();
+                Database = new ApplicationContextDB();
 
-                ApplicationMethod.Initialize(db);
+                ApplicationMethod.Initialize(Database);
 
-                Application.Run(new AuthorizationForm());
+                AppContext = new ApplicationContext(new AuthorizationForm());
+
+                Application.Run(AppContext);
             }
             catch (Exception)
             {

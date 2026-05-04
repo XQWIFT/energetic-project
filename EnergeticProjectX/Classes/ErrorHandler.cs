@@ -1,4 +1,6 @@
-﻿using EnergeticProjectX.Properties;
+﻿using FH = EnergeticProjectX.Classes.FormHandler;
+using EnergeticProjectX.Properties;
+using EnergeticProjectX.Objects;
 using System.Diagnostics;
 
 namespace EnergeticProjectX.Classes
@@ -45,6 +47,28 @@ namespace EnergeticProjectX.Classes
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Метод, который проверяет наличие пользователя в контексте базы данных по заданному логину.
+        /// </summary>
+        /// <param name="db">Контекст базы данных.</param>
+        /// <param name="currentForm">Текущая форма.</param>
+        /// <param name="userLogin">Заданный логин пользователя.</param>
+        /// <param name="message">Сообщение в случае отсутствия данных о пользователе с заданным логином.</param>
+        /// <returns>При отсутствии совпадения по логину появляется сообщение с последующим открытием формы авторизации
+        /// для повторного входа в систему.</returns>
+        public static User? EnsureUserActive(Form currentForm, ApplicationContextDB db, string userLogin, string message)
+        {
+            var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
+
+            if (user == null)
+            {
+                ShowError(message);
+                FH.RedirectToAuthorization(currentForm);
+                return null;
+            }
+            return user;
         }
 
         /// <summary>
@@ -100,6 +124,36 @@ namespace EnergeticProjectX.Classes
             var answer = MessageBox.Show(message, Resources.TitleConfirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             return answer;
+        }
+
+        /// <summary>
+        /// Метод, который вызывает мигающее предупреждение с соответствующим сообщением.
+        /// </summary>
+        /// <param name="label">Поле для вывода текста.</param>
+        /// <param name="message">Сообщение.</param>
+        public static void ShowBlinkWarning(Label label, string message)
+        {
+            if (label.Tag is bool isBlinking && isBlinking)
+                return;
+
+            label.Text = message;
+            label.Visible = true;
+            label.Tag = true;
+
+            _ = BlinkAsync(label, 3, 750);
+        }
+
+        private static async Task BlinkAsync(Label label, int blinks, int delayMs)
+        {
+            for (int i = 0; i < blinks; i++)
+            {
+                label.Visible = false;
+                await Task.Delay(delayMs);
+                label.Visible = true;
+                await Task.Delay(delayMs);
+            }
+            label.Visible = false;
+            label.Tag = false;
         }
     }
 }

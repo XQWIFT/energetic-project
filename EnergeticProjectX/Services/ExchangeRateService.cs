@@ -20,8 +20,6 @@ namespace EnergeticProjectX.Services
         {
             try
             {
-                LoggerService.Debug("Начало обновления курсов валют с ЦБ РФ.");
-
                 var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
                 var json = httpClient.GetStringAsync(CBR_API_URL).Result;
 
@@ -29,12 +27,8 @@ namespace EnergeticProjectX.Services
 
                 if (response?.Valute == null || response.Valute.Count == 0)
                 {
-                    LoggerService.Warning("Ответ не поступил или произошла ошибка при конвертации.");
-
                     return 0;
                 }
-
-                LoggerService.Debug($"Получено курсов из ЦБ: {response.Valute.Count}");
 
                 var allCurrencies = db.Currencies.ToList();
 
@@ -51,10 +45,6 @@ namespace EnergeticProjectX.Services
                         matchedCurrency.ExchangeRate = cbrCurrency.Value / cbrCurrency.Nominal;
                         matchedCurrency.DataOfUpdate = updateDate;
                         updatedCount++;
-
-                        LoggerService.Debug($"Обновлён курс {cbrCurrency.CharCode}: " +
-                                           $"{cbrCurrency.Value} / {cbrCurrency.Nominal} = " +
-                                           $"{matchedCurrency.ExchangeRate:F4}");
                     }
                 }
 
@@ -62,19 +52,12 @@ namespace EnergeticProjectX.Services
                 {
                     if (EH.DBSaveChangesUniversalErrorCheck(db))
                         return 0;
-
-                    LoggerService.Info($"Курсы валют обновлены. Количество обновлённых валют: {updatedCount}. Дата: {updateDate:dd.MM.yyyy HH:mm}");
-                }
-                else
-                {
-                    LoggerService.Warning("Не найдено совпадений валют между данными от Центробанка и базой данных.");
                 }
 
                 return updatedCount;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LoggerService.Error("Необработанная ошибка при обновлении курсов", ex);
                 return 0;
             }
         }

@@ -1,61 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Compile Update="Forms\AddCategory.cs">
+    <Compile Update="Forms\AddCategoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\AddClient.cs">
+    <Compile Update="Forms\AddClientForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\AddProduct.cs">
+    <Compile Update="Forms\AddProductForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\AuthorizationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\AdministratorPanel.cs">
+    <Compile Update="Forms\AdministratorMainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\EditCategories.cs">
+    <Compile Update="Forms\EditCategoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\EditClient.cs">
+    <Compile Update="Forms\EditClientForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\EditProduct.cs">
+    <Compile Update="Forms\EditProductForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\ListOfClients.cs">
+    <Compile Update="Forms\TableOfClients.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\ListOfUsers.cs">
+    <Compile Update="Forms\TableOfUsers.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\MakingShipment.cs">
+    <Compile Update="Forms\MakeShipmentForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\MakingSupply.cs">
+    <Compile Update="Forms\MakeDeliveryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\ProductCatalog.cs">
+    <Compile Update="Forms\TableOfProducts.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\RegistrationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Settings.cs">
+    <Compile Update="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\ShipmentDetails.cs">
+    <Compile Update="Forms\ShipmentDetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\ShipmentJournal.cs">
+    <Compile Update="Forms\TableOfShipments.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\UserChangePassword.cs">
+    <Compile Update="Forms\ChangePasswordForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\WarehousemanPanel.cs">
+    <Compile Update="Forms\WarehousemanMainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

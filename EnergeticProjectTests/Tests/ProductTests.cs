@@ -37,7 +37,7 @@ namespace EnergeticProjectTestt.Tests
             Password = BCryptRealization.PasswordHash("Test1234"),
             Surname = "Тестов",
             Name = "Тест",
-            UserRole = UserRole.Administrator,
+            UserRole = UserRoles.Administrator,
             CurrencyId = Guid.NewGuid()
         };
 
