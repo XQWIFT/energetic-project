@@ -25,6 +25,8 @@ namespace EnergeticProjectX.Forms
             this.userLogin = userLogin;
 
             LoadUserData();
+
+            ActiveControl = LabelOfCompanyName;
         }
 
         private void LoadUserData()

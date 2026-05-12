@@ -2,6 +2,7 @@
 using FH = EnergeticProjectX.Classes.FormHandler;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Properties;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EnergeticProjectX.Forms
 {
@@ -23,6 +24,8 @@ namespace EnergeticProjectX.Forms
             InitializeComponent();
 
             this.userLogin = userLogin;
+
+            ActiveControl = LabelOfCompanyName;
 
             LoadUserData();
         }
@@ -49,7 +52,7 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfLogOut_Click(object sender, EventArgs e)
         {
-            var authorizationForm = new AuthorizationForm();
+            var authorizationForm = Program.ServiceProvider.GetRequiredService<AuthorizationForm>();
             FH.OpenForm(this, authorizationForm);
         }
 

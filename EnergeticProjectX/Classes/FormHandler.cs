@@ -1,4 +1,5 @@
 ﻿using EnergeticProjectX.Forms;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EnergeticProjectX.Classes
 {
@@ -35,7 +36,7 @@ namespace EnergeticProjectX.Classes
                 form.Close();
             }
 
-            var authorizationForm = new AuthorizationForm();
+            var authorizationForm = Program.ServiceProvider.GetRequiredService<AuthorizationForm>();
             Program.AppContext!.MainForm = authorizationForm;
             authorizationForm.Show();
             currentForm.Close();

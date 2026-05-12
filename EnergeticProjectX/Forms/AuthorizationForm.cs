@@ -5,6 +5,7 @@ using EnergeticProjectX.Properties;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using System.Text.RegularExpressions;
+using EnergeticProjectX.interfaces;
 
 namespace EnergeticProjectX.Forms
 {
@@ -13,14 +14,14 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class AuthorizationForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
-
+        private readonly IUserService _userService;       
         /// <summary>
         /// Конструктор для реализации формы авторизации пользователя.
         /// </summary>
-        public AuthorizationForm()
+        public AuthorizationForm(IUserService userservice)
         {
             InitializeComponent();
+            _userService = userservice;
         }
 
         private void IsTextChanged(object sender, EventArgs e)
@@ -79,8 +80,7 @@ namespace EnergeticProjectX.Forms
             var userLogin = Regex.Replace(TextBoxForLogin.Text, @"\s", "");
             var password = Regex.Replace(TextBoxOfPassword.Text, @"\s", "");
 
-            var user = Db.Users.FirstOrDefault(u => u.Login == userLogin);
-
+            var user = _userService.FindByLogin(userLogin);
             if (user == null)
             {
                 EH.ShowWarning(Resources.UserNotFound, true);

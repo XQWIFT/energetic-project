@@ -230,7 +230,7 @@
             LabelOfFullName.TabIndex = 0;
             LabelOfFullName.Text = "\r\n\r\n";
             // 
-            // WarehousemanPanel
+            // WarehousemanMainMenu
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -251,7 +251,7 @@
             Controls.Add(LabelOfLoginAs);
             Controls.Add(LabelOfCompanyName);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Name = "WarehousemanPanel";
+            Name = "WarehousemanMainMenu";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Панель управления (Кладовщик)";
             ResumeLayout(false);

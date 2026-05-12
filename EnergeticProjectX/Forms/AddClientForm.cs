@@ -1,5 +1,6 @@
 ﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
 using FH = EnergeticProjectX.Classes.FormHandler;
+using CHK = EnergeticProjectX.Classes.Chekouts;
 using System.Text.RegularExpressions;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Objects;
@@ -99,6 +100,11 @@ namespace EnergeticProjectX.Forms
             {
                 button.BackColor = Color.Transparent;
             }
+        }
+
+        private void TextBoxOfINN_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            CHK.CheckOnlyNumber(e);
         }
     }
 }

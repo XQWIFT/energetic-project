@@ -108,6 +108,7 @@
             TextBoxOfINN.Size = new Size(540, 45);
             TextBoxOfINN.TabIndex = 3;
             TextBoxOfINN.TextChanged += IsTextChanged;
+            TextBoxOfINN.KeyPress += TextBoxOfINN_KeyPress;
             // 
             // LabelOfContactInfo
             // 
@@ -182,7 +183,7 @@
             ButtonOfDeleteClient.Enter += TabSelection_Enter;
             ButtonOfDeleteClient.Leave += TabSelection_Leave;
             // 
-            // EditClient
+            // EditClientForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -202,7 +203,7 @@
             Controls.Add(LabelOfEditClient);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "EditClient";
+            Name = "EditClientForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Управление данными клиентской базы";
             ResumeLayout(false);

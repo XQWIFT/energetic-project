@@ -71,7 +71,7 @@
             DGVOfUsers.RowHeadersVisible = false;
             DGVOfUsers.RowHeadersWidth = 62;
             DGVOfUsers.Size = new Size(922, 645);
-            DGVOfUsers.TabIndex = 0;
+            DGVOfUsers.TabIndex = 1;
             DGVOfUsers.CellMouseClick += DGVOfUsers_CellMouseClick;
             DGVOfUsers.CellMouseDoubleClick += DGVOfUsers_CellMouseClick;
             DGVOfUsers.CellMouseEnter += DGVOfUsers_CellMouseEnter;
@@ -87,14 +87,14 @@
             ReturnToAdministratorPanel.Location = new Point(242, 672);
             ReturnToAdministratorPanel.Name = "ReturnToAdministratorPanel";
             ReturnToAdministratorPanel.Size = new Size(372, 78);
-            ReturnToAdministratorPanel.TabIndex = 1;
+            ReturnToAdministratorPanel.TabIndex = 2;
             ReturnToAdministratorPanel.Text = "Главное меню";
             ReturnToAdministratorPanel.UseVisualStyleBackColor = true;
             ReturnToAdministratorPanel.Click += ButtonOfAdministratorMainMenu_Click;
             ReturnToAdministratorPanel.Enter += TabSelection_Enter;
             ReturnToAdministratorPanel.Leave += TabSelection_Leave;
             // 
-            // ListOfUsers
+            // TableOfUsers
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -104,7 +104,7 @@
             Controls.Add(DGVOfUsers);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "ListOfUsers";
+            Name = "TableOfUsers";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Просмотр пользователей системы";
             ((System.ComponentModel.ISupportInitialize)DGVOfUsers).EndInit();

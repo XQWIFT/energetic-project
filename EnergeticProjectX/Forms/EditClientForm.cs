@@ -1,8 +1,10 @@
 ﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
 using FH = EnergeticProjectX.Classes.FormHandler;
+using CHK = EnergeticProjectX.Classes.Chekouts;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Enums;
+using System.Text.RegularExpressions;
 
 namespace EnergeticProjectX.Forms
 {
@@ -69,33 +71,22 @@ namespace EnergeticProjectX.Forms
 
                 TextBoxOfINN.Focus();
             }
-            else if (Db.Clients.Any(u => u.INN == TextBoxOfINN.Text.Trim()))
+            else if (iNN != TextBoxOfINN.Text.ToString())
             {
-                EH.ShowWarning(Resources.InnAlreadyExists, true);
+                if (Db.Clients.Any(u => u.INN == TextBoxOfINN.Text.Trim()))
+                {
+                    EH.ShowWarning(Resources.InnAlreadyExists, true);
 
-                TextBoxOfINN.Focus();
+                    TextBoxOfINN.Focus();
+                }
+                else
+                {
+                    ChangeUser();
+                }
             }
             else
             {
-                var client = Db.Clients.FirstOrDefault(u => u.Client_Id == clientId);
-
-                if (client == null)
-                {
-                    EH.ShowError(Resources.ClientsLoadError, true);
-
-                    return;
-                }
-
-                client.Name = TextBoxOfName.Text.Trim();
-                client.Contractor = EnumHandler.SetContractorType(ComboBoxOfContractor.Text);
-                client.INN = TextBoxOfINN.Text.Trim();
-                client.Status = Status.Active;
-                client.ContactInfo = TextBoxOfContactInfo.Text.Trim();
-
-                if (EH.DBSaveChangesUniversalErrorCheck(Db))
-                    return;
-
-                OpenListOfClients();
+                ChangeUser();
             }
         }
 
@@ -147,6 +138,34 @@ namespace EnergeticProjectX.Forms
             {
                 control.BackColor = Color.Transparent;
             }
+        }
+
+        private void TextBoxOfINN_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            CHK.CheckOnlyNumber(e);
+        }
+
+        private void ChangeUser()
+        {
+            var client = Db.Clients.FirstOrDefault(u => u.Client_Id == clientId);
+
+            if (client == null)
+            {
+                EH.ShowError(Resources.ClientsLoadError, true);
+
+                return;
+            }
+
+            client.Name = Regex.Replace(TextBoxOfName.Text, @"\s+", " ");
+            client.Contractor = EnumHandler.SetContractorType(ComboBoxOfContractor.Text);
+            client.INN = TextBoxOfINN.Text.Trim();
+            client.Status = Status.Active;
+            client.ContactInfo = Regex.Replace(TextBoxOfContactInfo.Text, @"\s+", " ");
+
+            if (EH.DBSaveChangesUniversalErrorCheck(Db))
+                return;
+
+            OpenListOfClients();
         }
     }
 }

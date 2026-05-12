@@ -2,6 +2,7 @@
 using PCM = EnergeticProjectX.Classes.PriceCurrencyManager;
 using FH = EnergeticProjectX.Classes.FormHandler;
 using TH = EnergeticProjectX.Classes.TimeHandler;
+using CHK = EnergeticProjectX.Classes.Chekouts;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Models;
@@ -189,8 +190,16 @@ namespace EnergeticProjectX.Forms
                 var existingItem = DeliveryItems.FirstOrDefault(i => i.Article == article);
                 if (existingItem != null)
                 {
-                    EH.ShowWarning($"{Resources.Product} {product.Name} {Resources.AlreadyInSupply}.");
+                    int rowIndex = DeliveryItems.IndexOf(existingItem);
 
+                    DeliveryItems[rowIndex].Quantity += quantity;
+
+                    RefreshItemsGrid();
+                    UpdateTotalCost();
+                    UpdateButtonStates();
+
+                    TextBoxOfQuantity.Text = "1";
+                    TextBoxOfQuantity.Focus();
                     return;
                 }
 
@@ -490,6 +499,11 @@ namespace EnergeticProjectX.Forms
             {
                 button.BackColor = Color.Transparent;
             }
+        }
+
+        private void TextBoxOfQuantity_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            CHK.CheckOnlyNumber(e);
         }
     }
 }

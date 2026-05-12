@@ -104,6 +104,7 @@
             TextBoxOfINN.Size = new Size(583, 45);
             TextBoxOfINN.TabIndex = 3;
             TextBoxOfINN.TextChanged += IsTextChanged;
+            TextBoxOfINN.KeyPress += TextBoxOfINN_KeyPress;
             // 
             // TextBoxOfContactInfo
             // 
@@ -163,7 +164,7 @@
             ComboBoxOfContractor.SelectedIndexChanged += IsTextChanged;
             ComboBoxOfContractor.TextChanged += IsTextChanged;
             // 
-            // AddClient
+            // AddClientForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -182,7 +183,7 @@
             Controls.Add(LabelOfAddClient);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "AddClient";
+            Name = "AddClientForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Добавление клиента";
             ResumeLayout(false);

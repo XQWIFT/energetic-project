@@ -41,9 +41,6 @@
             textBoxSearch = new TextBox();
             ButtonOfSearch = new Button();
             ButtonOfChangeCaterogies = new Button();
-            LabelOfCriticalStockQuantity = new Label();
-            LabelOfHavingDiscount = new Label();
-            LabelOfHavingDiscountSoon = new Label();
             ((System.ComponentModel.ISupportInitialize)DataGridOfProducts).BeginInit();
             PanelSearch.SuspendLayout();
             SuspendLayout();
@@ -174,7 +171,7 @@
             ButtonOfMakingShipment.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfMakingShipment.FlatStyle = FlatStyle.Flat;
             ButtonOfMakingShipment.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            ButtonOfMakingShipment.Location = new Point(308, 637);
+            ButtonOfMakingShipment.Location = new Point(308, 636);
             ButtonOfMakingShipment.Name = "ButtonOfMakingShipment";
             ButtonOfMakingShipment.Size = new Size(369, 66);
             ButtonOfMakingShipment.TabIndex = 3;
@@ -246,48 +243,12 @@
             ButtonOfChangeCaterogies.Enter += TabSelection_Enter;
             ButtonOfChangeCaterogies.Leave += TabSelection_Leave;
             // 
-            // LabelOfCriticalStockQuantity
-            // 
-            LabelOfCriticalStockQuantity.BackColor = Color.LightCoral;
-            LabelOfCriticalStockQuantity.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfCriticalStockQuantity.Location = new Point(40, 807);
-            LabelOfCriticalStockQuantity.Name = "LabelOfCriticalStockQuantity";
-            LabelOfCriticalStockQuantity.Size = new Size(294, 56);
-            LabelOfCriticalStockQuantity.TabIndex = 0;
-            LabelOfCriticalStockQuantity.Text = "Критический остаток";
-            LabelOfCriticalStockQuantity.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // LabelOfHavingDiscount
-            // 
-            LabelOfHavingDiscount.BackColor = Color.LightGoldenrodYellow;
-            LabelOfHavingDiscount.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfHavingDiscount.Location = new Point(640, 807);
-            LabelOfHavingDiscount.Name = "LabelOfHavingDiscount";
-            LabelOfHavingDiscount.Size = new Size(313, 56);
-            LabelOfHavingDiscount.TabIndex = 0;
-            LabelOfHavingDiscount.Text = "Скоро снижение цены";
-            LabelOfHavingDiscount.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // LabelOfHavingDiscountSoon
-            // 
-            LabelOfHavingDiscountSoon.BackColor = Color.LightSalmon;
-            LabelOfHavingDiscountSoon.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfHavingDiscountSoon.Location = new Point(340, 807);
-            LabelOfHavingDiscountSoon.Name = "LabelOfHavingDiscountSoon";
-            LabelOfHavingDiscountSoon.Size = new Size(294, 56);
-            LabelOfHavingDiscountSoon.TabIndex = 0;
-            LabelOfHavingDiscountSoon.Text = "Цена уже снижена";
-            LabelOfHavingDiscountSoon.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // ProductCatalog
+            // TableOfProducts
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
-            ClientSize = new Size(992, 892);
-            Controls.Add(LabelOfHavingDiscountSoon);
-            Controls.Add(LabelOfHavingDiscount);
-            Controls.Add(LabelOfCriticalStockQuantity);
+            ClientSize = new Size(992, 794);
             Controls.Add(ButtonOfChangeCaterogies);
             Controls.Add(PanelSearch);
             Controls.Add(ButtonOfMakingShipment);
@@ -298,7 +259,7 @@
             Controls.Add(ButtonOfMainMenu);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "ProductCatalog";
+            Name = "TableOfProducts";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Информация о товаре";
             ((System.ComponentModel.ISupportInitialize)DataGridOfProducts).EndInit();
@@ -320,8 +281,5 @@
         private Label LabelOfSearch;
         private Button ButtonOfSearch;
         private Button ButtonOfChangeCaterogies;
-        private Label LabelOfCriticalStockQuantity;
-        private Label LabelOfHavingDiscount;
-        private Label LabelOfHavingDiscountSoon;
     }
 }

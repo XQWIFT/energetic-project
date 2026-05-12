@@ -1,10 +1,11 @@
-﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
-using EnergeticProjectX.Classes;
+﻿using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
+using System.Text.RegularExpressions;
+using EH = EnergeticProjectX.Classes.ErrorHandler;
 
 namespace EnergeticProjectX.Forms
 {
@@ -98,7 +99,10 @@ namespace EnergeticProjectX.Forms
 
             var newCategoryName = Interaction.InputBox(Resources.InputNewCategoryName, Resources.EditCategory, ComboBoxOfCategory.Text).Trim();
 
-            if (Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(c.Name, newCategoryName)))
+            if ((Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(c.Name, newCategoryName)) ||
+                Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(c.Name, Regex.Replace(newCategoryName, @"\s+", "")) ||
+                Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(Regex.Replace(c.Name, @"\s+", ""),
+                Regex.Replace(newCategoryName, @"\s+", ""))))))
             {
                 EH.ShowWarning(Resources.NewCategoryAlreadyExists, true);
 

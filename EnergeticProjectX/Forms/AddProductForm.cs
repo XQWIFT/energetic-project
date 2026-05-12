@@ -2,6 +2,7 @@
 using PCM = EnergeticProjectX.Classes.PriceCurrencyManager;
 using TH = EnergeticProjectX.Classes.TimeHandler;
 using FH = EnergeticProjectX.Classes.FormHandler;
+using CHK = EnergeticProjectX.Classes.Chekouts;
 using System.Text.RegularExpressions;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
@@ -116,7 +117,7 @@ namespace EnergeticProjectX.Forms
                 CreationDate = DateTime.UtcNow,
                 DiscountDate = TH.GetDiscountUtcDate()
             };
-            
+
             Db.Products.Add(product);
             if (EH.DBSaveChangesUniversalErrorCheck(Db))
                 return;
@@ -176,6 +177,13 @@ namespace EnergeticProjectX.Forms
             {
                 button.BackColor = Color.Transparent;
             }
+        }
+
+        private void TextBoxOfPurchasePrice_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var text = TextBoxOfPurchasePrice.Text;
+
+            CHK.CheckPrice(e, text);
         }
     }
 }

@@ -279,6 +279,7 @@
             TextBoxOfQuantity.Name = "TextBoxOfQuantity";
             TextBoxOfQuantity.Size = new Size(308, 45);
             TextBoxOfQuantity.TabIndex = 5;
+            TextBoxOfQuantity.KeyPress += TextBoxOfQuantity_KeyPress;
             // 
             // TextBoxOfPurchaseAll
             // 
@@ -307,7 +308,7 @@
             ButtonOfCancel.Enter += TabSelection_Enter;
             ButtonOfCancel.Leave += TabSelection_Leave;
             // 
-            // MakingSupply
+            // MakeDeliveryForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -332,7 +333,7 @@
             Controls.Add(LabelOfCategory);
             Controls.Add(LabelOfMakingSupply);
             Controls.Add(DataGridViewOfSupply);
-            Name = "MakingSupply";
+            Name = "MakeDeliveryForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Оформление поставки";
             ((System.ComponentModel.ISupportInitialize)DataGridViewOfSupply).EndInit();

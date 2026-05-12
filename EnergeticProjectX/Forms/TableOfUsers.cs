@@ -27,6 +27,8 @@ namespace EnergeticProjectX.Forms
 
             this.userLogin = userLogin;
 
+            ActiveControl = DGVOfUsers;
+
             LoadUsers();
         }
         private void LoadUsers()

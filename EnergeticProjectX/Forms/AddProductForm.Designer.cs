@@ -99,6 +99,7 @@
             TextBoxOfPurchasePrice.Size = new Size(402, 45);
             TextBoxOfPurchasePrice.TabIndex = 4;
             TextBoxOfPurchasePrice.TextChanged += IsTextChanged;
+            TextBoxOfPurchasePrice.KeyPress += TextBoxOfPurchasePrice_KeyPress;
             // 
             // LabelOfUnit
             // 
@@ -175,7 +176,7 @@
             LabelOfCurrencySymbol.Size = new Size(38, 45);
             LabelOfCurrencySymbol.TabIndex = 0;
             // 
-            // AddProduct
+            // AddProductForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -195,7 +196,7 @@
             Controls.Add(LabelOfAddProduct);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "AddProduct";
+            Name = "AddProductForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Добавление нового товара";
             ResumeLayout(false);

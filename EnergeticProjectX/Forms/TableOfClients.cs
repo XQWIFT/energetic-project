@@ -30,6 +30,9 @@ namespace EnergeticProjectX.Forms
 
             this.userLogin = userLogin;
 
+            ActiveControl = DGVOfClients;
+
+
             LoadClients();
         }
 

@@ -4,6 +4,7 @@ using EnergeticProjectX.Properties;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Classes;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EnergeticProjectX.Forms
 {
@@ -61,9 +62,9 @@ namespace EnergeticProjectX.Forms
                 return;
             }
 
-            var password = Regex.Replace(TextBoxOfPassword.Text, @"\s", "");
-            var login = Regex.Replace(TextBoxOfLogin.Text, @"\s", "");
-            var passwordConfirmation = Regex.Replace(TextBoxOfPasswordConfirmation.Text, @"\s", "");
+            var password = Regex.Replace(TextBoxOfPassword.Text, @"\s+", "");
+            var login = Regex.Replace(TextBoxOfLogin.Text, @"\s+", "");
+            var passwordConfirmation = Regex.Replace(TextBoxOfPasswordConfirmation.Text, @"\s+", "");
 
             var userLoginFree = IsUserLoginFree(login, Db);
             var (passwordsMatch, passwordSatisfyRequirements) = UIHelper.IsPasswordRelevant(password, passwordConfirmation);
@@ -136,7 +137,7 @@ namespace EnergeticProjectX.Forms
 
         private void LabelOfAuthorization_Click(object sender, EventArgs e)
         {
-            var authorizationForm = new AuthorizationForm();
+            var authorizationForm = Program.ServiceProvider.GetRequiredService<AuthorizationForm>();
             FH.OpenForm(this, authorizationForm);
         }
 

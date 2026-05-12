@@ -287,6 +287,7 @@
             TextBoxOfPurchasePrice.Size = new Size(496, 50);
             TextBoxOfPurchasePrice.TabIndex = 46;
             TextBoxOfPurchasePrice.TextChanged += IsTextChanged;
+            TextBoxOfPurchasePrice.KeyPress += TextBoxOfPurchasePrice_KeyPress;
             // 
             // LabelOfPurchasePrice
             // 
@@ -327,7 +328,7 @@
             TextBoxOfCategory.TabIndex = 50;
             TextBoxOfCategory.TextChanged += IsTextChanged;
             // 
-            // EditProduct
+            // EditProductForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -359,7 +360,7 @@
             Controls.Add(LabelOfEditProduct);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "EditProduct";
+            Name = "EditProductForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Редактирование";
             ResumeLayout(false);

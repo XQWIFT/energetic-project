@@ -74,16 +74,20 @@ namespace EnergeticProjectX.Forms
 
             var newCategory = new Category
             {
-                Name = Regex.Replace(TextBoxOfCategoryName.Text.Trim(), @"\s+", " "),
+                Name = Regex.Replace(TextBoxOfCategoryName.Text, @"\s+", " "),
                 Unit_Id = (Guid)ComboBoxOfUnit.SelectedValue
             };
 
-            if (Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(c.Name, newCategory.Name)))
+            if (Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(c.Name, newCategory.Name)) ||
+                Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(c.Name, Regex.Replace(newCategory.Name, @"\s+", "")) ||
+                Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(Regex.Replace(c.Name, @"\s+", ""),
+                Regex.Replace(newCategory.Name, @"\s+", "")))))
             {
                 EH.ShowWarning(Resources.NewCategoryAlreadyExists, true);
 
                 return;
             }
+            
 
             Db.Categories.Add(newCategory);
             if (EH.DBSaveChangesUniversalErrorCheck(Db))

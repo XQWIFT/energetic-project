@@ -79,7 +79,7 @@
             DGVOfClients.RowHeadersVisible = false;
             DGVOfClients.RowHeadersWidth = 62;
             DGVOfClients.Size = new Size(952, 512);
-            DGVOfClients.TabIndex = 0;
+            DGVOfClients.TabIndex = 1;
             DGVOfClients.CellMouseClick += DGVOfClients_CellMouseClick;
             DGVOfClients.CellMouseDoubleClick += DGVOfClients_CellMouseClick;
             DGVOfClients.CellMouseEnter += DGVOfClients_CellMouseEnter;
@@ -96,7 +96,7 @@
             ButtonOfMainMenu.Location = new Point(12, 553);
             ButtonOfMainMenu.Name = "ButtonOfMainMenu";
             ButtonOfMainMenu.Size = new Size(284, 65);
-            ButtonOfMainMenu.TabIndex = 1;
+            ButtonOfMainMenu.TabIndex = 2;
             ButtonOfMainMenu.Text = "Главное меню";
             ButtonOfMainMenu.UseVisualStyleBackColor = true;
             ButtonOfMainMenu.Click += ButtonOfMainMenu_Click;
@@ -114,7 +114,7 @@
             ButtonOfAddClient.Location = new Point(302, 553);
             ButtonOfAddClient.Name = "ButtonOfAddClient";
             ButtonOfAddClient.Size = new Size(338, 65);
-            ButtonOfAddClient.TabIndex = 2;
+            ButtonOfAddClient.TabIndex = 3;
             ButtonOfAddClient.Text = "Добавить клиента";
             ButtonOfAddClient.UseVisualStyleBackColor = true;
             ButtonOfAddClient.Click += ButtonOfAddClient_Click;
@@ -133,7 +133,7 @@
             ButtonOfClient.Location = new Point(646, 553);
             ButtonOfClient.Name = "ButtonOfClient";
             ButtonOfClient.Size = new Size(318, 65);
-            ButtonOfClient.TabIndex = 3;
+            ButtonOfClient.TabIndex = 4;
             ButtonOfClient.Text = "Данные клиента";
             ButtonOfClient.UseVisualStyleBackColor = true;
             ButtonOfClient.Click += ButtonOfClient_Click;
@@ -144,7 +144,7 @@
             // 
             clientDisplayModelBindingSource.DataSource = typeof(Models.ClientDisplayModel);
             // 
-            // ListOfClients
+            // TableOfClients
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -156,7 +156,7 @@
             Controls.Add(DGVOfClients);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "ListOfClients";
+            Name = "TableOfClients";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Список клиентов";
             ((System.ComponentModel.ISupportInitialize)DGVOfClients).EndInit();

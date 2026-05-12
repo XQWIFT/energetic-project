@@ -1,12 +1,14 @@
-﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
-using PCM = EnergeticProjectX.Classes.PriceCurrencyManager;
-using TH = EnergeticProjectX.Classes.TimeHandler;
-using FH = EnergeticProjectX.Classes.FormHandler;
-using EnergeticProjectX.Classes;
+﻿using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using System.Globalization;
+using System.Text.RegularExpressions;
+using CHK = EnergeticProjectX.Classes.Chekouts;
+using EH = EnergeticProjectX.Classes.ErrorHandler;
+using FH = EnergeticProjectX.Classes.FormHandler;
+using PCM = EnergeticProjectX.Classes.PriceCurrencyManager;
+using TH = EnergeticProjectX.Classes.TimeHandler;
 
 namespace EnergeticProjectX.Forms
 {
@@ -92,7 +94,7 @@ namespace EnergeticProjectX.Forms
                     TextBoxOfPriceForSell.Text = PCM.SetPriceToChosenCurrency(Db, currentProduct.SalePrice, userLogin).ToString();
                     TextBoxOfCreationDate.Text = TH.UtcToLocalDateTime(currentProduct.CreationDate).ToString("dd.MM.yyyy HH:mm");
                     TextBoxOfDiscountDate.Text = TH.UtcDateToLocalDateOnly(currentProduct.DiscountDate).ToString("dd.MM.yyyy");
-                    
+
                 }
                 else
                 {
@@ -200,7 +202,7 @@ namespace EnergeticProjectX.Forms
                     return;
                 }
 
-                productToUpdate.Name = TextBoxOfName.Text.Trim().Replace("  ", " ");
+                productToUpdate.Name = Regex.Replace(TextBoxOfName.Text, @"\s+", " ");
 
                 productToUpdate.CategoryId = (Guid)ComboBoxOfCategory.SelectedValue;
 
@@ -214,7 +216,7 @@ namespace EnergeticProjectX.Forms
                 }
 
                 productToUpdate.PurchasePrice = PCM.SetPriceToDefaultCurrency(Db, (decimal)purchasePrice, userLogin);
-                
+
                 productToUpdate.SalePrice = PCM.GetSalePriceInDefaultCurrency(productToUpdate.PurchasePrice);
 
                 var creationDateInLocalTime = TH.UtcToLocalDateTime(productToUpdate.CreationDate);
@@ -319,6 +321,13 @@ namespace EnergeticProjectX.Forms
             {
                 button.BackColor = Color.Transparent;
             }
+        }
+
+        private void TextBoxOfPurchasePrice_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var text = TextBoxOfPurchasePrice.Text;
+
+            CHK.CheckPrice(e, text);
         }
     }
 }
