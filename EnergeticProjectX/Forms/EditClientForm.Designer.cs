@@ -40,6 +40,7 @@
             LabelOfName = new Label();
             LabelOfEditClient = new Label();
             ButtonOfDeleteClient = new Button();
+            ButtonOfCheckByINN = new Button();
             SuspendLayout();
             // 
             // ComboBoxOfContractor
@@ -62,9 +63,9 @@
             ButtonOfCancel.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfCancel.FlatStyle = FlatStyle.Flat;
             ButtonOfCancel.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfCancel.Location = new Point(401, 572);
+            ButtonOfCancel.Location = new Point(400, 639);
             ButtonOfCancel.Name = "ButtonOfCancel";
-            ButtonOfCancel.Size = new Size(266, 69);
+            ButtonOfCancel.Size = new Size(267, 69);
             ButtonOfCancel.TabIndex = 6;
             ButtonOfCancel.Text = "Отменить";
             ButtonOfCancel.UseVisualStyleBackColor = true;
@@ -81,9 +82,9 @@
             ButtonOfSaveChanges.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfSaveChanges.FlatStyle = FlatStyle.Flat;
             ButtonOfSaveChanges.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfSaveChanges.Location = new Point(127, 572);
+            ButtonOfSaveChanges.Location = new Point(127, 639);
             ButtonOfSaveChanges.Name = "ButtonOfSaveChanges";
-            ButtonOfSaveChanges.Size = new Size(259, 68);
+            ButtonOfSaveChanges.Size = new Size(267, 68);
             ButtonOfSaveChanges.TabIndex = 5;
             ButtonOfSaveChanges.Text = "Сохранить";
             ButtonOfSaveChanges.UseVisualStyleBackColor = true;
@@ -173,9 +174,9 @@
             ButtonOfDeleteClient.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfDeleteClient.FlatStyle = FlatStyle.Flat;
             ButtonOfDeleteClient.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfDeleteClient.Location = new Point(201, 657);
+            ButtonOfDeleteClient.Location = new Point(127, 713);
             ButtonOfDeleteClient.Name = "ButtonOfDeleteClient";
-            ButtonOfDeleteClient.Size = new Size(377, 68);
+            ButtonOfDeleteClient.Size = new Size(540, 68);
             ButtonOfDeleteClient.TabIndex = 7;
             ButtonOfDeleteClient.Text = "Удалить клиента";
             ButtonOfDeleteClient.UseVisualStyleBackColor = true;
@@ -183,12 +184,30 @@
             ButtonOfDeleteClient.Enter += TabSelection_Enter;
             ButtonOfDeleteClient.Leave += TabSelection_Leave;
             // 
+            // ButtonOfCheckByINN
+            // 
+            ButtonOfCheckByINN.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfCheckByINN.FlatAppearance.BorderSize = 4;
+            ButtonOfCheckByINN.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfCheckByINN.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfCheckByINN.FlatStyle = FlatStyle.Flat;
+            ButtonOfCheckByINN.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            ButtonOfCheckByINN.ForeColor = SystemColors.ControlText;
+            ButtonOfCheckByINN.Location = new Point(127, 563);
+            ButtonOfCheckByINN.Name = "ButtonOfCheckByINN";
+            ButtonOfCheckByINN.Size = new Size(540, 70);
+            ButtonOfCheckByINN.TabIndex = 8;
+            ButtonOfCheckByINN.Text = "Проверить по ИНН";
+            ButtonOfCheckByINN.UseVisualStyleBackColor = true;
+            ButtonOfCheckByINN.Click += ButtonOfCheckByINN_Click;
+            // 
             // EditClientForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
-            ClientSize = new Size(818, 763);
+            ClientSize = new Size(818, 831);
+            Controls.Add(ButtonOfCheckByINN);
             Controls.Add(ButtonOfDeleteClient);
             Controls.Add(ComboBoxOfContractor);
             Controls.Add(ButtonOfCancel);
@@ -224,5 +243,6 @@
         private Label LabelOfName;
         private Label LabelOfEditClient;
         private Button ButtonOfDeleteClient;
+        private Button ButtonOfCheckByINN;
     }
 }

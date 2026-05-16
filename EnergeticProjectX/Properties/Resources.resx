@@ -531,4 +531,7 @@
   <data name="CleanUpHiddenClientsError" xml:space="preserve">
     <value>Ошибка очистки скрытых клиентов.</value>
   </data>
+  <data name="NewFuncIsInProgress" xml:space="preserve">
+    <value>Данный функционал находится на этапе разработки. Пожалуйста, попробуйте позже!</value>
+  </data>
 </root>

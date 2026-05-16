@@ -1,5 +1,6 @@
-﻿using EnergeticProjectX.Classes;
-using EnergeticProjectX.Enums;
+﻿using EnergeticProjectX.Enums;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,11 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class EditCategoryForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
 
         private readonly string userLogin;
 
@@ -22,15 +27,21 @@ namespace EnergeticProjectX.Forms
         /// Конструктор для реализации изменения существующей категорий.
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
-        public EditCategoryForm(string userLogin)
+        public EditCategoryForm(string userLogin, IProductService productService, IUserService userService, IClientService clientService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
 
+            _productService = productService;
+
+            _userService = userService;
+
+            _clientService = clientService;
+
             LoadCategories();
 
-            AddCategoryForm.LoadUnits(Db, ref ComboBoxOfNewUnitData);
+            _productService.GetUnits();
         }
 
         private void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -45,7 +56,7 @@ namespace EnergeticProjectX.Forms
 
             if (chosenCategory != null)
             {
-                var currentUnit = Db.Units.FirstOrDefault(u => u.Unit_Id == chosenCategory.Unit_Id);
+                var currentUnit = _productService.LoadCategoryUnit(chosenCategory);
 
                 if (currentUnit != null)
                 {
@@ -68,7 +79,7 @@ namespace EnergeticProjectX.Forms
 
         private void LoadCategories()
         {
-            var categories = Db.Categories.Where(u => u.Status == Status.Active).ToList();
+            var categories = _productService.GetCategories();
 
             if (categories != null && categories.Count != 0)
             {
@@ -88,7 +99,11 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfSaveChanges_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
             if (ComboBoxOfCategory.SelectedValue == null || ComboBoxOfNewUnitData.SelectedValue == null)
             {
@@ -99,9 +114,9 @@ namespace EnergeticProjectX.Forms
 
             var newCategoryName = Interaction.InputBox(Resources.InputNewCategoryName, Resources.EditCategory, ComboBoxOfCategory.Text).Trim();
 
-            if ((Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(c.Name, newCategoryName)) ||
-                Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(c.Name, Regex.Replace(newCategoryName, @"\s+", "")) ||
-                Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(Regex.Replace(c.Name, @"\s+", ""),
+            if ((_productService.GetCategories().Any(c => EF.Functions.ILike(c.Name, newCategoryName)) ||
+                _productService.GetCategories().Any(c => EF.Functions.ILike(c.Name, Regex.Replace(newCategoryName, @"\s+", "")) ||
+                _productService.GetCategories().Any(c => EF.Functions.ILike(Regex.Replace(c.Name, @"\s+", ""),
                 Regex.Replace(newCategoryName, @"\s+", ""))))))
             {
                 EH.ShowWarning(Resources.NewCategoryAlreadyExists, true);
@@ -118,7 +133,7 @@ namespace EnergeticProjectX.Forms
             var selectedUnitId = (Guid)ComboBoxOfNewUnitData.SelectedValue;
             var chosenCategoryId = (Guid)ComboBoxOfCategory.SelectedValue;
 
-            var category = Db.Categories.Find(chosenCategoryId);
+            var category = _productService.GetCategoryById(chosenCategoryId);
 
             if (category != null)
             {
@@ -129,8 +144,12 @@ namespace EnergeticProjectX.Forms
 
                 if (question == DialogResult.Yes)
                 {
-                    if (EH.DBSaveChangesUniversalErrorCheck(Db))
+                    if (_userService.DbSaveChangesErrorCheck())
+                    {
+                        EH.ShowError(Resources.UniversalErrorDatabase, true);
                         return;
+                    }
+
 
                     EH.ShowInformation(Resources.SuccessUpdateCategory);
                 }
@@ -147,7 +166,11 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfDelete_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
             if (ComboBoxOfCategory.SelectedValue == null)
             {
@@ -164,14 +187,18 @@ namespace EnergeticProjectX.Forms
             {
                 var chosenCategoryId = (Guid)ComboBoxOfCategory.SelectedValue;
 
-                var category = Db.Categories.Find(chosenCategoryId);
+                var category = _productService.GetCategoryById(chosenCategoryId);
 
                 if (category != null)
                 {
                     category.Status = Status.Hidden;
 
-                    if (EH.DBSaveChangesUniversalErrorCheck(Db))
+                    if (_userService.DbSaveChangesErrorCheck())
+                    {
+                        EH.ShowError(Resources.UniversalErrorDatabase, true);
                         return;
+                    }
+                    
 
                     EH.ShowInformation(Resources.CategorySuccessfullyDeleted);
 
@@ -188,7 +215,7 @@ namespace EnergeticProjectX.Forms
         private void OpenProductCatalog()
         {
             Hide();
-            var productCatalog = new TableOfProducts(userLogin);
+            var productCatalog = new TableOfProducts(userLogin, _userService, _productService, _clientService);
             productCatalog.ShowDialog();
             Close();
         }

@@ -62,7 +62,7 @@
             ButtonOfCancel.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfCancel.FlatStyle = FlatStyle.Flat;
             ButtonOfCancel.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfCancel.Location = new Point(435, 412);
+            ButtonOfCancel.Location = new Point(428, 452);
             ButtonOfCancel.Name = "ButtonOfCancel";
             ButtonOfCancel.Size = new Size(310, 69);
             ButtonOfCancel.TabIndex = 6;
@@ -81,7 +81,7 @@
             ButtonOfAddProduct.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfAddProduct.FlatStyle = FlatStyle.Flat;
             ButtonOfAddProduct.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfAddProduct.Location = new Point(110, 412);
+            ButtonOfAddProduct.Location = new Point(103, 452);
             ButtonOfAddProduct.Name = "ButtonOfAddProduct";
             ButtonOfAddProduct.Size = new Size(309, 68);
             ButtonOfAddProduct.TabIndex = 5;

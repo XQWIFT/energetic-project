@@ -1,11 +1,12 @@
 ﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
 using FH = EnergeticProjectX.Classes.FormHandler;
 using System.Data;
-using EnergeticProjectX.Enums;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Models;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Objects;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 
 namespace EnergeticProjectX.Forms
 {
@@ -14,7 +15,11 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class TableOfClients : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
 
         private readonly BindingSource bindingSource = [];
 
@@ -24,14 +29,19 @@ namespace EnergeticProjectX.Forms
         /// Конструктор для реализации работы формы с таблицей клиентов.
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
-        public TableOfClients(string userLogin)
+        public TableOfClients(string userLogin, IUserService userService, IClientService clientService, IProductService productService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
 
-            ActiveControl = DGVOfClients;
+            _clientService = clientService;
 
+            _userService = userService;
+
+            _productService = productService;
+
+            ActiveControl = DGVOfClients;
 
             LoadClients();
         }
@@ -40,7 +50,7 @@ namespace EnergeticProjectX.Forms
         {
             try
             {
-                bindingSource.DataSource = Db.Clients.Where(c => c.Status == Status.Active)
+                bindingSource.DataSource = _clientService.LoadActiveClients()
                     .Select(u => new ClientDisplayModel
                     {
                         Name = u.Name!,
@@ -53,7 +63,7 @@ namespace EnergeticProjectX.Forms
                 DGVOfClients.DataSource = bindingSource;
                 bindingSource.ResetBindings(false);
 
-                EH.ShowInformation($"{Resources.HowMuchClientsUploaded} {Db.Clients.Where(c => c.Status == Status.Active).Count()}");
+                EH.ShowInformation($"{Resources.HowMuchClientsUploaded} {_clientService.LoadActiveClients().Count}");
             }
             catch (Exception)
             {
@@ -114,7 +124,11 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfClient_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+                return;
+            }
 
             if (DGVOfClients.CurrentRow != null)
             {
@@ -123,10 +137,12 @@ namespace EnergeticProjectX.Forms
                 var Name = selectedRow.Cells[nameof(Client.Name)].Value!.ToString()!;
                 var Contractor = selectedRow.Cells[nameof(Client.Contractor)].Value!.ToString()!;
                 var Inn = selectedRow.Cells[nameof(Client.INN)].Value!.ToString()!;
-                var ClientId = Db.Clients.FirstOrDefault(u => u.INN == Inn)!.Client_Id;
+                var ClientId = _clientService.FindClientByINN(Inn)!.Client_Id;
                 var ContactInfo = selectedRow.Cells[nameof(Client.ContactInfo)].Value!.ToString()!;
 
-                var editClient = new EditClientForm(userLogin, ClientId, Name, Contractor, Inn, ContactInfo);
+                var editClient = new EditClientForm(userLogin, ClientId, Name, Contractor, Inn, ContactInfo,
+                    _clientService, _userService, _productService);
+
                 FH.OpenForm(this, editClient);
             }
             else
@@ -137,17 +153,25 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfMainMenu_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+                return;
+            }
 
-            var administratorMainMenu = new AdministratorMainMenu(userLogin);
+            var administratorMainMenu = new AdministratorMainMenu(userLogin, _userService, _clientService, _productService);
             FH.OpenForm(this, administratorMainMenu);
         }
 
         private void ButtonOfAddClient_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+                return;
+            }
 
-            var addClient = new AddClientForm(userLogin);
+            var addClient = new AddClientForm(userLogin, _userService, _clientService, _productService);
             FH.OpenForm(this, addClient);
         }
 

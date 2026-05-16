@@ -28,20 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             ButtonOfAddCategory = new Button();
             ButtonOfAddProduct = new Button();
             ButtonOfMainMenu = new Button();
             ButtonOfProductCard = new Button();
-            DataGridOfProducts = new DataGridView();
+            DGVOfProducts = new DataGridView();
             ButtonOfMakingShipment = new Button();
             PanelSearch = new Panel();
             LabelOfSearch = new Label();
-            textBoxSearch = new TextBox();
+            TextBoxOfSearch = new TextBox();
             ButtonOfSearch = new Button();
             ButtonOfChangeCaterogies = new Button();
-            ((System.ComponentModel.ISupportInitialize)DataGridOfProducts).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DGVOfProducts).BeginInit();
             PanelSearch.SuspendLayout();
             SuspendLayout();
             // 
@@ -119,49 +119,48 @@
             ButtonOfProductCard.Enter += TabSelection_Enter;
             ButtonOfProductCard.Leave += TabSelection_Leave;
             // 
-            // DataGridOfProducts
+            // DGVOfProducts
             // 
-            DataGridOfProducts.AllowUserToAddRows = false;
-            DataGridOfProducts.AllowUserToDeleteRows = false;
-            DataGridOfProducts.AllowUserToResizeColumns = false;
-            DataGridOfProducts.AllowUserToResizeRows = false;
-            DataGridOfProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            DataGridOfProducts.BackgroundColor = SystemColors.ControlLight;
-            DataGridOfProducts.BorderStyle = BorderStyle.Fixed3D;
-            DataGridOfProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            DataGridOfProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            DataGridOfProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DataGridOfProducts.EnableHeadersVisualStyles = false;
-            DataGridOfProducts.GridColor = SystemColors.WindowText;
-            DataGridOfProducts.Location = new Point(16, 81);
-            DataGridOfProducts.MultiSelect = false;
-            DataGridOfProducts.Name = "DataGridOfProducts";
-            DataGridOfProducts.ReadOnly = true;
-            DataGridOfProducts.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            DataGridOfProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            DataGridOfProducts.RowHeadersVisible = false;
-            DataGridOfProducts.RowHeadersWidth = 62;
-            DataGridOfProducts.Size = new Size(964, 540);
-            DataGridOfProducts.TabIndex = 0;
-            DataGridOfProducts.CellFormatting += DGVProducts_CellFormatting;
-            DataGridOfProducts.CellMouseClick += DGVProducts_CellMouseClick;
-            DataGridOfProducts.CellMouseDoubleClick += DGVProducts_CellMouseClick;
-            DataGridOfProducts.CellMouseEnter += DGVProducts_CellMouseEnter;
-            DataGridOfProducts.SelectionChanged += DGVProducts_SelectionChanged;
+            DGVOfProducts.AllowUserToAddRows = false;
+            DGVOfProducts.AllowUserToDeleteRows = false;
+            DGVOfProducts.AllowUserToResizeColumns = false;
+            DGVOfProducts.AllowUserToResizeRows = false;
+            DGVOfProducts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            DGVOfProducts.BackgroundColor = SystemColors.ControlLight;
+            DGVOfProducts.BorderStyle = BorderStyle.Fixed3D;
+            DGVOfProducts.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            DGVOfProducts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            DGVOfProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DGVOfProducts.EnableHeadersVisualStyles = false;
+            DGVOfProducts.GridColor = SystemColors.WindowText;
+            DGVOfProducts.Location = new Point(16, 81);
+            DGVOfProducts.MultiSelect = false;
+            DGVOfProducts.Name = "DGVOfProducts";
+            DGVOfProducts.ReadOnly = true;
+            DGVOfProducts.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            DGVOfProducts.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            DGVOfProducts.RowHeadersVisible = false;
+            DGVOfProducts.RowHeadersWidth = 62;
+            DGVOfProducts.Size = new Size(964, 540);
+            DGVOfProducts.TabIndex = 0;
+            DGVOfProducts.CellMouseClick += DGVProducts_CellMouseClick;
+            DGVOfProducts.CellMouseDoubleClick += DGVProducts_CellMouseClick;
+            DGVOfProducts.CellMouseEnter += DGVProducts_CellMouseEnter;
+            DGVOfProducts.SelectionChanged += DGVProducts_SelectionChanged;
             // 
             // ButtonOfMakingShipment
             // 
@@ -184,7 +183,7 @@
             // PanelSearch
             // 
             PanelSearch.Controls.Add(LabelOfSearch);
-            PanelSearch.Controls.Add(textBoxSearch);
+            PanelSearch.Controls.Add(TextBoxOfSearch);
             PanelSearch.Controls.Add(ButtonOfSearch);
             PanelSearch.Location = new Point(13, 12);
             PanelSearch.Name = "PanelSearch";
@@ -202,13 +201,13 @@
             LabelOfSearch.Text = "Поиск:";
             LabelOfSearch.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // textBoxSearch
+            // TextBoxOfSearch
             // 
-            textBoxSearch.Font = new Font("Segoe UI", 12F);
-            textBoxSearch.Location = new Point(149, 14);
-            textBoxSearch.Name = "textBoxSearch";
-            textBoxSearch.Size = new Size(622, 39);
-            textBoxSearch.TabIndex = 1;
+            TextBoxOfSearch.Font = new Font("Segoe UI", 12F);
+            TextBoxOfSearch.Location = new Point(149, 14);
+            TextBoxOfSearch.Name = "TextBoxOfSearch";
+            TextBoxOfSearch.Size = new Size(622, 39);
+            TextBoxOfSearch.TabIndex = 1;
             // 
             // ButtonOfSearch
             // 
@@ -252,7 +251,7 @@
             Controls.Add(ButtonOfChangeCaterogies);
             Controls.Add(PanelSearch);
             Controls.Add(ButtonOfMakingShipment);
-            Controls.Add(DataGridOfProducts);
+            Controls.Add(DGVOfProducts);
             Controls.Add(ButtonOfProductCard);
             Controls.Add(ButtonOfAddCategory);
             Controls.Add(ButtonOfAddProduct);
@@ -262,7 +261,7 @@
             Name = "TableOfProducts";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Информация о товаре";
-            ((System.ComponentModel.ISupportInitialize)DataGridOfProducts).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DGVOfProducts).EndInit();
             PanelSearch.ResumeLayout(false);
             PanelSearch.PerformLayout();
             ResumeLayout(false);
@@ -274,10 +273,10 @@
         private Button ButtonOfAddProduct;
         private Button ButtonOfMainMenu;
         private Button ButtonOfProductCard;
-        private DataGridView DataGridOfProducts;
+        private DataGridView DGVOfProducts;
         private Button ButtonOfMakingShipment;
         private Panel PanelSearch;
-        private TextBox textBoxSearch;
+        private TextBox TextBoxOfSearch;
         private Label LabelOfSearch;
         private Button ButtonOfSearch;
         private Button ButtonOfChangeCaterogies;

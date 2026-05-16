@@ -5,6 +5,8 @@ using EnergeticProjectX.Classes;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Enums;
 using System.Text.RegularExpressions;
+using EnergeticProjectX.Interfaces;
+using EnergeticProjectX.interfaces;
 
 namespace EnergeticProjectX.Forms
 {
@@ -13,7 +15,11 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class EditClientForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
 
         private readonly string userLogin;
         private readonly Guid clientId;
@@ -30,9 +36,16 @@ namespace EnergeticProjectX.Forms
         /// <param name="contractor">Контрагент.</param>
         /// <param name="iNN">Идентификационный номер клиента.</param>
         /// <param name="contactInfo">Контактная информация.</param>
-        public EditClientForm(string userLogin, Guid clientId, string name, string contractor, string iNN, string contactInfo)
+        public EditClientForm(string userLogin, Guid clientId, string name, string contractor, string iNN,
+            string contactInfo, IClientService clientService, IUserService userService, IProductService productService)
         {
             InitializeComponent();
+
+            _clientService = clientService;
+
+            _userService = userService;
+
+            _productService = productService;
 
             this.userLogin = userLogin;
             this.clientId = clientId;
@@ -63,7 +76,11 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfSaveChanges_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
             if (!UIHelper.ValidateINN(TextBoxOfINN.Text.Trim(), ComboBoxOfContractor.Text))
             {
@@ -73,7 +90,7 @@ namespace EnergeticProjectX.Forms
             }
             else if (iNN != TextBoxOfINN.Text.ToString())
             {
-                if (Db.Clients.Any(u => u.INN == TextBoxOfINN.Text.Trim()))
+                if (_clientService.FindClientByINN(iNN) != null)
                 {
                     EH.ShowWarning(Resources.InnAlreadyExists, true);
 
@@ -92,18 +109,26 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfDeleteClient_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
             var answer = EH.ShowConfirmation($"{Resources.SureWantToDeleteClient} {name}?");
 
             if (answer == DialogResult.Yes)
             {
-                var client = Db.Clients.FirstOrDefault(u => u.Client_Id == clientId);
+                var client = _clientService.FindClientById(clientId);
 
                 client?.Status = Status.Hidden;
 
-                if (EH.DBSaveChangesUniversalErrorCheck(Db))
+                if (_userService.DbSaveChangesErrorCheck())
+                {
+                    EH.ShowError(Resources.UniversalErrorDatabase, true);
                     return;
+                }
+
             }
             else
             {
@@ -113,14 +138,17 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
-
+            if (_userService.EnsureUserActive == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
             OpenListOfClients();
         }
 
         private void OpenListOfClients()
         {
-            var listOfClients = new TableOfClients(userLogin);
+            var listOfClients = new TableOfClients(userLogin, _userService, _clientService, _productService);
             FH.OpenForm(this, listOfClients);
         }
 
@@ -147,7 +175,7 @@ namespace EnergeticProjectX.Forms
 
         private void ChangeUser()
         {
-            var client = Db.Clients.FirstOrDefault(u => u.Client_Id == clientId);
+            var client = _clientService.FindClientById(clientId);
 
             if (client == null)
             {
@@ -162,10 +190,20 @@ namespace EnergeticProjectX.Forms
             client.Status = Status.Active;
             client.ContactInfo = Regex.Replace(TextBoxOfContactInfo.Text, @"\s+", " ");
 
-            if (EH.DBSaveChangesUniversalErrorCheck(Db))
+            if (_userService.DbSaveChangesErrorCheck())
+            {
+                EH.ShowError(Resources.UniversalErrorDatabase, true);
                 return;
+            }
 
             OpenListOfClients();
+        }
+
+        private void ButtonOfCheckByINN_Click(object sender, EventArgs e)
+        {
+            EH.ShowAlert(Resources.NewFuncIsInProgress);
+
+            return;
         }
     }
 }

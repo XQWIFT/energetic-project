@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             LabelOfTitle = new Label();
             LabelOfClient = new Label();
             ComboBoxOfClient = new ComboBox();
@@ -43,6 +43,10 @@
             LabelOfStockQuantity = new Label();
             TextBoxOfStockQuantity = new TextBox();
             ButtonOfProductDelete = new Button();
+            labelOfRegion = new Label();
+            comboboxOfRegion = new ComboBox();
+            labelOfCity = new Label();
+            comboboxOfCity = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)NumericQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DGVOfItems).BeginInit();
             SuspendLayout();
@@ -60,7 +64,7 @@
             // 
             LabelOfClient.AutoSize = true;
             LabelOfClient.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            LabelOfClient.Location = new Point(10, 117);
+            LabelOfClient.Location = new Point(8, 110);
             LabelOfClient.Name = "LabelOfClient";
             LabelOfClient.Size = new Size(180, 38);
             LabelOfClient.TabIndex = 0;
@@ -70,7 +74,7 @@
             // 
             ComboBoxOfClient.DropDownStyle = ComboBoxStyle.DropDownList;
             ComboBoxOfClient.Font = new Font("Segoe UI", 14F);
-            ComboBoxOfClient.Location = new Point(198, 114);
+            ComboBoxOfClient.Location = new Point(196, 107);
             ComboBoxOfClient.Name = "ComboBoxOfClient";
             ComboBoxOfClient.Size = new Size(352, 46);
             ComboBoxOfClient.TabIndex = 1;
@@ -79,7 +83,7 @@
             // 
             LabelOfProduct.AutoSize = true;
             LabelOfProduct.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            LabelOfProduct.Location = new Point(12, 176);
+            LabelOfProduct.Location = new Point(12, 295);
             LabelOfProduct.Name = "LabelOfProduct";
             LabelOfProduct.Size = new Size(96, 38);
             LabelOfProduct.TabIndex = 0;
@@ -89,7 +93,7 @@
             // 
             ComboBoxOfProduct.DropDownStyle = ComboBoxStyle.DropDownList;
             ComboBoxOfProduct.Font = new Font("Segoe UI", 14F);
-            ComboBoxOfProduct.Location = new Point(198, 178);
+            ComboBoxOfProduct.Location = new Point(196, 295);
             ComboBoxOfProduct.Name = "ComboBoxOfProduct";
             ComboBoxOfProduct.Size = new Size(352, 46);
             ComboBoxOfProduct.TabIndex = 2;
@@ -99,7 +103,7 @@
             // 
             LabelOfQuantity.AutoSize = true;
             LabelOfQuantity.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            LabelOfQuantity.Location = new Point(12, 304);
+            LabelOfQuantity.Location = new Point(12, 423);
             LabelOfQuantity.Name = "LabelOfQuantity";
             LabelOfQuantity.Size = new Size(178, 38);
             LabelOfQuantity.TabIndex = 0;
@@ -108,7 +112,7 @@
             // NumericQuantity
             // 
             NumericQuantity.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            NumericQuantity.Location = new Point(198, 302);
+            NumericQuantity.Location = new Point(196, 421);
             NumericQuantity.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             NumericQuantity.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             NumericQuantity.Name = "NumericQuantity";
@@ -126,7 +130,7 @@
             ButtonOfAddProduct.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfAddProduct.FlatStyle = FlatStyle.Flat;
             ButtonOfAddProduct.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfAddProduct.Location = new Point(76, 389);
+            ButtonOfAddProduct.Location = new Point(76, 479);
             ButtonOfAddProduct.Name = "ButtonOfAddProduct";
             ButtonOfAddProduct.Size = new Size(393, 62);
             ButtonOfAddProduct.TabIndex = 5;
@@ -145,14 +149,14 @@
             DGVOfItems.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             DGVOfItems.BackgroundColor = SystemColors.ControlLight;
             DGVOfItems.BorderStyle = BorderStyle.Fixed3D;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            DGVOfItems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            DGVOfItems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             DGVOfItems.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGVOfItems.EnableHeadersVisualStyles = false;
             DGVOfItems.Location = new Point(564, 0);
@@ -174,7 +178,7 @@
             ButtonOfMakingShipment.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfMakingShipment.FlatStyle = FlatStyle.Flat;
             ButtonOfMakingShipment.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfMakingShipment.Location = new Point(76, 538);
+            ButtonOfMakingShipment.Location = new Point(76, 628);
             ButtonOfMakingShipment.Name = "ButtonOfMakingShipment";
             ButtonOfMakingShipment.Size = new Size(393, 56);
             ButtonOfMakingShipment.TabIndex = 7;
@@ -189,7 +193,7 @@
             ButtonOfCancel.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfCancel.FlatStyle = FlatStyle.Flat;
             ButtonOfCancel.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfCancel.Location = new Point(76, 609);
+            ButtonOfCancel.Location = new Point(76, 699);
             ButtonOfCancel.Name = "ButtonOfCancel";
             ButtonOfCancel.Size = new Size(393, 58);
             ButtonOfCancel.TabIndex = 8;
@@ -201,7 +205,7 @@
             // 
             LabelOfStockQuantity.AutoSize = true;
             LabelOfStockQuantity.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfStockQuantity.Location = new Point(12, 240);
+            LabelOfStockQuantity.Location = new Point(12, 359);
             LabelOfStockQuantity.Name = "LabelOfStockQuantity";
             LabelOfStockQuantity.Size = new Size(125, 38);
             LabelOfStockQuantity.TabIndex = 0;
@@ -211,7 +215,7 @@
             // 
             TextBoxOfStockQuantity.BackColor = Color.White;
             TextBoxOfStockQuantity.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            TextBoxOfStockQuantity.Location = new Point(198, 240);
+            TextBoxOfStockQuantity.Location = new Point(196, 359);
             TextBoxOfStockQuantity.Name = "TextBoxOfStockQuantity";
             TextBoxOfStockQuantity.ReadOnly = true;
             TextBoxOfStockQuantity.Size = new Size(352, 45);
@@ -225,7 +229,7 @@
             ButtonOfProductDelete.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfProductDelete.FlatStyle = FlatStyle.Flat;
             ButtonOfProductDelete.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfProductDelete.Location = new Point(76, 466);
+            ButtonOfProductDelete.Location = new Point(76, 556);
             ButtonOfProductDelete.Name = "ButtonOfProductDelete";
             ButtonOfProductDelete.Size = new Size(393, 57);
             ButtonOfProductDelete.TabIndex = 6;
@@ -233,12 +237,54 @@
             ButtonOfProductDelete.UseVisualStyleBackColor = true;
             ButtonOfProductDelete.Click += ButtonOfProductDelete_Click;
             // 
-            // MakingShipment
+            // labelOfRegion
+            // 
+            labelOfRegion.AutoSize = true;
+            labelOfRegion.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            labelOfRegion.Location = new Point(8, 172);
+            labelOfRegion.Name = "labelOfRegion";
+            labelOfRegion.Size = new Size(159, 38);
+            labelOfRegion.TabIndex = 9;
+            labelOfRegion.Text = "Регион РФ";
+            // 
+            // comboboxOfRegion
+            // 
+            comboboxOfRegion.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboboxOfRegion.Font = new Font("Segoe UI", 14F);
+            comboboxOfRegion.Location = new Point(196, 169);
+            comboboxOfRegion.Name = "comboboxOfRegion";
+            comboboxOfRegion.Size = new Size(352, 46);
+            comboboxOfRegion.TabIndex = 10;
+            // 
+            // labelOfCity
+            // 
+            labelOfCity.AutoSize = true;
+            labelOfCity.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            labelOfCity.Location = new Point(10, 233);
+            labelOfCity.Name = "labelOfCity";
+            labelOfCity.Size = new Size(97, 38);
+            labelOfCity.TabIndex = 11;
+            labelOfCity.Text = "Город";
+            // 
+            // comboboxOfCity
+            // 
+            comboboxOfCity.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboboxOfCity.Font = new Font("Segoe UI", 14F);
+            comboboxOfCity.Location = new Point(196, 233);
+            comboboxOfCity.Name = "comboboxOfCity";
+            comboboxOfCity.Size = new Size(352, 46);
+            comboboxOfCity.TabIndex = 12;
+            // 
+            // MakeShipmentForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
             ClientSize = new Size(1164, 768);
+            Controls.Add(labelOfCity);
+            Controls.Add(comboboxOfCity);
+            Controls.Add(labelOfRegion);
+            Controls.Add(comboboxOfRegion);
             Controls.Add(ButtonOfProductDelete);
             Controls.Add(TextBoxOfStockQuantity);
             Controls.Add(LabelOfStockQuantity);
@@ -255,7 +301,7 @@
             Controls.Add(ButtonOfCancel);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "MakingShipment";
+            Name = "MakeShipmentForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Оформление отгрузки";
             ((System.ComponentModel.ISupportInitialize)NumericQuantity).EndInit();
@@ -280,5 +326,9 @@
         private Label LabelOfStockQuantity;
         private TextBox TextBoxOfStockQuantity;
         private Button ButtonOfProductDelete;
+        private Label labelOfRegion;
+        private ComboBox comboboxOfRegion;
+        private Label labelOfCity;
+        private ComboBox comboboxOfCity;
     }
 }

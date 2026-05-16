@@ -1,19 +1,17 @@
-﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
-using FH = EnergeticProjectX.Classes.FormHandler;
+﻿using FH = EnergeticProjectX.Classes.FormHandler;
+using EH = EnergeticProjectX.Classes.ErrorHandler;
+using TH = EnergeticProjectX.Classes.TimeHandler;
 using EnergeticProjectX.Enums;
-using EnergeticProjectX.Models;
-using EnergeticProjectX.Properties;
 using EnergeticProjectX.Objects;
-using Microsoft.EntityFrameworkCore;
 using EnergeticProjectX.interfaces;
 using EnergeticProjectX.Interfaces;
+using EnergeticProjectX.Models;
+using EnergeticProjectX.Properties;
+using Microsoft.EntityFrameworkCore;
 
 namespace EnergeticProjectX.Forms
 {
-    /// <summary>
-    /// Форма для работы с каталогом товаров в виде таблицы.
-    /// </summary>
-    public partial class TableOfProducts : Form
+    public partial class HeatMapForm : Form
     {
         private readonly IUserService _userService;
 
@@ -25,15 +23,11 @@ namespace EnergeticProjectX.Forms
 
         private readonly string userLogin;
 
-        private bool isWarehouseman = false;
-
-        private string? selectedArticle;
-
         /// <summary>
         /// Конструктор для реализации формы каталога товаров.
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
-        public TableOfProducts(string userLogin, IUserService userService, IProductService productService,
+        public HeatMapForm(string userLogin, IUserService userService, IProductService productService,
             IClientService clientService)
         {
             InitializeComponent();
@@ -46,37 +40,9 @@ namespace EnergeticProjectX.Forms
 
             _clientService = clientService;
 
-            LoadUser();
-
             LoadProducts();
-        }
 
-        private void LoadUser()
-        {
-            var user = EnsureUserActive();
-
-            if (user == null)
-                return;
-
-            if (user.UserRole == UserRoles.Administrator)
-            {
-                ButtonOfAddCategory.Visible = true;
-                ButtonOfChangeCaterogies.Visible = true;
-                ButtonOfAddProduct.Visible = true;
-                ButtonOfProductCard.Visible = true;
-                PanelSearch.Visible = true;
-                ButtonOfMakingShipment.Visible = false;
-            }
-            else if (user.UserRole == UserRoles.Warehouseman)
-            {
-                isWarehouseman = true;
-                ButtonOfAddCategory.Visible = false;
-                ButtonOfChangeCaterogies.Visible = false;
-                ButtonOfAddProduct.Visible = false;
-                ButtonOfProductCard.Visible = true;
-                ButtonOfMakingShipment.Visible = true;
-                PanelSearch.Visible = true;
-            }
+            ActiveControl = DGVOfProducts;
         }
 
         private void LoadProducts(string? searchText = null)
@@ -142,7 +108,7 @@ namespace EnergeticProjectX.Forms
                 DGVOfProducts.DataSource = bindingSource;
                 bindingSource.ResetBindings(false);
 
-                if (!isWarehouseman)
+                if (_userService.FindByLogin(userLogin).UserRole == UserRoles.Administrator)
                 {
                     EH.ShowInformation($"{Resources.HowMuchProductsUploaded} {products.Count}.");
                 }
@@ -152,22 +118,6 @@ namespace EnergeticProjectX.Forms
                 EH.ShowError(Resources.ErrorUploadData, true);
 
                 return;
-            }
-        }
-
-        private void DGVProducts_SelectionChanged(object sender, EventArgs e)
-        {
-            var hasSelectedRow = DGVOfProducts.SelectedRows.Count > 0;
-
-            ButtonOfProductCard.Enabled = hasSelectedRow;
-
-            if (hasSelectedRow && bindingSource.Current is ProductDisplayModel selectedProduct)
-            {
-                selectedArticle = selectedProduct.Article;
-            }
-            else if (!hasSelectedRow)
-            {
-                selectedArticle = null;
             }
         }
 
@@ -196,11 +146,26 @@ namespace EnergeticProjectX.Forms
                 DGVOfProducts.Rows[e.RowIndex].Selected = true;
 
                 DGVOfProducts.CurrentCell = DGVOfProducts.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            }
+        }
 
-                if (bindingSource.Current is ProductDisplayModel selectedProduct)
-                {
-                    selectedArticle = selectedProduct.Article;
-                }
+        private void DGVProducts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex < 0 || DGVOfProducts.Rows[e.RowIndex].DataBoundItem is not ProductDisplayModel product)
+                return;
+
+            var columnName = DGVOfProducts.Columns[e.ColumnIndex].Name;
+
+            if (columnName == nameof(product.StockQuantity))
+                if (product.StockQuantity < 5)
+                    e.CellStyle.BackColor = Color.LightCoral;
+
+            if (columnName == nameof(product.DiscountDate))
+            {
+                if (TH.UtcDateToLocalDateOnly(product.DiscountDate) <= DateOnly.FromDateTime(DateTime.Today))
+                    e.CellStyle.BackColor = Color.LightSalmon;
+                else if (TH.UtcDateToLocalDateOnly(product.DiscountDate) <= DateOnly.FromDateTime(DateTime.Today.AddDays(7)))
+                    e.CellStyle.BackColor = Color.LightGoldenrodYellow;
             }
         }
 
@@ -217,7 +182,7 @@ namespace EnergeticProjectX.Forms
             if (EnsureUserActive() == null)
                 return;
 
-            if (isWarehouseman)
+            if (_userService.FindByLogin(userLogin).UserRole == UserRoles.Warehouseman)
             {
                 var warehousemanMainMenu = new WarehousemanMainMenu(userLogin, _userService, _productService, _clientService);
                 FH.OpenForm(this, warehousemanMainMenu);
@@ -229,49 +194,13 @@ namespace EnergeticProjectX.Forms
             }
         }
 
-        private void ButtonAddProduct_Click(object sender, EventArgs e)
+        private void ButtonOfTableOfProducts_Click(object sender, EventArgs e)
         {
             if (EnsureUserActive() == null)
                 return;
 
-            var addProduct = new AddProductForm(userLogin, _productService, _userService, _clientService);
-            FH.OpenForm(this, addProduct);
-        }
-
-        private void ButtonOfAddCategory_Click(object sender, EventArgs e)
-        {
-            if (EnsureUserActive() == null)
-                return;
-
-            var addCategory = new AddCategoryForm(userLogin, _productService, _userService, _clientService);
-            FH.OpenForm(this, addCategory);
-        }
-
-        private void ButtonOfProductCard_Click(object sender, EventArgs e)
-        {
-            if (EnsureUserActive() == null)
-                return;
-
-            var editProduct = new EditProductForm(userLogin, selectedArticle!, _userService, _productService, _clientService);
-            FH.OpenForm(this, editProduct);
-        }
-
-        private void ButtonOfMakingShipment_Click(object sender, EventArgs e)
-        {
-            if (EnsureUserActive() == null)
-                return;
-
-            var makingShipment = new MakeShipmentForm(userLogin, _clientService, _userService, _productService);
-            FH.OpenForm(this, makingShipment);
-        }
-
-        private void ButtonOfChangeCaterogies_Click(object sender, EventArgs e)
-        {
-            if (EnsureUserActive() == null)
-                return;
-
-            var editCategories = new EditCategoryForm(userLogin, _productService, _userService, _clientService);
-            FH.OpenForm(this, editCategories);
+            var productCatalog = new TableOfProducts(userLogin, _userService, _productService, _clientService);
+            FH.OpenForm(this, productCatalog);
         }
 
         private User? EnsureUserActive()

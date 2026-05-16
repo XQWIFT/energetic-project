@@ -2,11 +2,11 @@
 using PCM = EnergeticProjectX.Classes.PriceCurrencyManager;
 using TH = EnergeticProjectX.Classes.TimeHandler;
 using FH = EnergeticProjectX.Classes.FormHandler;
-using EnergeticProjectX.Classes;
-using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Models;
 using EnergeticProjectX.Properties;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 
 namespace EnergeticProjectX.Forms
 {
@@ -15,7 +15,11 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class MakeShipmentForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IUserService _userService;
+
+        private readonly IProductService _productService;
+
+        private readonly IClientService _clientService;
 
         private readonly string userLogin;
 
@@ -26,11 +30,15 @@ namespace EnergeticProjectX.Forms
         /// <summary>
         /// Конструктор для реализации формы оформления отгрузки товара.
         /// </summary>
-        public MakeShipmentForm(string userLogin)
+        public MakeShipmentForm(string userLogin, IClientService clientService, IUserService userService, IProductService productService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
+
+            _clientService = clientService;
+            _userService = userService;
+            _productService = productService;
 
             LoadClients();
             LoadProducts();
@@ -38,7 +46,7 @@ namespace EnergeticProjectX.Forms
 
         private void LoadClients()
         {
-            var clients = Db.Clients.Where(c => c.Status == Status.Active).ToList();
+            var clients = _clientService.LoadActiveClients();
 
             ComboBoxOfClient.DataSource = clients;
             ComboBoxOfClient.DisplayMember = nameof(Client.Name);
@@ -49,7 +57,7 @@ namespace EnergeticProjectX.Forms
 
         private void LoadProducts()
         {
-            var products = Db.Products.Where(p => p.Status == Status.Active && p.StockQuantity > 0).ToList();
+            var products = _productService.GetAvailableProducts();
 
             ComboBoxOfProduct.DataSource = products;
             ComboBoxOfProduct.DisplayMember = nameof(Product.Name);
@@ -104,7 +112,7 @@ namespace EnergeticProjectX.Forms
             NumericQuantity.Maximum = 999999;
             NumericQuantity.Minimum = 1;
             NumericQuantity.Value = 1;
-            NumericQuantity.Enabled = true; 
+            NumericQuantity.Enabled = true;
 
             if (ComboBoxOfProduct.SelectedValue is not string article)
             {
@@ -112,7 +120,7 @@ namespace EnergeticProjectX.Forms
                 return;
             }
 
-            var product = Db.Products.FirstOrDefault(p => p.Article == article);
+            var product = _productService.GetProductByArticle(article);
             if (product == null)
                 return;
 
@@ -143,7 +151,7 @@ namespace EnergeticProjectX.Forms
             if (ComboBoxOfProduct.SelectedValue is not string article)
                 return;
 
-            var product = Db.Products.FirstOrDefault(p => p.Article == article);
+            var product = _productService.GetProductByArticle(article);
             if (product == null)
                 return;
 
@@ -179,7 +187,7 @@ namespace EnergeticProjectX.Forms
             if (ComboBoxOfProduct.SelectedValue is not string article)
                 return;
 
-            var product = Db.Products.FirstOrDefault(p => p.Article == article);
+            var product = _productService.GetProductByArticle(article);
             if (product == null)
                 return;
 
@@ -229,7 +237,14 @@ namespace EnergeticProjectX.Forms
 
                 var article = ComboBoxOfProduct.SelectedValue.ToString();
 
-                var product = Db.Products.FirstOrDefault(p => p.Article == article);
+                if (article == null)
+                {
+                    EH.ShowWarning(Resources.ProductNotFound, true);
+
+                    return;
+                }
+
+                var product = _productService.GetProductByArticle(article);
 
                 if (product == null || article == null)
                 {
@@ -266,7 +281,7 @@ namespace EnergeticProjectX.Forms
                         Article = article,
                         Name = product.Name,
                         Quantity = quantityToAdd,
-                        PriceSnapshot = PCM.SetPriceToChosenCurrency(Db, product.SalePrice, userLogin)
+                        PriceSnapshot = PCM.SetPriceToChosenCurrency(_userService, product.SalePrice, userLogin)
                     };
 
                     ShipmentItems.Add(newItem);
@@ -288,10 +303,14 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfMakingShipment_Click(object sender, EventArgs e)
         {
-            var user = EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+            var user = _userService.EnsureUserActive(userLogin);
 
             if (user == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
                 return;
+            }
+
 
             if (ShipmentItems.Count == 0)
             {
@@ -307,7 +326,7 @@ namespace EnergeticProjectX.Forms
                 return;
             }
 
-            var client = Db.Clients.FirstOrDefault(c => c.Client_Id == (Guid)ComboBoxOfClient.SelectedValue);
+            var client = _clientService.FindClientById((Guid)ComboBoxOfClient.SelectedValue);
 
             if (client == null)
             {
@@ -329,28 +348,22 @@ namespace EnergeticProjectX.Forms
                         User_Id = user.User_Id
                     };
 
-                    Db.Shipments.Add(shipment);
+                    _productService.AddShipment(shipment);
 
                     var totalQuantity = 0;
 
                     foreach (var item in ShipmentItems)
                     {
-                        var product = Db.Products.First(p => p.Article == item.Article);
+                        var product = _productService.GetProductByArticle(item.Article);
 
-                        Db.ShipmentItems.Add(new ShipmentItems
-                        {
-                            Shipment_Id = shipment.Shipment_Id,
-                            Product_Id = product.Product_Id,
-                            FixedPurchasePrice = product.PurchasePrice,
-                            FixedSalePrice = product.SalePrice,
-                            Quantity = item.Quantity
-                        });
-
+                        _productService.AddShipmentItems(shipment.Shipment_Id, product.Product_Id,
+                            product.PurchasePrice, product.SalePrice, item.Quantity);
+                        
                         product.StockQuantity -= item.Quantity;
                         totalQuantity += item.Quantity;
                     }
 
-                    if (EH.DBSaveChangesUniversalErrorCheck(Db))
+                    if (_userService.DbSaveChangesErrorCheck())
                     {
                         EH.ShowError(Resources.SaveShipmentError, true);
 
@@ -378,16 +391,24 @@ namespace EnergeticProjectX.Forms
 
         private void OpenMainMenu()
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
-            var warehousemanMainMenu = new WarehousemanMainMenu(userLogin);
+            var warehousemanMainMenu = new WarehousemanMainMenu(userLogin, _userService, _productService, _clientService);
             FH.OpenForm(this, warehousemanMainMenu);
 
         }
 
         private void ButtonOfProductDelete_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
             if (selectedShipmentItem == null)
             {

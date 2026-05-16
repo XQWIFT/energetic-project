@@ -709,6 +709,15 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Данный функционал находится на этапе разработки. Пожалуйста, попробуйте позже!.
+        /// </summary>
+        internal static string NewFuncIsInProgress {
+            get {
+                return ResourceManager.GetString("NewFuncIsInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Ни один товар не был загружен.
         /// </summary>
         internal static string NoProductsLoaded {

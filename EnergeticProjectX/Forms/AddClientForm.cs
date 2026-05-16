@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
+using EnergeticProjectX.Interfaces;
+using EnergeticProjectX.interfaces;
 
 namespace EnergeticProjectX.Forms
 {
@@ -13,7 +15,11 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class AddClientForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
 
         private readonly string userLogin;
 
@@ -21,11 +27,14 @@ namespace EnergeticProjectX.Forms
         /// Конструктор для реализации формы добавления нового клиента.
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
-        public AddClientForm(string userLogin)
+        public AddClientForm(string userLogin, IUserService userService, IClientService clientService, IProductService productService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
+            _userService = userService;
+            _clientService = clientService;
+            _productService = productService;
         }
 
         private void IsTextChanged(object sender, EventArgs e)
@@ -37,7 +46,11 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfAddClient_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
             var name = Regex.Replace(TextBoxOfName.Text.Trim(), @"\s+", " ");
             var contractor = Regex.Replace(ComboBoxOfContractor.Text.Trim(), @"\s+", " ");
@@ -51,7 +64,7 @@ namespace EnergeticProjectX.Forms
                 return;
             }
 
-            if (Db.Clients.Any(u => u.INN == iNN))
+            if (_clientService.FindClientByINN(iNN) != null)
             {
                 EH.ShowWarning(Resources.InnAlreadyExists, true);
 
@@ -66,24 +79,42 @@ namespace EnergeticProjectX.Forms
                 ContactInfo = contactInfo
             };
 
-            Db.Clients.Add(client);
-            if (EH.DBSaveChangesUniversalErrorCheck(Db))
+            _clientService.AddClient(client);
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
                 return;
+            }
 
             OpenListOfClients();
         }
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
-
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
             OpenListOfClients();
         }
 
         private void OpenListOfClients()
         {
-            var listOfClients = new TableOfClients(userLogin);
+            var listOfClients = new TableOfClients(userLogin, _userService, _clientService, _productService);
             FH.OpenForm(this, listOfClients);
+        }
+
+        private void TextBoxOfINN_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            CHK.CheckOnlyNumber(e);
+        }
+
+        private void ButtonOfChekByINN_Click(object sender, EventArgs e)
+        {
+            EH.ShowAlert(Resources.NewFuncIsInProgress);
+
+            return;
         }
 
         private void TabSelection_Enter(object sender, EventArgs e)
@@ -100,11 +131,6 @@ namespace EnergeticProjectX.Forms
             {
                 button.BackColor = Color.Transparent;
             }
-        }
-
-        private void TextBoxOfINN_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            CHK.CheckOnlyNumber(e);
         }
     }
 }

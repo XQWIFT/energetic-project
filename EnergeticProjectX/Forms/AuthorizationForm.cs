@@ -1,11 +1,12 @@
+using EnergeticProjectX.Classes;
+using EnergeticProjectX.Enums;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
+using EnergeticProjectX.Objects;
+using EnergeticProjectX.Properties;
+using System.Text.RegularExpressions;
 using EH = EnergeticProjectX.Classes.ErrorHandler;
 using FH = EnergeticProjectX.Classes.FormHandler;
-using EnergeticProjectX.Classes;
-using EnergeticProjectX.Properties;
-using EnergeticProjectX.Enums;
-using EnergeticProjectX.Objects;
-using System.Text.RegularExpressions;
-using EnergeticProjectX.interfaces;
 
 namespace EnergeticProjectX.Forms
 {
@@ -14,14 +15,24 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class AuthorizationForm : Form
     {
-        private readonly IUserService _userService;       
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
+
         /// <summary>
         /// Конструктор для реализации формы авторизации пользователя.
         /// </summary>
-        public AuthorizationForm(IUserService userservice)
+        public AuthorizationForm(IUserService userservice, IProductService productService, IClientService clientService)
         {
             InitializeComponent();
+
             _userService = userservice;
+
+            _clientService = clientService;
+
+            _productService = productService;
         }
 
         private void IsTextChanged(object sender, EventArgs e)
@@ -41,12 +52,12 @@ namespace EnergeticProjectX.Forms
             {
                 if (user.UserRole == UserRoles.Administrator)
                 {
-                    var administratorMainMenu = new AdministratorMainMenu(user.Login);
+                    var administratorMainMenu = new AdministratorMainMenu(user.Login, _userService, _clientService, _productService);
                     FH.OpenForm(this, administratorMainMenu);
                 }
                 else if (user.UserRole == UserRoles.Warehouseman)
                 {
-                    var warehousemanMainMenu = new WarehousemanMainMenu(user.Login);
+                    var warehousemanMainMenu = new WarehousemanMainMenu(user.Login, _userService, _productService, _clientService);
                     FH.OpenForm(this, warehousemanMainMenu);
                 }
                 else
@@ -81,6 +92,7 @@ namespace EnergeticProjectX.Forms
             var password = Regex.Replace(TextBoxOfPassword.Text, @"\s", "");
 
             var user = _userService.FindByLogin(userLogin);
+
             if (user == null)
             {
                 EH.ShowWarning(Resources.UserNotFound, true);
@@ -93,7 +105,7 @@ namespace EnergeticProjectX.Forms
 
         private void LabelOfRegistration_Click(object sender, EventArgs e)
         {
-            var registrationForm = new RegistrationForm();
+            var registrationForm = new RegistrationForm(_userService, _productService, _clientService);
             FH.OpenForm(this, registrationForm);
         }
 

@@ -94,7 +94,7 @@ namespace EnergeticProjectX.Classes
         {
             if (!optionsBuilder.IsConfigured)
             {
-                string connectionString = HiddenDataManager.GetConnectionString();
+                var connectionString = HiddenDataManager.GetConnectionString();
 
                 optionsBuilder.UseNpgsql(connectionString);
             }

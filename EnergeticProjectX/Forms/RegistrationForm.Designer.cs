@@ -75,7 +75,6 @@
             TextBoxOfName.Size = new Size(402, 45);
             TextBoxOfName.TabIndex = 1;
             TextBoxOfName.TextChanged += IsTextChanged;
-            TextBoxOfName.KeyPress += TextBoxOfPersonalData_KeyPress;
             // 
             // LabelOfSurname
             // 

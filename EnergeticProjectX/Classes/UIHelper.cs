@@ -1,4 +1,5 @@
 ﻿using EnergeticProjectX.Enums;
+using EnergeticProjectX.interfaces;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using System.Text.RegularExpressions;
@@ -69,9 +70,9 @@ namespace EnergeticProjectX.Classes
         /// <param name="db">Контекст базы данных.</param>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
         /// <returns>Значение символа выбранного курса валюты или пустая строка.</returns>
-        public static string GetCurrencySymbol(ApplicationContextDB db, string userLogin)
+        public static string GetCurrencySymbol(IUserService userService, string userLogin)
         {
-            var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
+            var user = userService.FindByLogin(userLogin);
 
             if (user == null)
             {
@@ -80,7 +81,7 @@ namespace EnergeticProjectX.Classes
                 return string.Empty;
             }
 
-            var currency = db.Currencies.FirstOrDefault(c => c.Currency_Id == user.CurrencyId);
+            var currency = userService.FindUserChosenCurrency(user);
 
             if (currency == null)
             {

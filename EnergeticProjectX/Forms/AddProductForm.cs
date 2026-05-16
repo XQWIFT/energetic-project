@@ -5,10 +5,11 @@ using FH = EnergeticProjectX.Classes.FormHandler;
 using CHK = EnergeticProjectX.Classes.Chekouts;
 using System.Text.RegularExpressions;
 using EnergeticProjectX.Classes;
-using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
-    
+using EnergeticProjectX.Interfaces;
+using EnergeticProjectX.interfaces;
+
 namespace EnergeticProjectX.Forms
 {
     /// <summary>
@@ -16,7 +17,11 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class AddProductForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
 
         private readonly string userLogin;
 
@@ -24,13 +29,19 @@ namespace EnergeticProjectX.Forms
         /// Конструктор для реализации формы добавления нового товара.
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
-        public AddProductForm(string userLogin)
+        public AddProductForm(string userLogin, IProductService productService, IUserService userService, IClientService clientService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
 
-            LabelOfCurrencySymbol.Text = UIHelper.GetCurrencySymbol(Db, userLogin);
+            _productService = productService;
+
+            _userService = userService;
+
+            _clientService = clientService;
+
+            LabelOfCurrencySymbol.Text = UIHelper.GetCurrencySymbol(_userService, userLogin);
 
             LoadCategories();
         }
@@ -48,7 +59,7 @@ namespace EnergeticProjectX.Forms
             {
                 ComboBoxOfCategory.SelectedIndexChanged -= IsComboBoxOfCategoryChanged!;
 
-                var categories = Db.Categories.Where(u => u.Status == Status.Active).ToList();
+                var categories = _productService.GetCategories();
 
                 ComboBoxOfCategory.DisplayMember = nameof(Category.Name);
                 ComboBoxOfCategory.ValueMember = nameof(Category.Category_Id);
@@ -81,7 +92,7 @@ namespace EnergeticProjectX.Forms
                 return;
             }
 
-            var unit = Db.Units.FirstOrDefault(u => u.Unit_Id == selectedCategory.Unit_Id);
+            var unit = _productService.LoadCategoryUnit(selectedCategory);
 
             if (unit != null)
                 TextBoxOfUnit.Text = unit.Name;
@@ -91,7 +102,12 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfAdd_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
+            ;
 
             if (ComboBoxOfCategory.SelectedValue == null)
             {
@@ -105,11 +121,23 @@ namespace EnergeticProjectX.Forms
             if (purchasePrice == null)
                 return;
 
-            var purchasePriceInDefaultCurrency = PCM.SetPriceToDefaultCurrency(Db, (decimal)purchasePrice, userLogin);
+            var purchasePriceInDefaultCurrency = PCM.SetPriceToDefaultCurrency(_userService, (decimal)purchasePrice, userLogin);
+
+
+            string article;
+            try
+            {
+               article =  _productService.GenerateUniqueProductArticle();
+            }
+            catch (InvalidOperationException)
+            {
+                EH.ShowError(Resources.MaxNumberOfProducts, true);
+                return;
+            }
 
             var product = new Product
             {
-                Article = GenerateUniqueProductArticle(Db),
+                Article = article,
                 Name = Regex.Replace(TextBoxOfName.Text.Trim(), @"\s+", " "),
                 CategoryId = (Guid)ComboBoxOfCategory.SelectedValue,
                 PurchasePrice = purchasePriceInDefaultCurrency,
@@ -118,48 +146,39 @@ namespace EnergeticProjectX.Forms
                 DiscountDate = TH.GetDiscountUtcDate()
             };
 
-            Db.Products.Add(product);
-            if (EH.DBSaveChangesUniversalErrorCheck(Db))
+            _productService.AddProduct(product);
+            if (_userService.DbSaveChangesErrorCheck() == false)
+            {
+                EH.ShowError(Resources.UniversalErrorDatabase, true);
                 return;
+            }
 
-            var salePriceInChosenCurrency = PCM.SetPriceToChosenCurrency(Db, product.SalePrice, userLogin);
+            var salePriceInChosenCurrency = _productService.SetPriceToChosenCurrency(purchasePriceInDefaultCurrency, userLogin);
 
             EH.ShowInformation($"{Resources.Product} {product.Name} {Resources.AddProductSuccess}:\n\n" +
                                $"{Resources.CreationData}: {TH.UtcToLocalDateTime(DateTime.UtcNow):dd.MM.yyyy HH:mm}\n" +
                                $"{Resources.DiscountDate}: {TH.UtcDateToLocalDateOnly(product.DiscountDate)}\n" +
-                               $"{Resources.PurchasePrice}: {PCM.PriceToCorrectFormat(Db, (decimal)purchasePrice, userLogin)}\n" +
-                               $"{Resources.SalePrice}: {PCM.PriceToCorrectFormat(Db, salePriceInChosenCurrency, userLogin)}\n" +
+                               $"{Resources.PurchasePrice}: {_productService.PriceToCorrectFormat((decimal)purchasePrice, userLogin)}\n" +
+                               $"{Resources.SalePrice}: {_productService.PriceToCorrectFormat(salePriceInChosenCurrency, userLogin)}\n" +
                                $"{Resources.StockQuantityByDefault}");
 
             OpenProductCatalog();
         }
 
-        private static string GenerateUniqueProductArticle(ApplicationContextDB db)
-        {
-            var maxArticleString = db.Products
-                                     .Select(u => u.Article)
-                                     .Where(article => !string.IsNullOrWhiteSpace(article))
-                                     .OrderByDescending(article => article)
-                                     .FirstOrDefault();
-
-            var maxCode = string.IsNullOrEmpty(maxArticleString) ? 0 : int.Parse(maxArticleString![1..]);
-
-            if (maxCode >= 999999)
-                throw new InvalidOperationException(Resources.MaxNumberOfProducts);
-
-            return "A" + (maxCode + 1).ToString("D6");
-        }
-
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
             OpenProductCatalog();
         }
 
         private void OpenProductCatalog()
         {
-            var productCatalog = new TableOfProducts(userLogin);
+            var productCatalog = new TableOfProducts(userLogin, _userService, _productService, _clientService);
             FH.OpenForm(this, productCatalog);
         }
 

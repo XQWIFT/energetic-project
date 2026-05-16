@@ -1,9 +1,10 @@
 ﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
 using FH = EnergeticProjectX.Classes.FormHandler;
 using EnergeticProjectX.Objects;
-using EnergeticProjectX.Classes;
 using EnergeticProjectX.Properties;
 using EnergeticProjectX.Enums;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 
 namespace EnergeticProjectX.Forms
 {
@@ -12,19 +13,29 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class ChangePasswordForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
-
         private readonly string userLogin;
+
+        private readonly IUserService _userService;
+
+        private readonly IProductService _productService;
+
+        private readonly IClientService _clientService;
 
         /// <summary>
         /// Конструктор для реализации формы изменения пароля.
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
-        public ChangePasswordForm(string userLogin)
+        public ChangePasswordForm(string userLogin, IUserService userService, IClientService clientService, IProductService productService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
+
+            _userService = userService;
+
+            _clientService = clientService;
+
+            _productService = productService;
         }
 
         private void IsTextChanged(object sender, EventArgs e)
@@ -36,10 +47,13 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfSaveInfo_Click(object sender, EventArgs e)
         {
-            var user = EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+            var user = _userService.EnsureUserActive(userLogin);
 
             if (user == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
                 return;
+            }
 
             var oldPassword = TextBoxForOldPassword.Text.Trim();
             var newPassword = TextBoxForNewPassword.Text.Trim();
@@ -50,28 +64,35 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            var user = EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+            var user = _userService.EnsureUserActive(userLogin);
 
             if (user == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
                 return;
+            }
 
             OpenMainMenu(user);
         }
 
         private void ChangePassword(User user, string oldPassword, string newPassword, string confirmationPassword)
         {
-            (var loginAndPasswordValid, var messageOfError) = UIHelper.IsAllPasswordsValid(user, oldPassword, newPassword, confirmationPassword);
+            (var loginAndPasswordValid, var messageOfError) = _userService.IsAllPasswordsValid(user, oldPassword, newPassword, confirmationPassword);
 
             if (loginAndPasswordValid)
             {
-                user.Password = BCryptRealization.PasswordHash(newPassword);
+                try
+                {
+                    _userService.ChangePassword(user, newPassword);
+                    EH.ShowInformation(Resources.ChangePasswordEvent);
 
-                if (EH.DBSaveChangesUniversalErrorCheck(Db))
-                    return;
+                    OpenMainMenu(user);
+                }
+                catch
+                {
+                    EH.ShowError(Resources.UniversalErrorDatabase, true);
+                }
 
-                EH.ShowInformation(Resources.ChangePasswordEvent);
-
-                OpenMainMenu(user);
             }
             else if (messageOfError == Resources.UserNotFound)
             {
@@ -118,12 +139,12 @@ namespace EnergeticProjectX.Forms
         {
             if (user.UserRole == UserRoles.Administrator)
             {
-                var administratorMainMenu = new AdministratorMainMenu(userLogin);
+                var administratorMainMenu = new AdministratorMainMenu(userLogin, _userService, _clientService, _productService);
                 FH.OpenForm(this, administratorMainMenu);
             }
             else if (user.UserRole == UserRoles.Warehouseman)
             {
-                var warehousemanMainMenu = new WarehousemanMainMenu(userLogin);
+                var warehousemanMainMenu = new WarehousemanMainMenu(userLogin, _userService, _productService, _clientService);
                 FH.OpenForm(this, warehousemanMainMenu);
             }
         }

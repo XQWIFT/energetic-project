@@ -1,5 +1,7 @@
 ﻿using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using System.Globalization;
@@ -17,7 +19,11 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class EditProductForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
 
         private readonly string userLogin;
 
@@ -30,15 +36,22 @@ namespace EnergeticProjectX.Forms
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
         /// <param name="article">Артикул выбранного товара.</param>
-        public EditProductForm(string userLogin, string article)
+        public EditProductForm(string userLogin, string article, IUserService userService, IProductService productService,
+            IClientService clientService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
             this.article = article;
 
-            LabelOfCurrencySymbolFirst.Text = UIHelper.GetCurrencySymbol(Db, userLogin);
-            LabelOfCurrencySymbolSecond.Text = UIHelper.GetCurrencySymbol(Db, userLogin);
+            _userService = userService;
+
+            _productService = productService;
+
+            _clientService = clientService;
+
+            LabelOfCurrencySymbolFirst.Text = UIHelper.GetCurrencySymbol(_userService, userLogin);
+            LabelOfCurrencySymbolSecond.Text = UIHelper.GetCurrencySymbol(_userService, userLogin);
             LoadProductData();
             LoadCategories();
 
@@ -60,7 +73,7 @@ namespace EnergeticProjectX.Forms
                 return;
 
             var hasChangesTextBoxes = TextBoxOfName.Text.Trim() != currentProduct.Name ||
-                                      TextBoxOfPurchasePrice.Text.Trim() != PCM.SetPriceToChosenCurrency(Db, currentProduct.PurchasePrice, userLogin).ToString() ||
+                                      TextBoxOfPurchasePrice.Text.Trim() != PCM.SetPriceToChosenCurrency(_userService, currentProduct.PurchasePrice, userLogin).ToString() ||
                                       TextBoxOfDiscountDate.Text.Trim() != currentProduct.DiscountDate.ToString();
 
             var hasChangesComboBox = false;
@@ -83,15 +96,15 @@ namespace EnergeticProjectX.Forms
         {
             try
             {
-                currentProduct = Db.Products.FirstOrDefault(p => p.Article == article)!;
+                currentProduct = _productService.GetProductByArticle(article);
 
                 if (currentProduct != null)
                 {
                     TextBoxOfName.Text = currentProduct.Name;
                     TextBoxOfCurrentStockQuantity.Text = currentProduct.StockQuantity.ToString();
-                    TextBoxOfCategory.Text = Db.Categories.FirstOrDefault(c => c.Category_Id == currentProduct.CategoryId)!.Name;
-                    TextBoxOfPurchasePrice.Text = PCM.SetPriceToChosenCurrency(Db, currentProduct.PurchasePrice, userLogin).ToString();
-                    TextBoxOfPriceForSell.Text = PCM.SetPriceToChosenCurrency(Db, currentProduct.SalePrice, userLogin).ToString();
+                    TextBoxOfCategory.Text =_productService.GetCategoryById(currentProduct.CategoryId).Name;
+                    TextBoxOfPurchasePrice.Text = _productService.SetPriceToChosenCurrency(currentProduct.PurchasePrice, userLogin).ToString();
+                    TextBoxOfPriceForSell.Text = _productService.SetPriceToChosenCurrency(currentProduct.SalePrice, userLogin).ToString();
                     TextBoxOfCreationDate.Text = TH.UtcToLocalDateTime(currentProduct.CreationDate).ToString("dd.MM.yyyy HH:mm");
                     TextBoxOfDiscountDate.Text = TH.UtcDateToLocalDateOnly(currentProduct.DiscountDate).ToString("dd.MM.yyyy");
 
@@ -117,7 +130,7 @@ namespace EnergeticProjectX.Forms
             {
                 ComboBoxOfCategory.SelectedIndexChanged -= IsComboBoxOfCategoryChanged!;
 
-                var categories = Db.Categories.Where(u => u.Status == Status.Active).ToList();
+                var categories = _productService.GetCategories();
 
                 ComboBoxOfCategory.DisplayMember = nameof(Category.Name);
                 ComboBoxOfCategory.ValueMember = nameof(Category.Category_Id);
@@ -140,7 +153,11 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfChange_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
             var answer = EH.ShowConfirmation($"{Resources.SureWantToChangeProductData}\n\n{Resources.AvailableFieldsToEditProduct}\n\n" +
                                              $"{Resources.IfChangePurchaseThenChangeSale}");
@@ -168,7 +185,7 @@ namespace EnergeticProjectX.Forms
                 return;
             }
 
-            var unit = Db.Units.FirstOrDefault(u => u.Unit_Id == selectedCategory.Unit_Id);
+            var unit = _productService.LoadCategoryUnit(selectedCategory);
 
             if (unit == null)
             {
@@ -182,7 +199,11 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfSaveChanges_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
             try
             {
@@ -193,7 +214,8 @@ namespace EnergeticProjectX.Forms
                     return;
                 }
 
-                var productToUpdate = Db.Products.FirstOrDefault(p => p.Article == article);
+
+                var productToUpdate = _productService.GetProductByArticle(article);
 
                 if (productToUpdate == null)
                 {
@@ -215,7 +237,7 @@ namespace EnergeticProjectX.Forms
                     return;
                 }
 
-                productToUpdate.PurchasePrice = PCM.SetPriceToDefaultCurrency(Db, (decimal)purchasePrice, userLogin);
+                productToUpdate.PurchasePrice = PCM.SetPriceToDefaultCurrency(_userService, (decimal)purchasePrice, userLogin);
 
                 productToUpdate.SalePrice = PCM.GetSalePriceInDefaultCurrency(productToUpdate.PurchasePrice);
 
@@ -239,8 +261,11 @@ namespace EnergeticProjectX.Forms
 
                 productToUpdate.DiscountDate = TH.LocalDateOnlyToUtcDate(discountDate);
 
-                if (EH.DBSaveChangesUniversalErrorCheck(Db))
+                if (_userService.DbSaveChangesErrorCheck())
+                {
+                    EH.ShowError(Resources.UniversalErrorDatabase, true);
                     return;
+                }
 
                 EH.ShowInformation(Resources.SuccessUpdateProduct);
 
@@ -256,7 +281,11 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
             if (ButtonOfChange.Enabled)
             {
@@ -275,13 +304,17 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfProductDelete_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return;
+            }
 
             var answer = EH.ShowConfirmation(Resources.ConfirmationToDeleteProduct);
 
             if (answer == DialogResult.Yes)
             {
-                var product = Db.Products.FirstOrDefault(p => p.Article == article);
+                var product = _productService.GetProductByArticle(article);
 
                 if (product == null)
                 {
@@ -292,8 +325,11 @@ namespace EnergeticProjectX.Forms
 
                 product.Status = Status.Hidden;
 
-                if (EH.DBSaveChangesUniversalErrorCheck(Db))
+                if (_userService.DbSaveChangesErrorCheck())
+                {
+                    EH.ShowError(Resources.UniversalErrorDatabase, true);
                     return;
+                }
 
                 EH.ShowInformation(Resources.ProductSuccessfullyDeleted);
 
@@ -303,7 +339,7 @@ namespace EnergeticProjectX.Forms
 
         private void OpenProductCatalog()
         {
-            var productCatalog = new TableOfProducts(userLogin);
+            var productCatalog = new TableOfProducts(userLogin, _userService, _productService, _clientService);
             FH.OpenForm(this, productCatalog);
         }
 

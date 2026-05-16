@@ -25,6 +25,9 @@
     <Compile Update="Forms\EditProductForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\HeatMapForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\TableOfClients.cs">
       <SubType>Form</SubType>
     </Compile>

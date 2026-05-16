@@ -1,10 +1,11 @@
 ﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
 using FH = EnergeticProjectX.Classes.FormHandler;
 using TH = EnergeticProjectX.Classes.TimeHandler;
-using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 
 namespace EnergeticProjectX.Forms
 {
@@ -13,7 +14,11 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class SettingsForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
 
         private readonly string userLogin;
 
@@ -24,11 +29,18 @@ namespace EnergeticProjectX.Forms
         /// <summary>
         /// Конструктор для реализации формы пользовательских настроек.
         /// </summary>
-        public SettingsForm(string userLogin)
+        public SettingsForm(string userLogin, IUserService userService, IProductService productService,
+            IClientService clientService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
+
+            _userService = userService;
+
+            _clientService = clientService;
+
+            _productService = productService;
 
             LoadCurrencies();
         }
@@ -38,14 +50,17 @@ namespace EnergeticProjectX.Forms
 
             try
             {
-                var user = EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+                var user = _userService.EnsureUserActive(userLogin);
 
                 if (user == null)
+                {
+                    EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
                     return;
+                }
 
                 originalCurrencyId = user.CurrencyId;
 
-                var startCurrency = Db.Currencies.FirstOrDefault(c => c.Currency_Id == user.CurrencyId);
+                var startCurrency = _userService.FindUserChosenCurrency(user);
 
                 if (startCurrency == null)
                 {
@@ -54,7 +69,7 @@ namespace EnergeticProjectX.Forms
                     return;
                 }
 
-                var currencies = Db.Currencies.ToList();
+                var currencies = _userService.GetAllCurrencies();
                 ComboBoxOfCurrency.DataSource = currencies;
                 ComboBoxOfCurrency.DisplayMember = nameof(Currency.CurrencyName);
                 ComboBoxOfCurrency.ValueMember = nameof(Currency.Currency_Id);
@@ -74,7 +89,7 @@ namespace EnergeticProjectX.Forms
         {
             if (ComboBoxOfCurrency.SelectedValue is Guid currencyId)
             {
-                var currency = Db.Currencies.FirstOrDefault(c => c.Currency_Id == currencyId);
+                var currency = _userService.GetCurrencyById(currencyId);
 
                 if (currency != null)
                 {
@@ -97,10 +112,14 @@ namespace EnergeticProjectX.Forms
         {
             try
             {
-                var user = EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+                var user = _userService.EnsureUserActive(userLogin);
 
                 if (user == null)
+                {
+                    EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
                     return;
+                }
+                    
 
                 if (ComboBoxOfCurrency.SelectedValue is not Guid newCurrencyId)
                 {
@@ -111,10 +130,14 @@ namespace EnergeticProjectX.Forms
 
                 user.CurrencyId = newCurrencyId;
 
-                if (EH.DBSaveChangesUniversalErrorCheck(Db))
+                if (_userService.DbSaveChangesErrorCheck())
+                {
+                    EH.ShowError(Resources.UniversalErrorDatabase, true);
                     return;
+                }
+                    
 
-                var newCurrency = Db.Currencies.FirstOrDefault(c => c.Currency_Id == newCurrencyId);
+                var newCurrency = _userService.GetCurrencyById(newCurrencyId);
 
                 if (newCurrency == null)
                 {
@@ -142,10 +165,13 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            var user = EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+            var user = _userService.EnsureUserActive(userLogin);
 
             if (user == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
                 return;
+            }
 
             OpenMainMenu(user);
         }
@@ -154,12 +180,12 @@ namespace EnergeticProjectX.Forms
         {
             if (user.UserRole == UserRoles.Administrator)
             {
-                var administratorMainMenu = new AdministratorMainMenu(userLogin);
+                var administratorMainMenu = new AdministratorMainMenu(userLogin, _userService, _clientService, _productService);
                 FH.OpenForm(this, administratorMainMenu);
             }
             else if (user.UserRole == UserRoles.Warehouseman)
             {
-                var warehousemanMainMenu = new WarehousemanMainMenu(userLogin);
+                var warehousemanMainMenu = new WarehousemanMainMenu(userLogin, _userService, _productService, _clientService);
                 FH.OpenForm(this, warehousemanMainMenu);
             }
         }

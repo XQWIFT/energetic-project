@@ -3,13 +3,14 @@ using PCM = EnergeticProjectX.Classes.PriceCurrencyManager;
 using FH = EnergeticProjectX.Classes.FormHandler;
 using TH = EnergeticProjectX.Classes.TimeHandler;
 using CHK = EnergeticProjectX.Classes.Chekouts;
-using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Models;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 
 namespace EnergeticProjectX.Forms
 {
@@ -18,7 +19,11 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class MakeDeliveryForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IUserService _userService;
+
+        private readonly IProductService _productService;
+
+        private readonly IClientService _clientService;
 
         private readonly string userLogin;
 
@@ -30,31 +35,24 @@ namespace EnergeticProjectX.Forms
         /// Конструктор для реализации формы поставки.
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
-        public MakeDeliveryForm(string userLogin)
+        public MakeDeliveryForm(string userLogin, IUserService userService,IProductService productService, IClientService clientService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
+            _userService = userService;
+            _productService = productService;
+            _clientService = clientService;
 
             LoadCategories();
             UpdateButtonStates();
-
-            ComboBoxOfCategory.SelectedIndexChanged += ComboBoxOfCategory_SelectedIndexChanged;
-            ComboBoxOfProduct.SelectedIndexChanged += ComboBoxOfProduct_SelectedIndexChanged;
-            TextBoxOfQuantity.TextChanged += ValidateFields;
-            DataGridViewOfSupply.CellClick += DataGridOfItems_CellClick;
-            ButtonOfAddProduct.Click += ButtonOfAddProduct_Click;
-            ButtonOfUploadingByFile.Click += ButtonOfLoadFromFile_Click;
-            ButtonOfDeleteProduct.Click += ButtonOfProductDelete_Click;
-            ButtonOfMakingSupply.Click += ButtonOfMakingDelivery_Click;
-            ButtonOfCancel.Click += ButtonOfCancel_Click;
         }
 
         private void LoadCategories()
         {
             try
             {
-                var categories = Db.Categories.Where(c => c.Status == Status.Active).ToList();
+                var categories = _productService.GetCategories();
 
                 ComboBoxOfCategory.DataSource = categories;
                 ComboBoxOfCategory.DisplayMember = nameof(Category.Name);
@@ -78,8 +76,8 @@ namespace EnergeticProjectX.Forms
                     ComboBoxOfProduct.DataSource = null;
                     return;
                 }
-
-                var products = Db.Products.Where(p => p.CategoryId == categoryId && p.Status == Status.Active).ToList();
+           
+                var products = _productService.GetProductsByCategoryId(categoryId);
 
                 ComboBoxOfProduct.DataSource = products;
                 ComboBoxOfProduct.DisplayMember = nameof(Product.Name);
@@ -133,20 +131,27 @@ namespace EnergeticProjectX.Forms
 
         private void ComboBoxOfProduct_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (ComboBoxOfProduct.SelectedValue is string article)
+            try
             {
-                var product = Db.Products.FirstOrDefault(p => p.Article == article);
-                if (product != null)
+                if (ComboBoxOfProduct.SelectedValue is string article)
                 {
-                    TextBoxOfStockQuantity.Text = product.StockQuantity.ToString();
+                    var product = _productService.GetProductByArticle(article);
+                    if (product != null)
+                    {
+                        TextBoxOfStockQuantity.Text = product.StockQuantity.ToString();
+                    }
                 }
-            }
-            else
-            {
-                TextBoxOfStockQuantity.Text = string.Empty;
-            }
+                else
+                {
+                    TextBoxOfStockQuantity.Text = string.Empty;
+                }
 
-            ValidateFields();
+                ValidateFields();
+            }
+            catch (Exception ex)
+            {
+                EH.ShowError("Ошибка:" + ex);
+            }
         }
 
         private void ValidateFields(object? sender = null, EventArgs? e = null)
@@ -170,7 +175,7 @@ namespace EnergeticProjectX.Forms
                     return;
                 }
 
-                var product = Db.Products.FirstOrDefault(p => p.Article == article);
+                var product = _productService.GetProductByArticle(article);
                 if (product == null)
                 {
                     EH.ShowError(Resources.ProductNotFound, true);
@@ -203,7 +208,7 @@ namespace EnergeticProjectX.Forms
                     return;
                 }
 
-                var category = Db.Categories.FirstOrDefault(c => c.Category_Id == categoryId);
+                var category = _productService.GetCategoryById(categoryId);
                 var unit = category?.Unit?.Name ?? "—";
 
                 var newItem = new DeliveryItemRow
@@ -243,10 +248,10 @@ namespace EnergeticProjectX.Forms
                     Index = index,
                     Name = i.Name,
                     Quantity = i.Quantity,
-                    PurchasePrice = PCM.PriceToCorrectFormat(Db, PCM.SetPriceToChosenCurrency(Db, i.PurchasePrice, userLogin), userLogin),
+                    PurchasePrice = _productService.PriceToCorrectFormat( PCM.SetPriceToChosenCurrency(_userService, i.PurchasePrice, userLogin), userLogin),
                     Category = i.Category,
                     Unit = i.Unit,
-                    TotalPrice = PCM.PriceToCorrectFormat(Db, PCM.SetPriceToChosenCurrency(Db, i.PurchasePrice * i.Quantity, userLogin), userLogin)
+                    TotalPrice = _productService.PriceToCorrectFormat(PCM.SetPriceToChosenCurrency(_userService, i.PurchasePrice * i.Quantity, userLogin), userLogin)
                 })
                 .ToList();
 
@@ -261,7 +266,7 @@ namespace EnergeticProjectX.Forms
             }
         }
 
-        private void DataGridOfItems_CellClick(object? sender, DataGridViewCellEventArgs e)
+        private void DataGridOfItems_CellClick(object? sender, DataGridViewCellMouseEventArgs e)
         {
             if (e.RowIndex >= 0 && e.RowIndex < DeliveryItems.Count)
             {
@@ -299,7 +304,7 @@ namespace EnergeticProjectX.Forms
         {
             var totalCost = DeliveryItems.Sum(i => i.PurchasePrice * i.Quantity);
 
-            var totalCostFormatted = PCM.PriceToCorrectFormat(Db, PCM.SetPriceToChosenCurrency(Db, totalCost, userLogin), userLogin);
+            var totalCostFormatted = _productService.PriceToCorrectFormat(PCM.SetPriceToChosenCurrency(_userService, totalCost, userLogin), userLogin);
 
             TextBoxOfPurchaseAll.Text = totalCostFormatted;
         }
@@ -332,13 +337,13 @@ namespace EnergeticProjectX.Forms
 
                     foreach (var item in items)
                     {
-                        var product = Db.Products.FirstOrDefault(p => p.Article == item.Article);
+                        var product = _productService.GetProductByArticle(item.Article);
 
                         if (product != null)
                         {
                             if (DeliveryItems.All(i => i.Article != item.Article))
                             {
-                                var category = Db.Categories.FirstOrDefault(c => c.Category_Id == product.CategoryId);
+                                var category = _productService.GetCategoryById(product.CategoryId);
 
                                 item.Category = category?.Name ?? "—";
                                 item.Unit = category?.Unit?.Name ?? "—";
@@ -394,7 +399,7 @@ namespace EnergeticProjectX.Forms
             {
                 try
                 {
-                    var user = EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+                    var user =_userService.EnsureUserActive(userLogin);
 
                     if (user == null)
                         return;
@@ -406,26 +411,20 @@ namespace EnergeticProjectX.Forms
                         TotalAmount = DeliveryItems.Sum(i => i.PurchasePrice * i.Quantity)
                     };
 
-                    Db.Deliveries.Add(delivery);
+                    _productService.AddDeliveries(delivery);
 
                     int totalQuantity = 0;
                     foreach (var item in DeliveryItems)
                     {
-                        var product = Db.Products.First(p => p.Article == item.Article);
+                        var product = _productService.GetProductByArticle(item.Article);
 
-                        Db.DeliveryItems.Add(new DeliveryItems
-                        {
-                            Delivery_Id = delivery.Delivery_Id,
-                            Product_Id = product.Product_Id,
-                            PurchasePrice = item.PurchasePrice,
-                            Quantity = item.Quantity
-                        });
-
+                        _productService.AddDeliveryItems(delivery.Delivery_Id, product.Product_Id, item.PurchasePrice, item.Quantity);
+                        
                         product.StockQuantity += item.Quantity;
                         totalQuantity += item.Quantity;
                     }
 
-                    if (EH.DBSaveChangesUniversalErrorCheck(Db))
+                    if (_userService.DbSaveChangesErrorCheck())
                     {
                         EH.ShowError(Resources.ErrorUploadData, true);
 
@@ -455,19 +454,19 @@ namespace EnergeticProjectX.Forms
 
         private void OpenMainMenu(string userLogin)
         {
-            var user = EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+            var user = _userService.EnsureUserActive(userLogin);
 
             if (user == null)
                 return;
 
             if (user.UserRole == UserRoles.Administrator)
             {
-                var administratorMainMenu = new AdministratorMainMenu(userLogin);
+                var administratorMainMenu = new AdministratorMainMenu(userLogin, _userService, _clientService, _productService);
                 FH.OpenForm(this, administratorMainMenu);
             }
-            if (user.UserRole == UserRoles.Warehouseman)
+            else if (user.UserRole == UserRoles.Warehouseman)
             {
-                var warehousemanMainMenu = new WarehousemanMainMenu(userLogin);
+                var warehousemanMainMenu = new WarehousemanMainMenu(userLogin, _userService, _productService, _clientService);
                 FH.OpenForm(this, warehousemanMainMenu);
             }
             else
@@ -485,6 +484,11 @@ namespace EnergeticProjectX.Forms
             ButtonOfDeleteProduct.Enabled = selectedDeliveryItem != null;
         }
 
+        private void TextBoxOfQuantity_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            CHK.CheckOnlyNumber(e);
+        }
+
         private void TabSelection_Enter(object sender, EventArgs e)
         {
             if (sender is Button button)
@@ -499,11 +503,6 @@ namespace EnergeticProjectX.Forms
             {
                 button.BackColor = Color.Transparent;
             }
-        }
-
-        private void TextBoxOfQuantity_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            CHK.CheckOnlyNumber(e);
         }
     }
 }

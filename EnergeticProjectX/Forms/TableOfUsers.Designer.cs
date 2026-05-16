@@ -32,6 +32,7 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DGVOfUsers = new DataGridView();
             ReturnToAdministratorPanel = new Button();
+            ButtonOfUserData = new Button();
             ((System.ComponentModel.ISupportInitialize)DGVOfUsers).BeginInit();
             SuspendLayout();
             // 
@@ -71,7 +72,8 @@
             DGVOfUsers.RowHeadersVisible = false;
             DGVOfUsers.RowHeadersWidth = 62;
             DGVOfUsers.Size = new Size(922, 645);
-            DGVOfUsers.TabIndex = 1;
+            DGVOfUsers.TabIndex = 0;
+            DGVOfUsers.TabStop = false;
             DGVOfUsers.CellMouseClick += DGVOfUsers_CellMouseClick;
             DGVOfUsers.CellMouseDoubleClick += DGVOfUsers_CellMouseClick;
             DGVOfUsers.CellMouseEnter += DGVOfUsers_CellMouseEnter;
@@ -84,15 +86,34 @@
             ReturnToAdministratorPanel.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ReturnToAdministratorPanel.FlatStyle = FlatStyle.Flat;
             ReturnToAdministratorPanel.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ReturnToAdministratorPanel.Location = new Point(242, 672);
+            ReturnToAdministratorPanel.Location = new Point(90, 677);
             ReturnToAdministratorPanel.Name = "ReturnToAdministratorPanel";
-            ReturnToAdministratorPanel.Size = new Size(372, 78);
-            ReturnToAdministratorPanel.TabIndex = 2;
+            ReturnToAdministratorPanel.Size = new Size(354, 63);
+            ReturnToAdministratorPanel.TabIndex = 1;
             ReturnToAdministratorPanel.Text = "Главное меню";
             ReturnToAdministratorPanel.UseVisualStyleBackColor = true;
             ReturnToAdministratorPanel.Click += ButtonOfAdministratorMainMenu_Click;
             ReturnToAdministratorPanel.Enter += TabSelection_Enter;
             ReturnToAdministratorPanel.Leave += TabSelection_Leave;
+            // 
+            // ButtonOfUserData
+            // 
+            ButtonOfUserData.Enabled = false;
+            ButtonOfUserData.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfUserData.FlatAppearance.BorderSize = 4;
+            ButtonOfUserData.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfUserData.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfUserData.FlatStyle = FlatStyle.Flat;
+            ButtonOfUserData.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            ButtonOfUserData.Location = new Point(472, 677);
+            ButtonOfUserData.Name = "ButtonOfUserData";
+            ButtonOfUserData.Size = new Size(389, 63);
+            ButtonOfUserData.TabIndex = 2;
+            ButtonOfUserData.Text = "Данные пользователя";
+            ButtonOfUserData.UseVisualStyleBackColor = true;
+            ButtonOfUserData.Click += ButtonOfUserData_Click;
+            ButtonOfUserData.Enter += TabSelection_Enter;
+            ButtonOfUserData.Leave += TabSelection_Leave;
             // 
             // TableOfUsers
             // 
@@ -100,6 +121,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
             ClientSize = new Size(946, 762);
+            Controls.Add(ButtonOfUserData);
             Controls.Add(ReturnToAdministratorPanel);
             Controls.Add(DGVOfUsers);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -115,5 +137,6 @@
 
         private DataGridView DGVOfUsers;
         private Button ReturnToAdministratorPanel;
+        private Button ButtonOfUserData;
     }
 }

@@ -39,6 +39,9 @@
             ButtonOfAddClient = new Button();
             ButtonOfCancel = new Button();
             ComboBoxOfContractor = new ComboBox();
+            ButtonOfChekByINN = new Button();
+            labelOfResultsOfINNCheck = new Label();
+            LabelOfStar = new Label();
             SuspendLayout();
             // 
             // LabelOfAddClient
@@ -123,7 +126,7 @@
             ButtonOfAddClient.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfAddClient.FlatStyle = FlatStyle.Flat;
             ButtonOfAddClient.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            ButtonOfAddClient.Location = new Point(111, 635);
+            ButtonOfAddClient.Location = new Point(111, 717);
             ButtonOfAddClient.Name = "ButtonOfAddClient";
             ButtonOfAddClient.Size = new Size(288, 68);
             ButtonOfAddClient.TabIndex = 5;
@@ -141,7 +144,7 @@
             ButtonOfCancel.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfCancel.FlatStyle = FlatStyle.Flat;
             ButtonOfCancel.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            ButtonOfCancel.Location = new Point(405, 635);
+            ButtonOfCancel.Location = new Point(405, 717);
             ButtonOfCancel.Name = "ButtonOfCancel";
             ButtonOfCancel.Size = new Size(289, 69);
             ButtonOfCancel.TabIndex = 6;
@@ -164,12 +167,53 @@
             ComboBoxOfContractor.SelectedIndexChanged += IsTextChanged;
             ComboBoxOfContractor.TextChanged += IsTextChanged;
             // 
+            // ButtonOfChekByINN
+            // 
+            ButtonOfChekByINN.FlatAppearance.BorderColor = Color.Black;
+            ButtonOfChekByINN.FlatAppearance.BorderSize = 4;
+            ButtonOfChekByINN.FlatAppearance.MouseDownBackColor = Color.Gray;
+            ButtonOfChekByINN.FlatAppearance.MouseOverBackColor = Color.LightGray;
+            ButtonOfChekByINN.FlatStyle = FlatStyle.Flat;
+            ButtonOfChekByINN.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            ButtonOfChekByINN.Location = new Point(111, 642);
+            ButtonOfChekByINN.Name = "ButtonOfChekByINN";
+            ButtonOfChekByINN.Size = new Size(583, 69);
+            ButtonOfChekByINN.TabIndex = 7;
+            ButtonOfChekByINN.Text = "Проверить по ИНН";
+            ButtonOfChekByINN.UseVisualStyleBackColor = true;
+            ButtonOfChekByINN.Click += ButtonOfChekByINN_Click;
+            // 
+            // labelOfResultsOfINNCheck
+            // 
+            labelOfResultsOfINNCheck.AutoSize = true;
+            labelOfResultsOfINNCheck.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            labelOfResultsOfINNCheck.ForeColor = Color.Black;
+            labelOfResultsOfINNCheck.Location = new Point(128, 609);
+            labelOfResultsOfINNCheck.Name = "labelOfResultsOfINNCheck";
+            labelOfResultsOfINNCheck.Size = new Size(284, 30);
+            labelOfResultsOfINNCheck.TabIndex = 8;
+            labelOfResultsOfINNCheck.Text = "Результат проверки ИНН";
+            // 
+            // LabelOfStar
+            // 
+            LabelOfStar.AutoSize = true;
+            LabelOfStar.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfStar.ForeColor = Color.Red;
+            LabelOfStar.Location = new Point(111, 609);
+            LabelOfStar.Name = "LabelOfStar";
+            LabelOfStar.Size = new Size(23, 30);
+            LabelOfStar.TabIndex = 9;
+            LabelOfStar.Text = "*";
+            // 
             // AddClientForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
-            ClientSize = new Size(800, 774);
+            ClientSize = new Size(803, 797);
+            Controls.Add(LabelOfStar);
+            Controls.Add(labelOfResultsOfINNCheck);
+            Controls.Add(ButtonOfChekByINN);
             Controls.Add(ComboBoxOfContractor);
             Controls.Add(ButtonOfCancel);
             Controls.Add(ButtonOfAddClient);
@@ -203,5 +247,8 @@
         private Button ButtonOfAddClient;
         private Button ButtonOfCancel;
         private ComboBox ComboBoxOfContractor;
+        private Button ButtonOfChekByINN;
+        private Label labelOfResultsOfINNCheck;
+        private Label LabelOfStar;
     }
 }

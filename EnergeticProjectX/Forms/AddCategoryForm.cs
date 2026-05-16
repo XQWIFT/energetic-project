@@ -1,11 +1,10 @@
-﻿using EnergeticProjectX.Classes;
-using EnergeticProjectX.Enums;
+﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
+using FH = EnergeticProjectX.Classes.FormHandler;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
-using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
-using EH = EnergeticProjectX.Classes.ErrorHandler;
-using FH = EnergeticProjectX.Classes.FormHandler;
 
 namespace EnergeticProjectX.Forms
 {
@@ -14,47 +13,38 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class AddCategoryForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
 
         private readonly string userLogin;
 
         /// <summary>
         /// Основной конструктор добавления новой категории.
         /// </summary>
-        public AddCategoryForm(string userLogin)
+        public AddCategoryForm(string userLogin, IProductService productService, IUserService userService, IClientService clientService)
         {
             InitializeComponent();
 
+            _productService = productService;
+            _userService = userService;
+            _clientService = clientService;
             this.userLogin = userLogin;
 
-            LoadUnits(Db, ref ComboBoxOfUnit);
-        }
-
-        /// <summary>
-        /// Загрузка единиц измерений в выпадающий список.
-        /// </summary>
-        /// <param name="db">Контекст базы данных.</param>
-        /// <param name="comboBox">Название выпадающего списка.</param>
-        public static void LoadUnits(ApplicationContextDB db, ref ComboBox comboBox)
-        {
-            var units = db.Units.ToList();
-
-            if (units.Count != 0)
+            try
             {
-                comboBox.DataSource = units;
-                comboBox.DisplayMember = nameof(Unit.Name);
-                comboBox.ValueMember = nameof(Unit.Unit_Id);
+                _productService.GetUnits();
             }
-            else
+            catch
             {
                 EH.ShowError(Resources.ErrorUnitUpload, true);
 
                 return;
             }
-
-            comboBox.SelectedIndex = -1;
         }
-
+       
         private void IsTextChanged(object sender, EventArgs e)
         {
             ButtonOfAddCategory.Enabled = !string.IsNullOrWhiteSpace(TextBoxOfCategoryName.Text) &&
@@ -63,7 +53,8 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfAddCategory_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (!EnsureUserActive())
+                return;
 
             if (ComboBoxOfUnit.SelectedValue == null)
             {
@@ -78,10 +69,7 @@ namespace EnergeticProjectX.Forms
                 Unit_Id = (Guid)ComboBoxOfUnit.SelectedValue
             };
 
-            if (Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(c.Name, newCategory.Name)) ||
-                Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(c.Name, Regex.Replace(newCategory.Name, @"\s+", "")) ||
-                Db.Categories.Any(c => c.Status == Status.Active && EF.Functions.ILike(Regex.Replace(c.Name, @"\s+", ""),
-                Regex.Replace(newCategory.Name, @"\s+", "")))))
+            if (_productService.IsCategoryNameBusy(newCategory.Name))
             {
                 EH.ShowWarning(Resources.NewCategoryAlreadyExists, true);
 
@@ -89,8 +77,8 @@ namespace EnergeticProjectX.Forms
             }
             
 
-            Db.Categories.Add(newCategory);
-            if (EH.DBSaveChangesUniversalErrorCheck(Db))
+            _productService.AddCategory(newCategory);
+            if (_userService.DbSaveChangesErrorCheck())
                 return;
 
             EH.ShowInformation(Resources.NewCategorySuccessfullyAdded);
@@ -100,14 +88,25 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfCancel_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
-
             OpenProductCatalog();
+        }
+
+        private bool EnsureUserActive()
+        {
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted, true);
+                return false;
+            }
+            return true;
         }
 
         private void OpenProductCatalog()
         {
-            var productCatalog = new TableOfProducts(userLogin);
+            if (!EnsureUserActive())
+                return;
+
+            var productCatalog = new TableOfProducts(userLogin, _userService, _productService, _clientService);
             FH.OpenForm(this, productCatalog);
         }
 

@@ -1,8 +1,8 @@
-﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
-using FH = EnergeticProjectX.Classes.FormHandler;
+﻿using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 using EnergeticProjectX.Properties;
-using EnergeticProjectX.Models;
-using EnergeticProjectX.Classes;
+using EH = EnergeticProjectX.Classes.ErrorHandler;
+using FH = EnergeticProjectX.Classes.FormHandler;
 
 namespace EnergeticProjectX.Forms
 {
@@ -11,7 +11,11 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class TableOfUsers : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
 
         private readonly BindingSource bindingSource = [];
 
@@ -21,11 +25,17 @@ namespace EnergeticProjectX.Forms
         /// Конструктор для реализации формы просмотра таблицы пользователей системы.
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
-        public TableOfUsers(string userLogin)
+        public TableOfUsers(string userLogin, IClientService clientService, IUserService userService, IProductService productService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
+
+            _userService = userService;
+
+            _productService = productService;
+
+            _clientService = clientService;
 
             ActiveControl = DGVOfUsers;
 
@@ -35,20 +45,12 @@ namespace EnergeticProjectX.Forms
         {
             try
             {
-                bindingSource.DataSource = Db.Users
-                    .Select(u => new UserDisplayModel
-                    {
-                        Surname = u.Surname,
-                        Name = u.Name,
-                        Patronymic = u.Patronymic,
-                        UserRole = EnumHandler.GetUserRole(u.UserRole)
-                    })
-                    .ToList();
+                bindingSource.DataSource = _userService.DisplayUsers();
 
                 DGVOfUsers.DataSource = bindingSource;
                 bindingSource.ResetBindings(false);
 
-                EH.ShowInformation($"{Resources.HowMuchUsersUploaded} {Db.Users.Count()}");
+                EH.ShowInformation($"{Resources.HowMuchUsersUploaded} {_userService.GetAllUsersCount()}");
             }
             catch (Exception)
             {
@@ -86,10 +88,21 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfAdministratorMainMenu_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+                return;
+            }
 
-            var administratorMainMenu = new AdministratorMainMenu(userLogin);
+            var administratorMainMenu = new AdministratorMainMenu(userLogin, _userService, _clientService, _productService);
             FH.OpenForm(this, administratorMainMenu);
+        }
+
+        private void ButtonOfUserData_Click(object sender, EventArgs e)
+        {
+            EH.ShowAlert(Resources.NewFuncIsInProgress);
+
+            return;
         }
 
         private void TabSelection_Enter(object sender, EventArgs e)

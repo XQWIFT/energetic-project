@@ -2,11 +2,12 @@
 using FH = EnergeticProjectX.Classes.FormHandler;
 using PCM = EnergeticProjectX.Classes.PriceCurrencyManager;
 using TH = EnergeticProjectX.Classes.TimeHandler;
-using EnergeticProjectX.Classes;
 using EnergeticProjectX.Models;
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using System.Text;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 
 namespace EnergeticProjectX.Forms
 {
@@ -15,7 +16,12 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class TableOfShipmentsForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+         //ApplicationContextDB Db = new ApplicationContextDB();
+        private readonly IUserService _userService;
+
+        private readonly IProductService _productService;
+
+        private readonly IClientService _clientService;
 
         private readonly string userLogin;
 
@@ -26,16 +32,24 @@ namespace EnergeticProjectX.Forms
         private List<ShipmentJournalDisplayModel> allShipments = [];
 
         private const int DefaultDateRangeDays = 7;
-
         /// <summary>
         /// Конструктор для реализации формы журнала отгрузок.
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
-        public TableOfShipmentsForm(string userLogin)
+        public TableOfShipmentsForm(string userLogin, IUserService userService, IClientService clientService,
+            IProductService productService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
+
+            _userService = userService;
+
+            _productService = productService;
+            
+            _clientService = clientService;
+
+           
 
             DateTimePickerFrom.Value = DateTime.Today.AddDays(-DefaultDateRangeDays);
             DateTimePickerTo.Value = DateTime.Today;
@@ -50,10 +64,10 @@ namespace EnergeticProjectX.Forms
         {
             try
             {
-                var users = Db.Users.ToDictionary(u => u.User_Id, u => u);
-                var clients = Db.Clients.ToDictionary(c => c.Client_Id, c => c);
+                var users = _userService.GetUsersInDictionary();
+                var clients = _clientService.GetClientsInDictionary();
 
-                var query = Db.Shipments.AsQueryable();
+                var query = _productService.GetShipmentsInQuery();
 
                 var fromDate = DateOnly.FromDateTime(DateTimePickerFrom.Value.Date);
                 var toDate = DateOnly.FromDateTime(DateTimePickerTo.Value.Date);
@@ -77,7 +91,7 @@ namespace EnergeticProjectX.Forms
                     }
 
                     var userName = $"{user.Surname} {user.Name}";
-                    var shipmentItems = Db.ShipmentItems.Where(si => si.Shipment_Id == shipment.Shipment_Id).ToList();
+                    var shipmentItems = _productService.GetShipmentItemsByID(shipment.Shipment_Id);
 
                     var totalRevenue = shipmentItems.Sum(si => si.FixedSalePrice * si.Quantity);
                     var totalCost = shipmentItems.Sum(si => si.FixedPurchasePrice * si.Quantity);
@@ -89,8 +103,8 @@ namespace EnergeticProjectX.Forms
                         UserName = userName,
                         ClientName = client.Name,
                         Date = TH.UtcDateToLocalDateOnly(DateOnly.FromDateTime(shipment.CreationDate)),
-                        Revenue = PCM.PriceToCorrectFormat(Db, PCM.SetPriceToChosenCurrency(Db, totalRevenue, userLogin), userLogin),
-                        Profit = PCM.PriceToCorrectFormat(Db, PCM.SetPriceToChosenCurrency(Db, profit, userLogin), userLogin),
+                        Revenue = _productService.PriceToCorrectFormat(PCM.SetPriceToChosenCurrency(_userService, totalRevenue, userLogin), userLogin),
+                        Profit = _productService.PriceToCorrectFormat(PCM.SetPriceToChosenCurrency(_userService, profit, userLogin), userLogin),
                         RevenueValue = totalRevenue,
                         ProfitValue = profit
                     });
@@ -176,7 +190,7 @@ namespace EnergeticProjectX.Forms
             if (e.RowIndex < allShipments.Count &&
                 DGVOfShipments.Rows[e.RowIndex].DataBoundItem is ShipmentJournalDisplayModel shipmentModel)
             {
-                selectedShipment = Db.Shipments.FirstOrDefault(s => s.Shipment_Id == shipmentModel.ShipmentId);
+                selectedShipment = _productService.GetShipmentById(shipmentModel.ShipmentId);
             }
             else
             {
@@ -204,12 +218,16 @@ namespace EnergeticProjectX.Forms
 
         private void ExportToCsv(string filePath)
         {
-            var user = EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+            var user = _userService.EnsureUserActive(userLogin);
 
             if (user == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
                 return;
+            }
+                
 
-            var currency = Db.Currencies.FirstOrDefault(c => c.Currency_Id == user.CurrencyId);
+            var currency = _userService.FindUserChosenCurrency(user);
 
             if (currency == null)
             {
@@ -233,8 +251,8 @@ namespace EnergeticProjectX.Forms
                 totalProfit += shipment.ProfitValue;
             }
 
-            var totalRevenueDisplay = PCM.PriceToCorrectFormat(Db, PCM.SetPriceToChosenCurrency(Db, totalRevenue, userLogin), userLogin);
-            var totalProfitDisplay = PCM.PriceToCorrectFormat(Db, PCM.SetPriceToChosenCurrency(Db, totalProfit, userLogin), userLogin);
+            var totalRevenueDisplay = _productService.PriceToCorrectFormat(PCM.SetPriceToChosenCurrency(_userService, totalRevenue, userLogin), userLogin);
+            var totalProfitDisplay = _productService.PriceToCorrectFormat(PCM.SetPriceToChosenCurrency(_userService, totalProfit, userLogin), userLogin);
 
             stringBuilder.AppendLine();
             stringBuilder.AppendLine($"{Resources.TotalRevenue};{totalRevenueDisplay}");
@@ -249,7 +267,11 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfExport_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+                return;
+            }
 
             if (allShipments.Count == 0)
             {
@@ -281,15 +303,23 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfMainMenu_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+                return;
+            }
 
-            var administratorMainMenu = new AdministratorMainMenu(userLogin);
+            var administratorMainMenu = new AdministratorMainMenu(userLogin, _userService, _clientService, _productService);
             FH.OpenForm(this, administratorMainMenu);
         }
 
         private void ButtonOfContent_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+                return;
+            }
 
             if (selectedShipment == null)
             {
@@ -298,7 +328,7 @@ namespace EnergeticProjectX.Forms
                 return;
             }
 
-            var shipmentDetails = new ShipmentDetailsForm(userLogin, selectedShipment);
+            var shipmentDetails = new ShipmentDetailsForm(userLogin, selectedShipment, _userService, _productService, _clientService);
             FH.OpenForm(this, shipmentDetails);
         }
 

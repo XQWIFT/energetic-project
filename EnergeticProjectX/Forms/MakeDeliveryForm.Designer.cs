@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewOfSupply = new DataGridView();
             LabelOfMakingSupply = new Label();
             LabelOfCategory = new Label();
@@ -60,41 +60,43 @@
             DataGridViewOfSupply.AllowUserToResizeColumns = false;
             DataGridViewOfSupply.AllowUserToResizeRows = false;
             DataGridViewOfSupply.BackgroundColor = SystemColors.ControlLight;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            DataGridViewOfSupply.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            DataGridViewOfSupply.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             DataGridViewOfSupply.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            DataGridViewOfSupply.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Window;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            DataGridViewOfSupply.DefaultCellStyle = dataGridViewCellStyle5;
             DataGridViewOfSupply.EnableHeadersVisualStyles = false;
             DataGridViewOfSupply.Location = new Point(561, 12);
             DataGridViewOfSupply.MultiSelect = false;
             DataGridViewOfSupply.Name = "DataGridViewOfSupply";
             DataGridViewOfSupply.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            DataGridViewOfSupply.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            DataGridViewOfSupply.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             DataGridViewOfSupply.RowHeadersVisible = false;
             DataGridViewOfSupply.RowHeadersWidth = 62;
             DataGridViewOfSupply.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DataGridViewOfSupply.Size = new Size(650, 707);
             DataGridViewOfSupply.TabIndex = 0;
+            DataGridViewOfSupply.CellMouseClick += DataGridOfItems_CellClick;
+            DataGridViewOfSupply.CellMouseDoubleClick += DataGridOfItems_CellClick;
             // 
             // LabelOfMakingSupply
             // 
@@ -179,6 +181,7 @@
             ButtonOfAddProduct.TabIndex = 6;
             ButtonOfAddProduct.Text = "Добавить товар";
             ButtonOfAddProduct.UseVisualStyleBackColor = true;
+            ButtonOfAddProduct.Click += ButtonOfAddProduct_Click;
             ButtonOfAddProduct.Enter += TabSelection_Enter;
             ButtonOfAddProduct.Leave += TabSelection_Leave;
             // 
@@ -195,6 +198,7 @@
             ButtonOfUploadingByFile.TabIndex = 7;
             ButtonOfUploadingByFile.Text = "Загрузить из файла";
             ButtonOfUploadingByFile.UseVisualStyleBackColor = true;
+            ButtonOfUploadingByFile.Click += ButtonOfLoadFromFile_Click;
             ButtonOfUploadingByFile.Enter += TabSelection_Enter;
             ButtonOfUploadingByFile.Leave += TabSelection_Leave;
             // 
@@ -211,6 +215,7 @@
             ButtonOfDeleteProduct.TabIndex = 8;
             ButtonOfDeleteProduct.Text = "Удалить товар";
             ButtonOfDeleteProduct.UseVisualStyleBackColor = true;
+            ButtonOfDeleteProduct.Click += ButtonOfProductDelete_Click;
             ButtonOfDeleteProduct.Enter += TabSelection_Enter;
             ButtonOfDeleteProduct.Leave += TabSelection_Leave;
             // 
@@ -227,6 +232,7 @@
             ButtonOfMakingSupply.TabIndex = 9;
             ButtonOfMakingSupply.Text = "Оформить поставку";
             ButtonOfMakingSupply.UseVisualStyleBackColor = true;
+            ButtonOfMakingSupply.Click += ButtonOfMakingDelivery_Click;
             ButtonOfMakingSupply.Enter += TabSelection_Enter;
             ButtonOfMakingSupply.Leave += TabSelection_Leave;
             // 
@@ -239,6 +245,7 @@
             ComboBoxOfCategory.Name = "ComboBoxOfCategory";
             ComboBoxOfCategory.Size = new Size(309, 46);
             ComboBoxOfCategory.TabIndex = 1;
+            ComboBoxOfCategory.SelectedIndexChanged += ComboBoxOfCategory_SelectedIndexChanged;
             // 
             // ComboBoxOfProduct
             // 
@@ -250,6 +257,7 @@
             ComboBoxOfProduct.Name = "ComboBoxOfProduct";
             ComboBoxOfProduct.Size = new Size(309, 46);
             ComboBoxOfProduct.TabIndex = 2;
+            ComboBoxOfProduct.SelectedIndexChanged += ComboBoxOfProduct_SelectedIndexChanged;
             // 
             // TextBoxOfUnit
             // 
@@ -279,6 +287,7 @@
             TextBoxOfQuantity.Name = "TextBoxOfQuantity";
             TextBoxOfQuantity.Size = new Size(308, 45);
             TextBoxOfQuantity.TabIndex = 5;
+            TextBoxOfQuantity.TextChanged += ValidateFields;
             TextBoxOfQuantity.KeyPress += TextBoxOfQuantity_KeyPress;
             // 
             // TextBoxOfPurchaseAll
@@ -305,6 +314,7 @@
             ButtonOfCancel.TabIndex = 10;
             ButtonOfCancel.Text = "Отмена";
             ButtonOfCancel.UseVisualStyleBackColor = true;
+            ButtonOfCancel.Click += ButtonOfCancel_Click;
             ButtonOfCancel.Enter += TabSelection_Enter;
             ButtonOfCancel.Leave += TabSelection_Leave;
             // 

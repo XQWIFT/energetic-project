@@ -1,10 +1,12 @@
-﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
-using FH = EnergeticProjectX.Classes.FormHandler;
-using EnergeticProjectX.Properties;
+﻿using EnergeticProjectX.Classes;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 using EnergeticProjectX.Objects;
-using EnergeticProjectX.Classes;
-using System.Text.RegularExpressions;
+using EnergeticProjectX.Properties;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.RegularExpressions;
+using EH = EnergeticProjectX.Classes.ErrorHandler;
+using FH = EnergeticProjectX.Classes.FormHandler;
 
 namespace EnergeticProjectX.Forms
 {
@@ -13,14 +15,24 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class RegistrationForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
 
         /// <summary>
         /// Конструктор для реализации формы регистрации.
         /// </summary>
-        public RegistrationForm()
+        public RegistrationForm(IUserService userservice,IProductService productService, IClientService clientService)
         {
             InitializeComponent();
+
+            _userService = userservice;
+
+            _clientService = clientService;
+
+            _productService = productService;
         }
 
         private void IsTextChanged(object sender, EventArgs e)
@@ -66,12 +78,12 @@ namespace EnergeticProjectX.Forms
             var login = Regex.Replace(TextBoxOfLogin.Text, @"\s+", "");
             var passwordConfirmation = Regex.Replace(TextBoxOfPasswordConfirmation.Text, @"\s+", "");
 
-            var userLoginFree = IsUserLoginFree(login, Db);
+            var userLoginFree = _userService.IsUserLoginFree(login);
             var (passwordsMatch, passwordSatisfyRequirements) = UIHelper.IsPasswordRelevant(password, passwordConfirmation);
 
             if (userLoginFree && passwordsMatch && passwordSatisfyRequirements)
             {
-                var currencyByDefault = Db.Currencies.FirstOrDefault(u => u.Code == "RUB");
+                var currencyByDefault = _userService.GetCurrency("RUB");
 
                 if (currencyByDefault == null)
                 {
@@ -90,11 +102,16 @@ namespace EnergeticProjectX.Forms
                     CurrencyId = currencyByDefault.Currency_Id
                 };
 
-                Db.Users.Add(user);
-                if (EH.DBSaveChangesUniversalErrorCheck(Db))
-                    return;
+                try
+                {
+                    _userService.AddUser(user);
+                }
+                catch (Exception)
+                {
+                    EH.ShowError(Resources.UniversalErrorDatabase, true);
+                }
 
-                var warehousemanMainMenu = new WarehousemanMainMenu(user.Login);
+                var warehousemanMainMenu = new WarehousemanMainMenu(user.Login, _userService, _productService, _clientService);
                 FH.OpenForm(this, warehousemanMainMenu);
             }
             else if (!userLoginFree)
@@ -122,19 +139,6 @@ namespace EnergeticProjectX.Forms
             }
         }
 
-        /// <summary>
-        /// Проверка, свободен ли указанный пользователем логин для регистрации.
-        /// </summary>
-        /// <param name="login">Введённый пользователем логин.</param>
-        /// <param name="db">Контекст базы данных.</param>
-        /// <returns>Подтверждение, есть ли соответствие с введённым логином в базе данных.</returns>
-        public static bool IsUserLoginFree(string login, ApplicationContextDB db)
-        {
-            var logins = db.Users.Select(u => u.Login).ToList();
-
-            return !logins.Contains(login);
-        }
-
         private void LabelOfAuthorization_Click(object sender, EventArgs e)
         {
             var authorizationForm = Program.ServiceProvider.GetRequiredService<AuthorizationForm>();
@@ -154,16 +158,6 @@ namespace EnergeticProjectX.Forms
             if (sender is Button button)
             {
                 button.BackColor = Color.Transparent;
-            }
-        }
-
-        private void TextBoxOfPersonalData_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsLetter(e.KeyChar) && !char.IsControl(e.KeyChar))
-            {
-                e.Handled = true;
-
-                EH.ShowBlinkWarning(LabelOfWarning, "Личные данные должны содержать\nтолько буквы!");
             }
         }
     }

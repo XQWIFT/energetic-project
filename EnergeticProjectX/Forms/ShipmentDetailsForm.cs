@@ -2,11 +2,12 @@
 using PCM = EnergeticProjectX.Classes.PriceCurrencyManager;
 using FH = EnergeticProjectX.Classes.FormHandler;
 using TH = EnergeticProjectX.Classes.TimeHandler;
-using EnergeticProjectX.Classes;
 using EnergeticProjectX.Objects;
 using Microsoft.EntityFrameworkCore;
 using EnergeticProjectX.Models;
 using EnergeticProjectX.Properties;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 
 namespace EnergeticProjectX.Forms
 {
@@ -15,7 +16,11 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class ShipmentDetailsForm : Form
     {
-        private static ApplicationContextDB Db => Program.Database;
+        private readonly IUserService _userService;
+
+        private readonly IProductService _productService;
+
+        private readonly IClientService _clientService;
 
         private readonly string userLogin;
 
@@ -26,11 +31,18 @@ namespace EnergeticProjectX.Forms
         /// </summary>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
         /// <param name="currentShipment">Заданная отгрузка.</param>
-        public ShipmentDetailsForm(string userLogin, Shipment currentShipment)
+        public ShipmentDetailsForm(string userLogin, Shipment currentShipment,
+            IUserService userService, IProductService productService, IClientService clientService)
         {
             InitializeComponent();
 
             this.userLogin = userLogin;
+
+            _userService = userService;
+
+            _productService = productService;
+
+             _clientService = clientService;
             
             this.currentShipment = currentShipment;
 
@@ -41,24 +53,19 @@ namespace EnergeticProjectX.Forms
         {
             try
             {
-                var user = Db.Users.FirstOrDefault(u => u.User_Id == currentShipment.User_Id);
+                var user = _userService.FindUserById(currentShipment.User_Id);
 
-                var client = Db.Clients.FirstOrDefault(c => c.Client_Id == currentShipment.Client_Id);
+                var client = _clientService.FindClientById(currentShipment.Client_Id);
 
-                var shipmentItems = Db.ShipmentItems
-                    .Where(si => si.Shipment_Id == currentShipment.Shipment_Id)
-                    .Include(si => si.Product)
-                    .ThenInclude(p => p!.Category)
-                    .ThenInclude(c => c!.Unit)
-                    .ToList();
+                var shipmentItems = _productService.GetShipmentItemsByID(currentShipment.Shipment_Id);
 
                 var totalRevenue = shipmentItems.Sum(si => si.FixedSalePrice * si.Quantity);
                 var totalCost = shipmentItems.Sum(si => si.FixedPurchasePrice * si.Quantity);
                 var profit = totalRevenue - totalCost;
 
-                var revenueFormatted = PCM.PriceToCorrectFormat(Db, PCM.SetPriceToChosenCurrency(Db, totalRevenue, userLogin), userLogin);
+                var revenueFormatted = _productService.PriceToCorrectFormat(PCM.SetPriceToChosenCurrency(_userService, totalRevenue, userLogin), userLogin);
 
-                var profitFormatted = PCM.PriceToCorrectFormat(Db, PCM.SetPriceToChosenCurrency(Db, profit, userLogin), userLogin);
+                var profitFormatted = _productService.PriceToCorrectFormat(PCM.SetPriceToChosenCurrency(_userService, profit, userLogin), userLogin);
 
                 TextBoxOfUserData.Text = user != null ? $"{user.Surname} {user.Name}".Trim() : Resources.Notstated;
                 TextBoxOfClient.Text = client?.Name ?? Resources.Notstated;
@@ -72,7 +79,7 @@ namespace EnergeticProjectX.Forms
                     Category = si.Product?.Category?.Name ?? Resources.Notstated,
                     Quantity = si.Quantity,
                     Unit = si.Product?.Category?.Unit?.Name ?? Resources.Notstated,
-                    SalePrice = PCM.PriceToCorrectFormat(Db, PCM.SetPriceToChosenCurrency(Db, si.FixedSalePrice, userLogin), userLogin)
+                    SalePrice = _productService.PriceToCorrectFormat(PCM.SetPriceToChosenCurrency(_userService, si.FixedSalePrice, userLogin), userLogin)
                 }).ToList();
 
                 DataGridViewOfShipmentProducts.DataSource = displayData;
@@ -87,9 +94,13 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfGoingBack_Click(object sender, EventArgs e)
         {
-            if (EH.EnsureUserActive(this, Db, userLogin, Resources.CurrentSessionWasInterruptedOrUserWasDeleted) == null) return;
+            if (_userService.EnsureUserActive(userLogin) == null)
+            {
+                EH.ShowError(Resources.CurrentSessionWasInterruptedOrUserWasDeleted);
+                return;
+            }
 
-            var shipmentJournal = new TableOfShipmentsForm(userLogin);
+            var shipmentJournal = new TableOfShipmentsForm(userLogin, _userService, _clientService, _productService);
             FH.OpenForm(this, shipmentJournal);
         }
 

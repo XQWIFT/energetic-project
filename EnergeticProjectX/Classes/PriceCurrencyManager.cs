@@ -2,6 +2,8 @@
 using EnergeticProjectX.Objects;
 using EnergeticProjectX.Properties;
 using System.Globalization;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 
 namespace EnergeticProjectX.Classes
 {
@@ -105,11 +107,11 @@ namespace EnergeticProjectX.Classes
         /// <param name="price">Цена в выбранной у пользователя валюте.</param>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
         /// <returns>Цена в рублях.</returns>
-        public static decimal SetPriceToDefaultCurrency(ApplicationContextDB db, decimal price, string userLogin)
+        public static decimal SetPriceToDefaultCurrency(IUserService userService, decimal price, string userLogin)
         {
-            var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
+            var user = userService.FindByLogin(userLogin);
 
-            var chosenCurrency = db.Currencies.FirstOrDefault(c => c.Currency_Id == user!.CurrencyId);
+            var chosenCurrency = userService.FindUserChosenCurrency(user);
 
             var priceInDefaultCurrency = Math.Round(chosenCurrency!.ExchangeRate * price, 2, MidpointRounding.AwayFromZero);
 
@@ -123,11 +125,11 @@ namespace EnergeticProjectX.Classes
         /// <param name="priceInDefaultCurrency">Цена в рублях.</param>
         /// <param name="userLogin">Логин авторизованного пользователя.</param>
         /// <returns>Цена в выбранной у пользователя валюте.</returns>
-        public static decimal SetPriceToChosenCurrency(ApplicationContextDB db, decimal priceInDefaultCurrency, string userLogin)
+        public static decimal SetPriceToChosenCurrency(IUserService userService, decimal priceInDefaultCurrency, string userLogin)
         {
-            var user = db.Users.FirstOrDefault(u => u.Login == userLogin);
+            var user = userService.FindByLogin(userLogin);
 
-            var chosenCurrency = db.Currencies.FirstOrDefault(c => c.Currency_Id == user!.CurrencyId);
+            var chosenCurrency = userService.FindUserChosenCurrency(user);
 
             var priceInChosenCurrency = Math.Round(priceInDefaultCurrency / chosenCurrency!.ExchangeRate, 2, MidpointRounding.AwayFromZero);
 

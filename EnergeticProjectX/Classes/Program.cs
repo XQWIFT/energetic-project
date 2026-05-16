@@ -3,6 +3,7 @@ using EnergeticProjectX.Forms;
 using Microsoft.Extensions.DependencyInjection;
 using EnergeticProjectX.Interfaces;
 using EnergeticProjectX.interfaces;
+using EnergeticProjectX.RepositoriesAndServices;
 
 
 namespace EnergeticProjectX.Classes
@@ -27,6 +28,10 @@ namespace EnergeticProjectX.Classes
 
                 services.AddScoped<IUserRepository, UserRepository>();
                 services.AddScoped<IUserService, UserService>();
+                services.AddScoped<IProductRepository,  ProductRepository>();
+                services.AddScoped<IProductService,  ProductService>();
+                services.AddScoped<IClientService, ClientService>();
+                services.AddScoped<IClientRepository, ClientRepository>();
 
                 services.AddTransient<AuthorizationForm>();
 

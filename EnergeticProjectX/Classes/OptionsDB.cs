@@ -29,10 +29,5 @@
         /// Пароль пользователя.
         /// </summary>
         public required string Password { get; set; }
-
-        /// <summary>
-        /// SSL Мод.
-        /// </summary>
-        public required string SSLMode { get; set; }
     }
 }
