@@ -61,20 +61,20 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Добавлено.
+        ///   Ищет локализованную строку, похожую на Ошибка добавления товара в поставку.
         /// </summary>
-        internal static string AddedRus {
+        internal static string AddProductError {
             get {
-                return ResourceManager.GetString("AddedRus", resourceCulture);
+                return ResourceManager.GetString("AddProductError", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на добавлен в отгрузку.
+        ///   Ищет локализованную строку, похожую на Сначала добавьте товары для оформления отгрузки!.
         /// </summary>
-        internal static string AddedToShipment {
+        internal static string AddProductsInShipmentFirst {
             get {
-                return ResourceManager.GetString("AddedToShipment", resourceCulture);
+                return ResourceManager.GetString("AddProductsInShipmentFirst", resourceCulture);
             }
         }
         
@@ -88,65 +88,20 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Уже добавлено.
+        ///   Ищет локализованную строку, похожую на уже добавлен в поставку.
         /// </summary>
-        internal static string AlreadyAddedRus {
+        internal static string AlreadyInSupply {
             get {
-                return ResourceManager.GetString("AlreadyAddedRus", resourceCulture);
+                return ResourceManager.GetString("AlreadyInSupply", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Article.
+        ///   Ищет локализованную строку, похожую на Приложение продолжит работу..
         /// </summary>
-        internal static string ArticleEng {
+        internal static string ApplicationWillContinue {
             get {
-                return ResourceManager.GetString("ArticleEng", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Артикул.
-        /// </summary>
-        internal static string ArticleRus {
-            get {
-                return ResourceManager.GetString("ArticleRus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Вы уверены, что хотите удалить категорию:.
-        /// </summary>
-        internal static string AskForDeleteCategory {
-            get {
-                return ResourceManager.GetString("AskForDeleteCategory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Вы уверены, что хотите удалить данный товар?.
-        /// </summary>
-        internal static string AskForDeleteProduct {
-            get {
-                return ResourceManager.GetString("AskForDeleteProduct", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Вы уверены, что хотите отменить редактирование?.
-        /// </summary>
-        internal static string AskOfCancelEdit {
-            get {
-                return ResourceManager.GetString("AskOfCancelEdit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Доступно на складе.
-        /// </summary>
-        internal static string Available {
-            get {
-                return ResourceManager.GetString("Available", resourceCulture);
+                return ResourceManager.GetString("ApplicationWillContinue", resourceCulture);
             }
         }
         
@@ -160,38 +115,20 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Доступно.
+        ///   Ищет локализованную строку, похожую на Доступно на складе:.
         /// </summary>
-        internal static string AvailableRus {
+        internal static string AvailableInWarehouse {
             get {
-                return ResourceManager.GetString("AvailableRus", resourceCulture);
+                return ResourceManager.GetString("AvailableInWarehouse", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Name.
+        ///   Ищет локализованную строку, похожую на Категория успешно удалена!.
         /// </summary>
-        internal static string CategoryDisplayMember {
+        internal static string CategorySuccessfullyDeleted {
             get {
-                return ResourceManager.GetString("CategoryDisplayMember", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка получения данных о выбранной категории..
-        /// </summary>
-        internal static string CategoryGetIdError {
-            get {
-                return ResourceManager.GetString("CategoryGetIdError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Category_Id.
-        /// </summary>
-        internal static string CategoryValueMember {
-            get {
-                return ResourceManager.GetString("CategoryValueMember", resourceCulture);
+                return ResourceManager.GetString("CategorySuccessfullyDeleted", resourceCulture);
             }
         }
         
@@ -205,52 +142,79 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Выберите категорию для удаления.
+        ///   Ищет локализованную строку, похожую на Выберите категорию и/или новую единицу измерения для дальнейшего редактирования!.
         /// </summary>
-        internal static string ChooseCategoryDelete {
+        internal static string ChooseCategoryAndNewUnitToEdit {
             get {
-                return ResourceManager.GetString("ChooseCategoryDelete", resourceCulture);
+                return ResourceManager.GetString("ChooseCategoryAndNewUnitToEdit", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Выберите категорию товара!.
+        ///   Ищет локализованную строку, похожую на Сначала выберите категорию товара!.
         /// </summary>
-        internal static string ChooseCategoryProduct {
+        internal static string ChooseCategoryProductFirst {
             get {
-                return ResourceManager.GetString("ChooseCategoryProduct", resourceCulture);
+                return ResourceManager.GetString("ChooseCategoryProductFirst", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Выберите клиента для редактирования..
+        ///   Ищет локализованную строку, похожую на Сначала выберите категорию для удаления!.
         /// </summary>
-        internal static string ChooseClientForEdit {
+        internal static string ChooseCategoryToDeleteFirst {
             get {
-                return ResourceManager.GetString("ChooseClientForEdit", resourceCulture);
+                return ResourceManager.GetString("ChooseCategoryToDeleteFirst", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Выберите категорию и/или новую единицу измерения для дальнейшего редактирования.
+        ///   Ищет локализованную строку, похожую на Сначала выберите клиента для редактирования!.
         /// </summary>
-        internal static string ChooseEditCategoryAndNewUnit {
+        internal static string ChooseClientToEditFirst {
             get {
-                return ResourceManager.GetString("ChooseEditCategoryAndNewUnit", resourceCulture);
+                return ResourceManager.GetString("ChooseClientToEditFirst", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Пожалуйста, выберите единицу измерения.
+        ///   Ищет локализованную строку, похожую на Сначала выберите клиента для совершения отгрузки!.
         /// </summary>
-        internal static string ChooseUnit {
+        internal static string ChooseClientToMakeShipmentFirst {
             get {
-                return ResourceManager.GetString("ChooseUnit", resourceCulture);
+                return ResourceManager.GetString("ChooseClientToMakeShipmentFirst", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка очистки скрытых категорий.
+        ///   Ищет локализованную строку, похожую на Пожалуйста, сначала выберите новую или текущую единицу измерения для редактирования категории..
+        /// </summary>
+        internal static string ChooseNewUnitToEditCategoryFirst {
+            get {
+                return ResourceManager.GetString("ChooseNewUnitToEditCategoryFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Пожалуйста, сначала выберите товар!.
+        /// </summary>
+        internal static string ChooseProductFirst {
+            get {
+                return ResourceManager.GetString("ChooseProductFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Сначала выберите товар для добавления в отгрузку!.
+        /// </summary>
+        internal static string ChooseProductToAddInShipmentFirst {
+            get {
+                return ResourceManager.GetString("ChooseProductToAddInShipmentFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ошибка очистки скрытых категорий..
         /// </summary>
         internal static string CleanUpHiddenCategoriesError {
             get {
@@ -259,7 +223,16 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка очистки скрытого товара:.
+        ///   Ищет локализованную строку, похожую на Ошибка очистки скрытых клиентов..
+        /// </summary>
+        internal static string CleanUpHiddenClientsError {
+            get {
+                return ResourceManager.GetString("CleanUpHiddenClientsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ошибка очистки скрытого товара..
         /// </summary>
         internal static string CleanUpHiddenProductsError {
             get {
@@ -277,97 +250,7 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Client_Id.
-        /// </summary>
-        internal static string Client_IdEng {
-            get {
-                return ResourceManager.GetString("Client_IdEng", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на ContactInfo.
-        /// </summary>
-        internal static string ClientContactInfo {
-            get {
-                return ResourceManager.GetString("ClientContactInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на ИП.
-        /// </summary>
-        internal static string ClientContractorIndEntrepreneur {
-            get {
-                return ResourceManager.GetString("ClientContractorIndEntrepreneur", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Юр. лицо.
-        /// </summary>
-        internal static string ClientContractorLegalEntity {
-            get {
-                return ResourceManager.GetString("ClientContractorLegalEntity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Физ. лицо.
-        /// </summary>
-        internal static string ClientContractorPhysicalPerson {
-            get {
-                return ResourceManager.GetString("ClientContractorPhysicalPerson", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на ClientName.
-        /// </summary>
-        internal static string ClientDisplayMember {
-            get {
-                return ResourceManager.GetString("ClientDisplayMember", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на INN.
-        /// </summary>
-        internal static string ClientINN {
-            get {
-                return ResourceManager.GetString("ClientINN", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на ClientCode.
-        /// </summary>
-        internal static string ClientRowCode {
-            get {
-                return ResourceManager.GetString("ClientRowCode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Contractor.
-        /// </summary>
-        internal static string ClientRowContractor {
-            get {
-                return ResourceManager.GetString("ClientRowContractor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Name.
-        /// </summary>
-        internal static string ClientRowName {
-            get {
-                return ResourceManager.GetString("ClientRowName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка при загрузке клиентов.
+        ///   Ищет локализованную строку, похожую на Ошибка при загрузке клиентов..
         /// </summary>
         internal static string ClientsLoadError {
             get {
@@ -376,29 +259,20 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Client_Id.
+        ///   Ищет локализованную строку, похожую на Вы уверены, что хотите отменить редактирование?.
         /// </summary>
-        internal static string ClientValueMember {
+        internal static string ConfirmationToCancelEdit {
             get {
-                return ResourceManager.GetString("ClientValueMember", resourceCulture);
+                return ResourceManager.GetString("ConfirmationToCancelEdit", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Подтверждение отмены.
+        ///   Ищет локализованную строку, похожую на Вы уверены, что хотите удалить данный товар?.
         /// </summary>
-        internal static string ConfirmationCancel {
+        internal static string ConfirmationToDeleteProduct {
             get {
-                return ResourceManager.GetString("ConfirmationCancel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Подтверждение удаления.
-        /// </summary>
-        internal static string ConfirmationDelete {
-            get {
-                return ResourceManager.GetString("ConfirmationDelete", resourceCulture);
+                return ResourceManager.GetString("ConfirmationToDeleteProduct", resourceCulture);
             }
         }
         
@@ -408,33 +282,6 @@ namespace EnergeticProjectX.Properties {
         internal static string ConnectionToDataBaseFailed {
             get {
                 return ResourceManager.GetString("ConnectionToDataBaseFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Если данному клиенту недавно были совершены отгрузки товаров, удалить данные не получится!.
-        /// </summary>
-        internal static string ConsequencesIfDeleteClient {
-            get {
-                return ResourceManager.GetString("ConsequencesIfDeleteClient", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на При сохранении изменений данная категория изменится у всех товаров этой категории!.
-        /// </summary>
-        internal static string ConsequencesSaveCategoryChange {
-            get {
-                return ResourceManager.GetString("ConsequencesSaveCategoryChange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на dd.MM.yyyy.
-        /// </summary>
-        internal static string CorrectDateFormat {
-            get {
-                return ResourceManager.GetString("CorrectDateFormat", resourceCulture);
             }
         }
         
@@ -475,38 +322,20 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка при загрузке отгрузок!.
+        ///   Ищет локализованную строку, похожую на Текущая сессия была завершена или данные об аккаунте были утеряны. Пожалуйста, повторно пройдите авторизацию!.
         /// </summary>
-        internal static string CriticalErrorWhenLoadingShipments {
+        internal static string CurrentSessionWasInterruptedOrUserWasDeleted {
             get {
-                return ResourceManager.GetString("CriticalErrorWhenLoadingShipments", resourceCulture);
+                return ResourceManager.GetString("CurrentSessionWasInterruptedOrUserWasDeleted", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Критическая ошибка при создании отгрузки.
-        /// </summary>
-        internal static string CriticalErrorWhenMakingShipment {
-            get {
-                return ResourceManager.GetString("CriticalErrorWhenMakingShipment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Дата.
+        ///   Ищет локализованную строку, похожую на Дата:.
         /// </summary>
         internal static string Date {
             get {
                 return ResourceManager.GetString("Date", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Изменён период:.
-        /// </summary>
-        internal static string DateRangeChanged {
-            get {
-                return ResourceManager.GetString("DateRangeChanged", resourceCulture);
             }
         }
         
@@ -520,20 +349,11 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Снижение цены должно быть произойти не раньше, чем через два месяца после создания.
+        ///   Ищет локализованную строку, похожую на Снижение цены должно быть произойти не раньше, чем через два месяца после создания..
         /// </summary>
-        internal static string DiscountDateCannotBeCreationDate {
+        internal static string DiscountDateShouldNotBeEarlierThanCreationDate {
             get {
-                return ResourceManager.GetString("DiscountDateCannotBeCreationDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на DiscountDate.
-        /// </summary>
-        internal static string DiscountDateName {
-            get {
-                return ResourceManager.GetString("DiscountDateName", resourceCulture);
+                return ResourceManager.GetString("DiscountDateShouldNotBeEarlierThanCreationDate", resourceCulture);
             }
         }
         
@@ -547,11 +367,11 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на пусто.
+        ///   Ищет локализованную строку, похожую на Конечная дата не может быть позже текущего дня..
         /// </summary>
-        internal static string Empty {
+        internal static string EndDateCannotBeInFuture {
             get {
-                return ResourceManager.GetString("Empty", resourceCulture);
+                return ResourceManager.GetString("EndDateCannotBeInFuture", resourceCulture);
             }
         }
         
@@ -574,24 +394,6 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Не удалось удалить данные клиента, так как они необходимы для учёта совершённых отгрузок..
-        /// </summary>
-        internal static string ErrorClientDelete {
-            get {
-                return ResourceManager.GetString("ErrorClientDelete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Не удалось сохранить изменения..
-        /// </summary>
-        internal static string ErrorClientSaveChanges {
-            get {
-                return ResourceManager.GetString("ErrorClientSaveChanges", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на Ошибка назначения валюты по умолчанию..
         /// </summary>
         internal static string ErrorDefaultCurrencyUpload {
@@ -601,7 +403,7 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка при экспорте отчёта.
+        ///   Ищет локализованную строку, похожую на Ошибка при экспорте отчёта..
         /// </summary>
         internal static string ErrorExportReport {
             get {
@@ -610,20 +412,20 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка при загрузке отгрузок.
+        ///   Ищет локализованную строку, похожую на Ошибка удаления товара из отгрузки..
         /// </summary>
-        internal static string ErrorLoadShipments {
+        internal static string ErrorProductDeleteFromShipment {
             get {
-                return ResourceManager.GetString("ErrorLoadShipments", resourceCulture);
+                return ResourceManager.GetString("ErrorProductDeleteFromShipment", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка удаления товара..
+        ///   Ищет локализованную строку, похожую на Ошибка чтения файла.
         /// </summary>
-        internal static string ErrorProductDelete {
+        internal static string ErrorReadingFile {
             get {
-                return ResourceManager.GetString("ErrorProductDelete", resourceCulture);
+                return ResourceManager.GetString("ErrorReadingFile", resourceCulture);
             }
         }
         
@@ -655,7 +457,7 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка загрузки данных:.
+        ///   Ищет локализованную строку, похожую на Ошибка загрузки данных..
         /// </summary>
         internal static string ErrorUploadData {
             get {
@@ -673,56 +475,38 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка валидации.
-        /// </summary>
-        internal static string ErrorValidation {
-            get {
-                return ResourceManager.GetString("ErrorValidation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка при загрузке отгрузки.
-        /// </summary>
-        internal static string ErrorWhileLoadingShipment {
-            get {
-                return ResourceManager.GetString("ErrorWhileLoadingShipment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на Ошибка при загрузке данных!.
         /// </summary>
-        internal static string ErrowWhileLoadingData {
+        internal static string ErrorWhileLoadingData {
             get {
-                return ResourceManager.GetString("ErrowWhileLoadingData", resourceCulture);
+                return ResourceManager.GetString("ErrorWhileLoadingData", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Данный логин уже существует..
+        ///   Ищет локализованную строку, похожую на Курс валюты:.
         /// </summary>
-        internal static string ExistsUsername {
+        internal static string ExchangeRate {
             get {
-                return ResourceManager.GetString("ExistsUsername", resourceCulture);
+                return ResourceManager.GetString("ExchangeRate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Начат экспорт отчёта за период:.
+        ///   Ищет локализованную строку, похожую на Курсы валют обновлены!.
         /// </summary>
-        internal static string ExportReportStarted {
+        internal static string ExchangeRatesUploaded {
             get {
-                return ResourceManager.GetString("ExportReportStarted", resourceCulture);
+                return ResourceManager.GetString("ExchangeRatesUploaded", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Заполните все обязательные поля.
+        ///   Ищет локализованную строку, похожую на Переданный файл не содержит товаров.
         /// </summary>
-        internal static string FillRequiredFields {
+        internal static string FileForSupplyNoProducts {
             get {
-                return ResourceManager.GetString("FillRequiredFields", resourceCulture);
+                return ResourceManager.GetString("FileForSupplyNoProducts", resourceCulture);
             }
         }
         
@@ -736,11 +520,20 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Клиентов загружено.
+        ///   Ищет локализованную строку, похожую на Клиентов загружено:.
         /// </summary>
         internal static string HowMuchClientsUploaded {
             get {
                 return ResourceManager.GetString("HowMuchClientsUploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Обновлено валют:.
+        /// </summary>
+        internal static string HowMuchExchangeRatesUploaded {
+            get {
+                return ResourceManager.GetString("HowMuchExchangeRatesUploaded", resourceCulture);
             }
         }
         
@@ -768,15 +561,6 @@ namespace EnergeticProjectX.Properties {
         internal static string IfChangePurchaseThenChangeSale {
             get {
                 return ResourceManager.GetString("IfChangePurchaseThenChangeSale", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Некорректный диапазон дат!.
-        /// </summary>
-        internal static string IncorrectDataPeriod {
-            get {
-                return ResourceManager.GetString("IncorrectDataPeriod", resourceCulture);
             }
         }
         
@@ -817,25 +601,16 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Некорректный выбор начальной даты..
+        ///   Ищет локализованную строку, похожую на Данный ИНН уже соответствует другому клиенту!.
         /// </summary>
-        internal static string IncorrectToDateChoice {
+        internal static string InnAlreadyExists {
             get {
-                return ResourceManager.GetString("IncorrectToDateChoice", resourceCulture);
+                return ResourceManager.GetString("InnAlreadyExists", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Данный ИНН уже соответствует другому клиенту..
-        /// </summary>
-        internal static string INNAlreadyInDB {
-            get {
-                return ResourceManager.GetString("INNAlreadyInDB", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Неверный формат данных для ИНН..
+        ///   Ищет локализованную строку, похожую на Неверный формат данных для ИНН.
         /// </summary>
         internal static string INNFormatError {
             get {
@@ -844,7 +619,7 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Идентификационный номер юридического лица должен быть представлен комбинацией из 10 цифр..
+        ///   Ищет локализованную строку, похожую на Идентификационный номер юридического лица должен быть представлен комбинацией из 10 цифр.
         /// </summary>
         internal static string INNRequirementsTenDigits {
             get {
@@ -853,11 +628,20 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Идентификационный номер физического лица лица или ИП должен быть представлен комбинацией из 12 цифр..
+        ///   Ищет локализованную строку, похожую на Идентификационный номер физического лица лица или ИП должен быть представлен комбинацией из 12 цифр.
         /// </summary>
         internal static string INNRequirementsTwelveDigits {
             get {
                 return ResourceManager.GetString("INNRequirementsTwelveDigits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Введите корректное количество товара для поставки.
+        /// </summary>
+        internal static string InputCorrectQuantity {
+            get {
+                return ResourceManager.GetString("InputCorrectQuantity", resourceCulture);
             }
         }
         
@@ -871,88 +655,16 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Личные данные должны содержать только буквы. .
+        ///   Ищет локализованную строку, похожую на Загружено.
         /// </summary>
-        internal static string InputPersonalDataIrrelevant {
+        internal static string Loaded {
             get {
-                return ResourceManager.GetString("InputPersonalDataIrrelevant", resourceCulture);
+                return ResourceManager.GetString("Loaded", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Неверный формат GUID.
-        /// </summary>
-        internal static string InvalidGUIDFormat {
-            get {
-                return ResourceManager.GetString("InvalidGUIDFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Пожалуйста, придумайте новый логин..
-        /// </summary>
-        internal static string InventNewLogin {
-            get {
-                return ResourceManager.GetString("InventNewLogin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Пожалуйста, придумайте новый пароль..
-        /// </summary>
-        internal static string InventNewPassword {
-            get {
-                return ResourceManager.GetString("InventNewPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на В количестве:.
-        /// </summary>
-        internal static string InWhatAmount {
-            get {
-                return ResourceManager.GetString("InWhatAmount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Вы вошли в аккаунт.
-        /// </summary>
-        internal static string Login {
-            get {
-                return ResourceManager.GetString("Login", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Все несохранённые изменения будут потеряны.
-        /// </summary>
-        internal static string LostUnsavedChanges {
-            get {
-                return ResourceManager.GetString("LostUnsavedChanges", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Необработанное исключение при запуске.
-        /// </summary>
-        internal static string LSCriticalErrorInLaunching {
-            get {
-                return ResourceManager.GetString("LSCriticalErrorInLaunching", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка создания уникального клиентского кода! Превышено допустимое число клиентов..
-        /// </summary>
-        internal static string MaxNumberOfClients {
-            get {
-                return ResourceManager.GetString("MaxNumberOfClients", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка создания артикула для товара! Превышено допустимое число товара..
+        ///   Ищет локализованную строку, похожую на Превышено допустимое число товара! Невозможно добавить товар..
         /// </summary>
         internal static string MaxNumberOfProducts {
             get {
@@ -961,110 +673,74 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка назначения уникального клиентского кода! Превышено допустимое число пользователей..
+        ///   Ищет локализованную строку, похожую на Новая категория, которую Вы хотите добавить, уже существует!.
         /// </summary>
-        internal static string MaxNumberOfUsers {
+        internal static string NewCategoryAlreadyExists {
             get {
-                return ResourceManager.GetString("MaxNumberOfUsers", resourceCulture);
+                return ResourceManager.GetString("NewCategoryAlreadyExists", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на {Message}.
+        ///   Ищет локализованную строку, похожую на Название категории не может быть пустым..
         /// </summary>
-        internal static string MessageForLogging {
+        internal static string NewCategoryNameShouldNotBeEmpty {
             get {
-                return ResourceManager.GetString("MessageForLogging", resourceCulture);
+                return ResourceManager.GetString("NewCategoryNameShouldNotBeEmpty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Name.
+        ///   Ищет локализованную строку, похожую на Новая категория успешно добавлена!.
         /// </summary>
-        internal static string NameEng {
+        internal static string NewCategorySuccessfullyAdded {
             get {
-                return ResourceManager.GetString("NameEng", resourceCulture);
+                return ResourceManager.GetString("NewCategorySuccessfullyAdded", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Название.
+        ///   Ищет локализованную строку, похожую на Текущая валюта:.
         /// </summary>
-        internal static string NameRus {
+        internal static string NewCurrency {
             get {
-                return ResourceManager.GetString("NameRus", resourceCulture);
+                return ResourceManager.GetString("NewCurrency", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Категория, которую Вы хотите добавить, уже существует..
+        ///   Ищет локализованную строку, похожую на Данный функционал находится на этапе разработки. Пожалуйста, попробуйте позже!.
         /// </summary>
-        internal static string NewCategoryExists {
+        internal static string NewFuncIsInProgress {
             get {
-                return ResourceManager.GetString("NewCategoryExists", resourceCulture);
+                return ResourceManager.GetString("NewFuncIsInProgress", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Данная категория уже существует..
+        ///   Ищет локализованную строку, похожую на Ни один товар не был загружен.
         /// </summary>
-        internal static string NewCategoryNameExists {
+        internal static string NoProductsLoaded {
             get {
-                return ResourceManager.GetString("NewCategoryNameExists", resourceCulture);
+                return ResourceManager.GetString("NoProductsLoaded", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Новый остаток:.
+        ///   Ищет локализованную строку, похожую на Сначала добавьте товары в поставку!.
         /// </summary>
-        internal static string NewStockQuantity {
+        internal static string NoProductsToAdd {
             get {
-                return ResourceManager.GetString("NewStockQuantity", resourceCulture);
+                return ResourceManager.GetString("NoProductsToAdd", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на В текущей отгрузке отсутствуют товары..
+        ///   Ищет локализованную строку, похожую на Не удалось обновить курсы валют!.
         /// </summary>
-        internal static string NoProductsInShipment {
+        internal static string NotManagedToUploadExchangeRates {
             get {
-                return ResourceManager.GetString("NoProductsInShipment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Недостаточно товара на складе.
-        /// </summary>
-        internal static string NotEnoughInStockQuantityRus {
-            get {
-                return ResourceManager.GetString("NotEnoughInStockQuantityRus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Недостаточно товара на складе!.
-        /// </summary>
-        internal static string NotEnoughProductInStock {
-            get {
-                return ResourceManager.GetString("NotEnoughProductInStock", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на не найден в базе данных..
-        /// </summary>
-        internal static string NotFoundInDB {
-            get {
-                return ResourceManager.GetString("NotFoundInDB", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Не удалось сохранить отгрузку в базу данных.
-        /// </summary>
-        internal static string NotManagedToSaveShipment {
-            get {
-                return ResourceManager.GetString("NotManagedToSaveShipment", resourceCulture);
+                return ResourceManager.GetString("NotManagedToUploadExchangeRates", resourceCulture);
             }
         }
         
@@ -1087,20 +763,20 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Открыты подробности отгрузки:.
+        ///   Ищет локализованную строку, похожую на Личные данные должны содержать только буквы..
         /// </summary>
-        internal static string OpenShipmentDetails {
+        internal static string PersonalDataIsIrrelevant {
             get {
-                return ResourceManager.GetString("OpenShipmentDetails", resourceCulture);
+                return ResourceManager.GetString("PersonalDataIsIrrelevant", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Указано.
+        ///   Ищет локализованную строку, похожую на Пожалуйста, подождите!.
         /// </summary>
-        internal static string PointedRus {
+        internal static string PleaseWait {
             get {
-                return ResourceManager.GetString("PointedRus", resourceCulture);
+                return ResourceManager.GetString("PleaseWait", resourceCulture);
             }
         }
         
@@ -1114,7 +790,7 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка при добавлении товара в отгрузку!.
+        ///   Ищет локализованную строку, похожую на Ошибка при добавлении товара в отгрузку.
         /// </summary>
         internal static string ProductAddToShipmentError {
             get {
@@ -1123,34 +799,7 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Description.
-        /// </summary>
-        internal static string ProductDisplayMember {
-            get {
-                return ResourceManager.GetString("ProductDisplayMember", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Выбран товар:.
-        /// </summary>
-        internal static string ProductIsChosen {
-            get {
-                return ResourceManager.GetString("ProductIsChosen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка при загрузке товаров.
-        /// </summary>
-        internal static string ProductLoadError {
-            get {
-                return ResourceManager.GetString("ProductLoadError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Товар не найден!.
+        ///   Ищет локализованную строку, похожую на Товар не найден..
         /// </summary>
         internal static string ProductNotFound {
             get {
@@ -1159,56 +808,38 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Количество товара.
+        ///   Ищет локализованную строку, похожую на товаров из файла.
         /// </summary>
-        internal static string ProductNumber {
+        internal static string ProductsFromFile {
             get {
-                return ResourceManager.GetString("ProductNumber", resourceCulture);
+                return ResourceManager.GetString("ProductsFromFile", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Товар успешно удалён из отгрузки!.
+        ///   Ищет локализованную строку, похожую на Количество товара:.
         /// </summary>
-        internal static string ProductRemovedFromShipment {
+        internal static string ProductsNumber {
             get {
-                return ResourceManager.GetString("ProductRemovedFromShipment", resourceCulture);
+                return ResourceManager.GetString("ProductsNumber", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка удаления товара из отгрузки.
+        ///   Ищет локализованную строку, похожую на Количество товара:.
         /// </summary>
-        internal static string ProductRemoveFromShipmentError {
+        internal static string ProductsQuantity {
             get {
-                return ResourceManager.GetString("ProductRemoveFromShipmentError", resourceCulture);
+                return ResourceManager.GetString("ProductsQuantity", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Строка с товаром выделена..
+        ///   Ищет локализованную строку, похожую на Товар успешно удален!.
         /// </summary>
-        internal static string ProductRowSelected {
+        internal static string ProductSuccessfullyDeleted {
             get {
-                return ResourceManager.GetString("ProductRowSelected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Товаров:.
-        /// </summary>
-        internal static string Products {
-            get {
-                return ResourceManager.GetString("Products", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Article.
-        /// </summary>
-        internal static string ProductValueMember {
-            get {
-                return ResourceManager.GetString("ProductValueMember", resourceCulture);
+                return ResourceManager.GetString("ProductSuccessfullyDeleted", resourceCulture);
             }
         }
         
@@ -1222,20 +853,11 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Инициализация приложения завершена!.
+        ///   Ищет локализованную строку, похожую на Закупочная цена.
         /// </summary>
-        internal static string ProgramInitializationEnd {
+        internal static string PurchasePrice {
             get {
-                return ResourceManager.GetString("ProgramInitializationEnd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Закупочная цена должна быть положительным числом!.
-        /// </summary>
-        internal static string PurchasePriceIsNegative {
-            get {
-                return ResourceManager.GetString("PurchasePriceIsNegative", resourceCulture);
+                return ResourceManager.GetString("PurchasePrice", resourceCulture);
             }
         }
         
@@ -1249,74 +871,29 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Введено слишком большое число.
+        ///   Ищет локализованную строку, похожую на Введено слишком большое число!.
         /// </summary>
-        internal static string PurchasePriceOverflowExc {
+        internal static string PurchasePriceOverflowException {
             get {
-                return ResourceManager.GetString("PurchasePriceOverflowExc", resourceCulture);
+                return ResourceManager.GetString("PurchasePriceOverflowException", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Закупочная цена.
+        ///   Ищет локализованную строку, похожую на Закупочная цена должна быть положительным числом!.
         /// </summary>
-        internal static string PurchasePriceRus {
+        internal static string PurchasePriceShouldNotBeNegative {
             get {
-                return ResourceManager.GetString("PurchasePriceRus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Количество.
-        /// </summary>
-        internal static string Quantity {
-            get {
-                return ResourceManager.GetString("Quantity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Период.
-        /// </summary>
-        internal static string RangeRus {
-            get {
-                return ResourceManager.GetString("RangeRus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Создана запись ID отгрузки:.
-        /// </summary>
-        internal static string RecordOfShipmentCreated {
-            get {
-                return ResourceManager.GetString("RecordOfShipmentCreated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Совершён экспорт отчёта:.
-        /// </summary>
-        internal static string ReportExported {
-            get {
-                return ResourceManager.GetString("ReportExported", resourceCulture);
+                return ResourceManager.GetString("PurchasePriceShouldNotBeNegative", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Отчёт успешно экспортирован!.
         /// </summary>
-        internal static string ReportExportedSuccessfully {
+        internal static string ReportSuccessfullyExported {
             get {
-                return ResourceManager.GetString("ReportExportedSuccessfully", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Возврат в главное меню.
-        /// </summary>
-        internal static string ReturnToMainMenu {
-            get {
-                return ResourceManager.GetString("ReturnToMainMenu", resourceCulture);
+                return ResourceManager.GetString("ReportSuccessfullyExported", resourceCulture);
             }
         }
         
@@ -1330,20 +907,20 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на RUB.
-        /// </summary>
-        internal static string RUB {
-            get {
-                return ResourceManager.GetString("RUB", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на Цена продажи.
         /// </summary>
         internal static string SalePrice {
             get {
                 return ResourceManager.GetString("SalePrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на При сохранении изменений данная категория изменится у всех товаров этой категории!.
+        /// </summary>
+        internal static string SaveCategoryChangeConsequences {
+            get {
+                return ResourceManager.GetString("SaveCategoryChangeConsequences", resourceCulture);
             }
         }
         
@@ -1357,11 +934,29 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Выделите товар для удаления..
+        ///   Ищет локализованную строку, похожую на Ошибка при сохранении отгрузки..
         /// </summary>
-        internal static string SelectProductToDelete {
+        internal static string SaveShipmentError {
             get {
-                return ResourceManager.GetString("SelectProductToDelete", resourceCulture);
+                return ResourceManager.GetString("SaveShipmentError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Выберите валюту!.
+        /// </summary>
+        internal static string SelectCurrency {
+            get {
+                return ResourceManager.GetString("SelectCurrency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Сначала выберите товар для удаления!.
+        /// </summary>
+        internal static string SelectProductToDeleteFirst {
+            get {
+                return ResourceManager.GetString("SelectProductToDeleteFirst", resourceCulture);
             }
         }
         
@@ -1375,79 +970,16 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Создание отгрузки отменено пользователем..
+        ///   Ищет локализованную строку, похожую на Настройки успешно сохранены!.
         /// </summary>
-        internal static string ShipmentCreationCancelledByUser {
+        internal static string SettingsSuccessfullySaved {
             get {
-                return ResourceManager.GetString("ShipmentCreationCancelledByUser", resourceCulture);
+                return ResourceManager.GetString("SettingsSuccessfullySaved", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Shipment_Id.
-        /// </summary>
-        internal static string ShipmentId {
-            get {
-                return ResourceManager.GetString("ShipmentId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Журнал отгрузок открыт пользователем:.
-        /// </summary>
-        internal static string ShipmentJournalOpened {
-            get {
-                return ResourceManager.GetString("ShipmentJournalOpened", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Отгрузка загружена:.
-        /// </summary>
-        internal static string ShipmentLoaded {
-            get {
-                return ResourceManager.GetString("ShipmentLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Отгрузки за выбранный период не найдены!.
-        /// </summary>
-        internal static string ShipmentNotFounded {
-            get {
-                return ResourceManager.GetString("ShipmentNotFounded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Выбрана отгрузка.
-        /// </summary>
-        internal static string ShipmentSelected {
-            get {
-                return ResourceManager.GetString("ShipmentSelected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Загружено отгрузок:.
-        /// </summary>
-        internal static string ShipmentsLoaded {
-            get {
-                return ResourceManager.GetString("ShipmentsLoaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Отгрузка успешно оформлена, ID:.
-        /// </summary>
-        internal static string ShipmentSuccessfullyCreated {
-            get {
-                return ResourceManager.GetString("ShipmentSuccessfullyCreated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Отгрузка успешно оформлена!.
+        ///   Ищет локализованную строку, похожую на Отгрузка успешно оформлена..
         /// </summary>
         internal static string ShipmentSuccessfullyProcessed {
             get {
@@ -1456,83 +988,11 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Обновлена таблица отгрузки, всего позиций:.
-        /// </summary>
-        internal static string ShipmentUploaded {
-            get {
-                return ResourceManager.GetString("ShipmentUploaded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Приложение завершено!.
-        /// </summary>
-        internal static string SLApplicationEnd {
-            get {
-                return ResourceManager.GetString("SLApplicationEnd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Приложение запущено!.
-        /// </summary>
-        internal static string SLApplicationRun {
-            get {
-                return ResourceManager.GetString("SLApplicationRun", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Контекст базы данных создан..
-        /// </summary>
-        internal static string SLContextDBCreated {
-            get {
-                return ResourceManager.GetString("SLContextDBCreated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Необработанное исключение при запуске.
-        /// </summary>
-        internal static string SLCriticalErrorInLaunchingProgram {
-            get {
-                return ResourceManager.GetString("SLCriticalErrorInLaunchingProgram", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Форма оформления отгрузки открыта пользователем:.
-        /// </summary>
-        internal static string SLMakingShipmentFormIsOpened {
-            get {
-                return ResourceManager.GetString("SLMakingShipmentFormIsOpened", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Конечная дата не может быть позже сегодняшнего дня..
+        ///   Ищет локализованную строку, похожую на Начальная дата не может быть позже текущего дня..
         /// </summary>
         internal static string StartDateCannotBeInFuture {
             get {
                 return ResourceManager.GetString("StartDateCannotBeInFuture", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Начало загрузки отгрузок.
-        /// </summary>
-        internal static string StartLoadingShipments {
-            get {
-                return ResourceManager.GetString("StartLoadingShipments", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Начало оформления отгрузки. Товаров:.
-        /// </summary>
-        internal static string StartOfMakingShipment {
-            get {
-                return ResourceManager.GetString("StartOfMakingShipment", resourceCulture);
             }
         }
         
@@ -1546,47 +1006,11 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на StockQuantity.
+        ///   Ищет локализованную строку, похожую на Недостаточно товара на складе..
         /// </summary>
-        internal static string StockQuantityName {
+        internal static string StockQuantityIsNotEnough {
             get {
-                return ResourceManager.GetString("StockQuantityName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Текущий остаток.
-        /// </summary>
-        internal static string StockQuantityRus {
-            get {
-                return ResourceManager.GetString("StockQuantityRus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Категория успешно добавлена!.
-        /// </summary>
-        internal static string SuccessAddCategory {
-            get {
-                return ResourceManager.GetString("SuccessAddCategory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Категория успешно удалена!.
-        /// </summary>
-        internal static string SuccessDeleteCategory {
-            get {
-                return ResourceManager.GetString("SuccessDeleteCategory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Товар успешно удален!.
-        /// </summary>
-        internal static string SuccessDeleteProduct {
-            get {
-                return ResourceManager.GetString("SuccessDeleteProduct", resourceCulture);
+                return ResourceManager.GetString("StockQuantityIsNotEnough", resourceCulture);
             }
         }
         
@@ -1609,11 +1033,38 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Поставка успешно оформлена!.
+        /// </summary>
+        internal static string SupplySuccessfullyProcessed {
+            get {
+                return ResourceManager.GetString("SupplySuccessfullyProcessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Сумма поставки:.
+        /// </summary>
+        internal static string SupplySum {
+            get {
+                return ResourceManager.GetString("SupplySum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Вы действительно хотите редактировать карточку данного товара?.
         /// </summary>
         internal static string SureWantToChangeProductData {
             get {
                 return ResourceManager.GetString("SureWantToChangeProductData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Вы уверены, что хотите удалить категорию:.
+        /// </summary>
+        internal static string SureWantToDeleteCategory {
+            get {
+                return ResourceManager.GetString("SureWantToDeleteCategory", resourceCulture);
             }
         }
         
@@ -1636,6 +1087,15 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Оформить действительно хотите оформить поставку?.
+        /// </summary>
+        internal static string SureWantToMakeSupply {
+            get {
+                return ResourceManager.GetString("SureWantToMakeSupply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Вы действительно хотите сохранить данные изменения?.
         /// </summary>
         internal static string SureWantToSaveCategoryChange {
@@ -1645,11 +1105,11 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Категория с таким наименованием уже имеется в базе данных..
+        ///   Ищет локализованную строку, похожую на Нет информации для экспорта. Необходимо выбрать другую дату..
         /// </summary>
-        internal static string ThereIsSuchCategory {
+        internal static string ThereIsNoDataToExport {
             get {
-                return ResourceManager.GetString("ThereIsSuchCategory", resourceCulture);
+                return ResourceManager.GetString("ThereIsNoDataToExport", resourceCulture);
             }
         }
         
@@ -1681,29 +1141,11 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка в базе данных.
-        /// </summary>
-        internal static string TitleErrorBD {
-            get {
-                return ResourceManager.GetString("TitleErrorBD", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на Информация.
         /// </summary>
         internal static string TitleInformation {
             get {
                 return ResourceManager.GetString("TitleInformation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Успешно!.
-        /// </summary>
-        internal static string TitleSuccess {
-            get {
-                return ResourceManager.GetString("TitleSuccess", resourceCulture);
             }
         }
         
@@ -1771,83 +1213,29 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Попытка добавления товара..
+        ///   Ищет локализованную строку, похожую на Попытка указать:.
         /// </summary>
-        internal static string TryToAdd {
+        internal static string TryToPoint {
             get {
-                return ResourceManager.GetString("TryToAdd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Некорректная категория.
-        /// </summary>
-        internal static string UncorrectCategory {
-            get {
-                return ResourceManager.GetString("UncorrectCategory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Неверный ID клиента!.
-        /// </summary>
-        internal static string UncorrectIDClient {
-            get {
-                return ResourceManager.GetString("UncorrectIDClient", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Некорректная цена.
-        /// </summary>
-        internal static string UncorrectPrice {
-            get {
-                return ResourceManager.GetString("UncorrectPrice", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Необработанное исключение:.
-        /// </summary>
-        internal static string UnhandledExceptionMessage {
-            get {
-                return ResourceManager.GetString("UnhandledExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Name.
-        /// </summary>
-        internal static string UnitDisplayMember {
-            get {
-                return ResourceManager.GetString("UnitDisplayMember", resourceCulture);
+                return ResourceManager.GetString("TryToPoint", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Единица измерения для соответствующей категории не найдена..
         /// </summary>
-        internal static string UnitNotFound {
+        internal static string UnitForChosenCategoryNotFound {
             get {
-                return ResourceManager.GetString("UnitNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Unit_Id.
-        /// </summary>
-        internal static string UnitValueMember {
-            get {
-                return ResourceManager.GetString("UnitValueMember", resourceCulture);
+                return ResourceManager.GetString("UnitForChosenCategoryNotFound", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Ошибка сохранения данных в базу данных..
         /// </summary>
-        internal static string UniversalErrorBD {
+        internal static string UniversalErrorDatabase {
             get {
-                return ResourceManager.GetString("UniversalErrorBD", resourceCulture);
+                return ResourceManager.GetString("UniversalErrorDatabase", resourceCulture);
             }
         }
         
@@ -1870,11 +1258,20 @@ namespace EnergeticProjectX.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Обновлен список для.
+        ///   Ищет локализованную строку, похожую на Все несохранённые изменения будут утеряны!.
         /// </summary>
-        internal static string UploadedListForRus {
+        internal static string UnsavedChangesWillBeLost {
             get {
-                return ResourceManager.GetString("UploadedListForRus", resourceCulture);
+                return ResourceManager.GetString("UnsavedChangesWillBeLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Обновление курсов валют....
+        /// </summary>
+        internal static string UploadingExchangeRates {
+            get {
+                return ResourceManager.GetString("UploadingExchangeRates", resourceCulture);
             }
         }
         
@@ -1884,6 +1281,15 @@ namespace EnergeticProjectX.Properties {
         internal static string UserCurrencyNotFound {
             get {
                 return ResourceManager.GetString("UserCurrencyNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Пользователь с таким логином уже существует! Пожалуйста, придумайте новый логин..
+        /// </summary>
+        internal static string UserLoginAlreadyExists {
+            get {
+                return ResourceManager.GetString("UserLoginAlreadyExists", resourceCulture);
             }
         }
         

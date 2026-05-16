@@ -29,7 +29,7 @@ namespace EnergeticProjectX.Objects
         /// Наименование товара.
         /// </summary>  
         [Column("name")]
-        [StringLength(30)]
+        [StringLength(100)]
         [Required]
         public required string Name { get; set; }
 
@@ -51,7 +51,7 @@ namespace EnergeticProjectX.Objects
         /// категория и при этом она скрыта, то данная категория удаляется безвозвратно.
         /// </summary>
         [Column("status")]
-        public ProductStatus Status { get; set; } = ProductStatus.Active;
+        public Status Status { get; set; } = Status.Active;
 
         /// <summary>
         /// Закупочная цена товара.

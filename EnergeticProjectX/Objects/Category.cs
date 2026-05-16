@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using EnergeticProjectX.Classes;
-using EnergeticProjectX.Properties;
 using EnergeticProjectX.Enums;
 
 namespace EnergeticProjectX.Objects
@@ -34,7 +32,7 @@ namespace EnergeticProjectX.Objects
         /// удаляется безвозвратно.
         /// </summary>
         [Column("status")]
-        public CategoryStatus Status { get; set; } = CategoryStatus.Active;
+        public Status Status { get; set; } = Status.Active;
 
         /// <summary>
         /// ID закреплённой единицы измерения.

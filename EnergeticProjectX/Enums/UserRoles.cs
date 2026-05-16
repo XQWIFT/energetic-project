@@ -1,14 +1,12 @@
 ﻿namespace EnergeticProjectX.Enums
 {
     /// <summary>
-    /// Роль пользователя
+    /// Роли пользователя: Администратор, Кладовщик.
     /// </summary>
-    public enum UserRole
+    public enum UserRoles
     {
-        [System.ComponentModel.Description("Администратор")]
         Administrator,
 
-        [System.ComponentModel.Description("Кладовщик")]
         Warehouseman
     }
 }

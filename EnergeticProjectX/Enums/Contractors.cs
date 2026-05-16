@@ -1,7 +1,7 @@
 ﻿namespace EnergeticProjectX.Enums
 {
     /// <summary>
-    /// Тип контрагента пользователя
+    /// Тип контрагента пользователя.
     /// </summary>
     public enum Contractors
     {

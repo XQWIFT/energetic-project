@@ -1,10 +1,12 @@
-﻿using EnergeticProjectX.Properties;
+﻿using FH = EnergeticProjectX.Classes.FormHandler;
+using EnergeticProjectX.Properties;
+using EnergeticProjectX.Objects;
 using System.Diagnostics;
 
 namespace EnergeticProjectX.Classes
 {
     /// <summary>
-    /// Класс для вычисления частых ошибок в работе программы
+    /// Класс для работы с частыми ошибками в программе.
     /// </summary>
     public class ErrorHandler
     {
@@ -12,8 +14,8 @@ namespace EnergeticProjectX.Classes
         /// Метод, который при удалении предмета из таблицы базы данных осуществляет проверку на сохранение
         /// соответствующих изменений. При ошибке сохранения в отладке выводится сообщение с описанием ошибки.
         /// </summary>
-        /// <param name="db">Контекст базы данных</param>
-        /// <param name="messageIfError">Сообщение в случае ошибки</param>
+        /// <param name="db">Контекст базы данных.</param>
+        /// <param name="messageIfError">Сообщение в случае ошибки.</param>
         public static void DBSaveChangesCleanUpHiddenItemsError(ApplicationContextDB db, string messageIfError)
         {
             try
@@ -30,21 +32,98 @@ namespace EnergeticProjectX.Classes
         /// Метод, который осуществляет проверку на сохранение изменений в базе данных. При ошибке выводится
         /// соответствующее сообщение.
         /// </summary>
-        /// <param name="db">Контекст базы данных</param>
-        /// <returns>Подтверждение сохранения данных</returns>
-        public static bool DBSaveChangesUniversalErrorCheck(ApplicationContextDB db)
+        /// <param name="db">Контекст базы данных.</param>
+        /// <returns>Подтверждение сохранения данных.</returns>
+        public static bool DBSaveChangesUniversalErrorCheck(ApplicationContextDB Db)
         {
             try
             {
-                db.SaveChanges();
+                Db.SaveChanges();
             }
             catch (Exception)
             {
-                MessageBox.Show($"{Resources.UniversalErrorBD}\n{Resources.TryAgain}", Resources.TitleErrorBD,
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError(Resources.UniversalErrorDatabase, true);
+
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Метод, который проверяет наличие пользователя в контексте базы данных по заданному логину.
+        /// </summary>
+        /// <param name="db">Контекст базы данных.</param>
+        /// <param name="currentForm">Текущая форма.</param>
+        /// <param name="userLogin">Заданный логин пользователя.</param>
+        /// <param name="message">Сообщение в случае отсутствия данных о пользователе с заданным логином.</param>
+        /// <returns>При отсутствии совпадения по логину появляется сообщение с последующим открытием формы авторизации
+        /// для повторного входа в систему.</returns>
+        public static User? EnsureUserActive(Form currentForm, ApplicationContextDB Db, string userLogin, string message)
+        {
+            var user = Db.Users.FirstOrDefault(u => u.Login == userLogin);
+
+            if (user == null)
+            {
+                ShowError(message);
+                FH.RedirectToAuthorization(currentForm);
+                return null;
+            }
+            return user;
+        }
+
+        /// <summary>
+        /// Метод для вывода сообщения с информацией пользователю.
+        /// </summary>
+        /// <param name="message">Информация для пользователя.</param>
+        public static void ShowInformation(string message)
+        {
+            MessageBox.Show(message, Resources.TitleInformation, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        /// <summary>
+        /// Метод для вывода уведомления пользователю.
+        /// </summary>
+        /// <param name="message">Текст уведомления.</param>
+        public static void ShowAlert(string message)
+        {
+            MessageBox.Show(message, Resources.TitleAlert, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        /// <summary>
+        /// Метод для вывода сообщения об ошибке пользователю.
+        /// </summary>
+        /// <param name="message">Текст ошибки.</param>
+        /// <param name="messageTryAgain">Указание, необходимо ли добавить сообщение, чтобы пользовать попробовал ещё раз.</param>
+        public static void ShowError(string message, bool messageTryAgain = false)
+        {
+            if (messageTryAgain)
+                MessageBox.Show(message + $"\n\n{Resources.TryAgain}", Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+                MessageBox.Show(message, Resources.TitleError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        /// <summary>
+        /// Метод для вывода предупреждения пользователю.
+        /// </summary>
+        /// <param name="message">Текст предупреждения.</param>
+        /// <param name="messageTryAgain">Указание, необходимо ли добавить сообщение, чтобы пользовать попробовал ещё раз.</param>
+        public static void ShowWarning(string message, bool messageTryAgain = false)
+        {
+            if (messageTryAgain)
+                MessageBox.Show(message + $"\n\n{Resources.TryAgain}", Resources.TitleWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+                MessageBox.Show(message, Resources.TitleWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        /// <summary>
+        /// Метод для вывода сообщения для подтверждения какого-либо действия пользователем.
+        /// </summary>
+        /// <param name="message">Текст для подтверждения.</param>
+        public static DialogResult ShowConfirmation(string message)
+        {
+            var answer = MessageBox.Show(message, Resources.TitleConfirmation, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            return answer;
         }
     }
 }
