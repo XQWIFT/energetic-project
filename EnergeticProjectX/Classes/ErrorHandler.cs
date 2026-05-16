@@ -1,4 +1,6 @@
-﻿using EnergeticProjectX.Properties;
+﻿using FH = EnergeticProjectX.Classes.FormHandler;
+using EnergeticProjectX.Properties;
+using EnergeticProjectX.Objects;
 using System.Diagnostics;
 
 namespace EnergeticProjectX.Classes
@@ -32,11 +34,11 @@ namespace EnergeticProjectX.Classes
         /// </summary>
         /// <param name="db">Контекст базы данных.</param>
         /// <returns>Подтверждение сохранения данных.</returns>
-        public static bool DBSaveChangesUniversalErrorCheck(ApplicationContextDB db)
+        public static bool DBSaveChangesUniversalErrorCheck(ApplicationContextDB Db)
         {
             try
             {
-                db.SaveChanges();
+                Db.SaveChanges();
             }
             catch (Exception)
             {
@@ -45,6 +47,28 @@ namespace EnergeticProjectX.Classes
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Метод, который проверяет наличие пользователя в контексте базы данных по заданному логину.
+        /// </summary>
+        /// <param name="db">Контекст базы данных.</param>
+        /// <param name="currentForm">Текущая форма.</param>
+        /// <param name="userLogin">Заданный логин пользователя.</param>
+        /// <param name="message">Сообщение в случае отсутствия данных о пользователе с заданным логином.</param>
+        /// <returns>При отсутствии совпадения по логину появляется сообщение с последующим открытием формы авторизации
+        /// для повторного входа в систему.</returns>
+        public static User? EnsureUserActive(Form currentForm, ApplicationContextDB Db, string userLogin, string message)
+        {
+            var user = Db.Users.FirstOrDefault(u => u.Login == userLogin);
+
+            if (user == null)
+            {
+                ShowError(message);
+                FH.RedirectToAuthorization(currentForm);
+                return null;
+            }
+            return user;
         }
 
         /// <summary>

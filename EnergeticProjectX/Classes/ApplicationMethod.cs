@@ -19,6 +19,8 @@ namespace EnergeticProjectX.Classes
             DeleteHiddenProducts(db);
 
             DeleteHiddenCategories(db);
+
+            DeleteHiddenClients(db);
         }
 
         /// <summary>
@@ -39,7 +41,7 @@ namespace EnergeticProjectX.Classes
         /// <param name="db">Контекст базы данных.</param>
         private static void DeleteHiddenProducts(ApplicationContextDB db)
         {
-            var hiddenProducts = db.Products.Where(p => p.Status == ProductStatus.Hidden).ToList();
+            var hiddenProducts = db.Products.Where(p => p.Status == Status.Hidden).ToList();
 
             foreach (var hiddenProduct in hiddenProducts)
             {
@@ -58,17 +60,36 @@ namespace EnergeticProjectX.Classes
         /// <param name="db">Контекст базы данных.</param>
         private static void DeleteHiddenCategories(ApplicationContextDB db)
         {
-            var hiddenCategories = db.Categories.Where(u => u.Status == CategoryStatus.Hidden).ToList();
+            var hiddenCategories = db.Categories.Where(u => u.Status == Status.Hidden).ToList();
 
             foreach (var hiddenCategory in hiddenCategories)
             {
-                var hasProducts = db.Products.Any(product => product.CategoryId == hiddenCategory.Category_Id);
+                var hasProducts = db.Products.Any(p => p.CategoryId == hiddenCategory.Category_Id);
 
                 if (!hasProducts)
                     db.Categories.Remove(hiddenCategory);
             }
 
             EH.DBSaveChangesCleanUpHiddenItemsError(db, Resources.CleanUpHiddenCategoriesError);
+        }
+
+        /// <summary>
+        /// Метод для удаления скрытых клиентов, которым не совершались отгрузки.
+        /// </summary>
+        /// <param name="db"></param>
+        private static void DeleteHiddenClients(ApplicationContextDB db)
+        {
+            var hiddenClients = db.Clients.Where(c => c.Status == Status.Hidden).ToList();
+
+            foreach (var hiddenClient in hiddenClients)
+            {
+                var hasShipments = db.Shipments.Any(s => s.Client_Id == hiddenClient.Client_Id);
+
+                if (!hasShipments)
+                    db.Clients.Remove(hiddenClient);
+            }
+
+            EH.DBSaveChangesCleanUpHiddenItemsError(db, Resources.CleanUpHiddenClientsError);
         }
 
         /// <summary>
@@ -87,13 +108,16 @@ namespace EnergeticProjectX.Classes
 
                     var currencyRUB = db.Currencies.FirstOrDefault(c => c.Code == "RUB");
 
-                    currencyRUB!.DataOfUpdate = DateTime.UtcNow;
-
-                    var updated = ExchangeRateService.UpdateRatesFromCbr(db);
-
-                    if (updated > 0)
+                    if (currencyRUB != null)
                     {
-                        EH.ShowInformation($"{Resources.ExchangeRatesUploaded}\n\n{Resources.HowMuchExchangeRatesUploaded} {updated}");
+                        currencyRUB.DataOfUpdate = DateTime.UtcNow;
+
+                        var updated = ExchangeRateService.UpdateRatesFromCbr(db);
+
+                        if (updated > 0)
+                        {
+                            EH.ShowInformation($"{Resources.ExchangeRatesUploaded}\n\n{Resources.HowMuchExchangeRatesUploaded} {updated}");
+                        }
                     }
                 }
             }

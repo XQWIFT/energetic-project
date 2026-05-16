@@ -51,5 +51,28 @@
 
             return DateOnly.FromDateTime(utcDateTime);
         }
+
+        /// <summary>
+        /// Метод, который конвертирует локальную дату - начало дня - в UTC.
+        /// </summary>
+        /// <param name="localDate"></param>
+        /// <returns></returns>
+        public static DateTime LocalDateToUtcStartOfDay(DateOnly localDate)
+        {
+            var localDateTime = localDate.ToDateTime(TimeOnly.MinValue, DateTimeKind.Local);
+            return TimeZoneInfo.ConvertTimeToUtc(localDateTime);
+        }
+
+        /// <summary>
+        /// Метод, который конвертирует локальную дату - начало следующего дня - в UTC.
+        /// </summary>
+        /// <param name="localDate"></param>
+        /// <returns></returns>
+        public static DateTime LocalDateToUtcStartOfNextDay(DateOnly localDate)
+        {
+            var nextDay = localDate.AddDays(1);
+            var localDateTime = nextDay.ToDateTime(TimeOnly.MinValue, DateTimeKind.Local);
+            return TimeZoneInfo.ConvertTimeToUtc(localDateTime);
+        }
     }
 }

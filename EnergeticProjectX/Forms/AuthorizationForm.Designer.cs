@@ -36,7 +36,10 @@ namespace EnergeticProjectX.Forms
             TextBoxOfPassword = new TextBox();
             ButtonOfInvolve = new Button();
             LabelOfRegistration = new Label();
-            LabelOfRequiredFieldsInfo = new Label();
+            LabelOfRequiredFieldFirst = new Label();
+            LabelOfRequiredFIeldSecond = new Label();
+            LabelOfStarFirst = new Label();
+            LabelOfStarSecond = new Label();
             SuspendLayout();
             // 
             // LabelOfAuthorization
@@ -118,23 +121,56 @@ namespace EnergeticProjectX.Forms
             // 
             LabelOfRegistration.AutoSize = true;
             LabelOfRegistration.Font = new Font("Segoe UI", 16F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 204);
-            LabelOfRegistration.Location = new Point(215, 421);
+            LabelOfRegistration.Location = new Point(203, 451);
             LabelOfRegistration.Name = "LabelOfRegistration";
             LabelOfRegistration.Size = new Size(565, 45);
             LabelOfRegistration.TabIndex = 3;
             LabelOfRegistration.Text = "Нет аккаунта? Зарегистрироваться";
             LabelOfRegistration.Click += LabelOfRegistration_Click;
             // 
-            // LabelOfRequiredFieldsInfo
+            // LabelOfRequiredFieldFirst
             // 
-            LabelOfRequiredFieldsInfo.AutoSize = true;
-            LabelOfRequiredFieldsInfo.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            LabelOfRequiredFieldsInfo.ForeColor = Color.DimGray;
-            LabelOfRequiredFieldsInfo.Location = new Point(265, 478);
-            LabelOfRequiredFieldsInfo.Name = "LabelOfRequiredFieldsInfo";
-            LabelOfRequiredFieldsInfo.Size = new Size(276, 30);
-            LabelOfRequiredFieldsInfo.TabIndex = 0;
-            LabelOfRequiredFieldsInfo.Text = "*Все поля обязательные";
+            LabelOfRequiredFieldFirst.AutoSize = true;
+            LabelOfRequiredFieldFirst.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfRequiredFieldFirst.ForeColor = Color.DimGray;
+            LabelOfRequiredFieldFirst.Location = new Point(381, 278);
+            LabelOfRequiredFieldFirst.Name = "LabelOfRequiredFieldFirst";
+            LabelOfRequiredFieldFirst.Size = new Size(221, 30);
+            LabelOfRequiredFieldFirst.TabIndex = 5;
+            LabelOfRequiredFieldFirst.Text = "Обязательное поле";
+            // 
+            // LabelOfRequiredFIeldSecond
+            // 
+            LabelOfRequiredFIeldSecond.AutoSize = true;
+            LabelOfRequiredFIeldSecond.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfRequiredFIeldSecond.ForeColor = Color.DimGray;
+            LabelOfRequiredFIeldSecond.Location = new Point(381, 384);
+            LabelOfRequiredFIeldSecond.Name = "LabelOfRequiredFIeldSecond";
+            LabelOfRequiredFIeldSecond.Size = new Size(221, 30);
+            LabelOfRequiredFIeldSecond.TabIndex = 6;
+            LabelOfRequiredFIeldSecond.Text = "Обязательное поле";
+            // 
+            // LabelOfStarFirst
+            // 
+            LabelOfStarFirst.AutoSize = true;
+            LabelOfStarFirst.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfStarFirst.ForeColor = Color.Red;
+            LabelOfStarFirst.Location = new Point(363, 278);
+            LabelOfStarFirst.Name = "LabelOfStarFirst";
+            LabelOfStarFirst.Size = new Size(23, 30);
+            LabelOfStarFirst.TabIndex = 7;
+            LabelOfStarFirst.Text = "*";
+            // 
+            // LabelOfStarSecond
+            // 
+            LabelOfStarSecond.AutoSize = true;
+            LabelOfStarSecond.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfStarSecond.ForeColor = Color.Red;
+            LabelOfStarSecond.Location = new Point(363, 384);
+            LabelOfStarSecond.Name = "LabelOfStarSecond";
+            LabelOfStarSecond.Size = new Size(23, 30);
+            LabelOfStarSecond.TabIndex = 8;
+            LabelOfStarSecond.Text = "*";
             // 
             // AuthorizationForm
             // 
@@ -142,7 +178,10 @@ namespace EnergeticProjectX.Forms
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
             ClientSize = new Size(997, 675);
-            Controls.Add(LabelOfRequiredFieldsInfo);
+            Controls.Add(LabelOfStarSecond);
+            Controls.Add(LabelOfStarFirst);
+            Controls.Add(LabelOfRequiredFIeldSecond);
+            Controls.Add(LabelOfRequiredFieldFirst);
             Controls.Add(LabelOfRegistration);
             Controls.Add(ButtonOfInvolve);
             Controls.Add(TextBoxOfPassword);
@@ -168,6 +207,9 @@ namespace EnergeticProjectX.Forms
         private TextBox TextBoxOfPassword;
         private Button ButtonOfInvolve;
         private Label LabelOfRegistration;
-        private Label LabelOfRequiredFieldsInfo;
+        private Label LabelOfRequiredFieldFirst;
+        private Label LabelOfRequiredFIeldSecond;
+        private Label LabelOfStarFirst;
+        private Label LabelOfStarSecond;
     }
 }

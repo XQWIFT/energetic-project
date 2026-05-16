@@ -44,6 +44,7 @@
             LabelOfAuthorization = new Label();
             LabelOfPatronymicInfo = new Label();
             LabelOfPatronymic = new Label();
+            LabelOfWarning = new Label();
             SuspendLayout();
             // 
             // LabelOfRegistration
@@ -143,11 +144,12 @@
             // 
             // LabelOfPasswordConfirmation
             // 
+            LabelOfPasswordConfirmation.AutoSize = true;
             LabelOfPasswordConfirmation.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             LabelOfPasswordConfirmation.Location = new Point(114, 470);
             LabelOfPasswordConfirmation.MaximumSize = new Size(250, 0);
             LabelOfPasswordConfirmation.Name = "LabelOfPasswordConfirmation";
-            LabelOfPasswordConfirmation.Size = new Size(250, 97);
+            LabelOfPasswordConfirmation.Size = new Size(174, 90);
             LabelOfPasswordConfirmation.TabIndex = 0;
             LabelOfPasswordConfirmation.Text = "Пароль повторно";
             // 
@@ -170,7 +172,7 @@
             ButtonOfRegistration.FlatAppearance.MouseOverBackColor = Color.LightGray;
             ButtonOfRegistration.FlatStyle = FlatStyle.Flat;
             ButtonOfRegistration.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ButtonOfRegistration.Location = new Point(200, 671);
+            ButtonOfRegistration.Location = new Point(200, 692);
             ButtonOfRegistration.Name = "ButtonOfRegistration";
             ButtonOfRegistration.Size = new Size(413, 74);
             ButtonOfRegistration.TabIndex = 7;
@@ -184,7 +186,7 @@
             // 
             LabelOfAuthorization.AutoSize = true;
             LabelOfAuthorization.Font = new Font("Segoe UI", 16F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 204);
-            LabelOfAuthorization.Location = new Point(153, 583);
+            LabelOfAuthorization.Location = new Point(153, 604);
             LabelOfAuthorization.Name = "LabelOfAuthorization";
             LabelOfAuthorization.Size = new Size(565, 45);
             LabelOfAuthorization.TabIndex = 14;
@@ -195,7 +197,7 @@
             // 
             LabelOfPatronymicInfo.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
             LabelOfPatronymicInfo.ForeColor = Color.Gray;
-            LabelOfPatronymicInfo.Location = new Point(200, 641);
+            LabelOfPatronymicInfo.Location = new Point(200, 662);
             LabelOfPatronymicInfo.Name = "LabelOfPatronymicInfo";
             LabelOfPatronymicInfo.Size = new Size(431, 27);
             LabelOfPatronymicInfo.TabIndex = 0;
@@ -211,12 +213,24 @@
             LabelOfPatronymic.TabIndex = 0;
             LabelOfPatronymic.Text = "Отчество";
             // 
+            // LabelOfWarning
+            // 
+            LabelOfWarning.AutoSize = true;
+            LabelOfWarning.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            LabelOfWarning.ForeColor = Color.Tomato;
+            LabelOfWarning.Location = new Point(366, 548);
+            LabelOfWarning.Name = "LabelOfWarning";
+            LabelOfWarning.Size = new Size(0, 30);
+            LabelOfWarning.TabIndex = 0;
+            LabelOfWarning.Visible = false;
+            // 
             // RegistrationForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Lavender;
-            ClientSize = new Size(828, 782);
+            ClientSize = new Size(838, 838);
+            Controls.Add(LabelOfWarning);
             Controls.Add(LabelOfPatronymic);
             Controls.Add(LabelOfPatronymicInfo);
             Controls.Add(LabelOfAuthorization);
@@ -260,5 +274,6 @@
         private Label LabelOfAuthorization;
         private Label LabelOfPatronymicInfo;
         private Label LabelOfPatronymic;
+        private Label LabelOfWarning;
     }
 }

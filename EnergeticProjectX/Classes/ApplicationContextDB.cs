@@ -94,7 +94,7 @@ namespace EnergeticProjectX.Classes
         {
             if (!optionsBuilder.IsConfigured)
             {
-                string connectionString = HiddenDataManager.GetConnectionString();
+                var connectionString = HiddenDataManager.GetConnectionString();
 
                 optionsBuilder.UseNpgsql(connectionString);
             }
@@ -191,6 +191,12 @@ namespace EnergeticProjectX.Classes
 
             // Статус категории ⟶ String.
             modelBuilder.Entity<Category>()
+                .Property(u => u.Status)
+                .HasConversion<string>()
+                .IsRequired();
+
+            // Статус клиента ⟶ String
+            modelBuilder.Entity<Client>()
                 .Property(u => u.Status)
                 .HasConversion<string>()
                 .IsRequired();

@@ -1,4 +1,4 @@
-﻿using EnergeticProjectX;
+﻿using EnergeticProjectX.Forms;
 using EnergeticProjectX.Classes;
 using EnergeticProjectX.Enums;
 using EnergeticProjectX.Objects;
@@ -27,7 +27,7 @@ namespace EnergeticProjectTestt.Tests
             Password = BCryptRealization.PasswordHash("123321dDd"),
             Surname = "Petukhov",
             Name = "Nikitos",
-            UserRole = UserRole.Administrator,
+            UserRole = UserRoles.Administrator,
             CurrencyId = Guid.NewGuid(),
         };
 

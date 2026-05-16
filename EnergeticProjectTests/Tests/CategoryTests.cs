@@ -21,11 +21,11 @@ namespace EnergeticProjectTestt.Tests
         public static bool IsCategoryNameUnique(ApplicationContextDB db, string name)
         {
             return !db.Categories.
-                Any(c => c.Status == CategoryStatus.Active && 
+                Any(c => c.Status == Status.Active && 
                 string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase) && c.Name != string.Empty);
         }
 
-        private void AddCategory(string name, CategoryStatus status = CategoryStatus.Active)
+        private void AddCategory(string name, Status status = Status.Active)
         {
             db.Categories.Add(new Category
             {
@@ -78,7 +78,7 @@ namespace EnergeticProjectTestt.Tests
         public void IsCategoryNameUnique_HiddenCategory_ReturnsTrue()
         {
             // Arrange
-            AddCategory("Электроника", CategoryStatus.Hidden);
+            AddCategory("Электроника", Status.Hidden);
 
             // Act
             var result = IsCategoryNameUnique(db, "Электроника");

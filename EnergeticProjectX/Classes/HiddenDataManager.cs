@@ -19,7 +19,7 @@ namespace EnergeticProjectX.Classes
 
             var options = JsonSerializer.Deserialize<OptionsDB>(json);
 
-            return $"Host={options!.Host};Port={options.Port};Database={options.Database};Username={options.Username};Password={options.Password};SSL Mode={options.SSLMode}";
+            return $"Host={options!.Host};Port={options.Port};Database={options.Database};Username={options.Username};Password={options.Password}";
         }
     }
 }

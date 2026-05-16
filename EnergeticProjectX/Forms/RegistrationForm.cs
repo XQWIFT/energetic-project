@@ -1,8 +1,12 @@
-﻿using EH = EnergeticProjectX.Classes.ErrorHandler;
-using EnergeticProjectX.Properties;
+﻿using EnergeticProjectX.Classes;
+using EnergeticProjectX.interfaces;
+using EnergeticProjectX.Interfaces;
 using EnergeticProjectX.Objects;
-using EnergeticProjectX.Classes;
-using EnergeticProjectX.Enums;
+using EnergeticProjectX.Properties;
+using Microsoft.Extensions.DependencyInjection;
+using System.Text.RegularExpressions;
+using EH = EnergeticProjectX.Classes.ErrorHandler;
+using FH = EnergeticProjectX.Classes.FormHandler;
 
 namespace EnergeticProjectX.Forms
 {
@@ -11,14 +15,24 @@ namespace EnergeticProjectX.Forms
     /// </summary>
     public partial class RegistrationForm : Form
     {
-        private readonly ApplicationContextDB db = new();
+        private readonly IProductService _productService;
+
+        private readonly IUserService _userService;
+
+        private readonly IClientService _clientService;
 
         /// <summary>
         /// Конструктор для реализации формы регистрации.
         /// </summary>
-        public RegistrationForm()
+        public RegistrationForm(IUserService userservice,IProductService productService, IClientService clientService)
         {
             InitializeComponent();
+
+            _userService = userservice;
+
+            _clientService = clientService;
+
+            _productService = productService;
         }
 
         private void IsTextChanged(object sender, EventArgs e)
@@ -32,15 +46,21 @@ namespace EnergeticProjectX.Forms
 
         private void ButtonOfRegistration_Click(object sender, EventArgs e)
         {
-            var firstname = User.IsUserPersonalDataRelevant(TextBoxOfName.Text);
-            var surname = User.IsUserPersonalDataRelevant(TextBoxOfName.Text);
-            var patronymic = User.IsUserPersonalDataRelevant(TextBoxOfName.Text);
+            var firstname = UIHelper.IsUserPersonalDataRelevant(TextBoxOfName.Text);
+            var surname = UIHelper.IsUserPersonalDataRelevant(TextBoxOfSurname.Text);
+            var patronymic = UIHelper.IsUserPersonalDataRelevant(TextBoxOfPatronymic.Text);
 
             if (firstname == null || surname == null)
             {
                 EH.ShowWarning(Resources.PersonalDataIsIrrelevant, true);
 
-                if (firstname == null)
+                if (firstname == null && surname == null)
+                {
+                    TextBoxOfName.Clear();
+                    TextBoxOfSurname.Clear();
+                    TextBoxOfName.Focus();
+                }
+                else if (firstname == null)
                 {
                     TextBoxOfName.Clear();
                     TextBoxOfName.Focus();
@@ -54,16 +74,16 @@ namespace EnergeticProjectX.Forms
                 return;
             }
 
-            var password = TextBoxOfPassword.Text.Trim();
-            var login = TextBoxOfLogin.Text.Trim();
-            var passwordConfirmation = TextBoxOfPasswordConfirmation.Text.Trim();
+            var password = Regex.Replace(TextBoxOfPassword.Text, @"\s+", "");
+            var login = Regex.Replace(TextBoxOfLogin.Text, @"\s+", "");
+            var passwordConfirmation = Regex.Replace(TextBoxOfPasswordConfirmation.Text, @"\s+", "");
 
-            var userLoginFree = IsUserLoginFree(login, db);
-            var (passwordsMatch, passwordSatisfyRequirements) = User.IsPasswordRelevant(password, passwordConfirmation);
+            var userLoginFree = _userService.IsUserLoginFree(login);
+            var (passwordsMatch, passwordSatisfyRequirements) = UIHelper.IsPasswordRelevant(password, passwordConfirmation);
 
             if (userLoginFree && passwordsMatch && passwordSatisfyRequirements)
             {
-                var currencyByDefault = db.Currencies.FirstOrDefault(u => u.Code == "RUB");
+                var currencyByDefault = _userService.GetCurrency("RUB");
 
                 if (currencyByDefault == null)
                 {
@@ -74,23 +94,25 @@ namespace EnergeticProjectX.Forms
 
                 var user = new User
                 {
-                    Surname = TextBoxOfSurname.Text.Trim(),
-                    Name = TextBoxOfName.Text.Trim(),
-                    Patronymic = TextBoxOfPatronymic.Text.Trim() ?? null,
-                    Login = TextBoxOfLogin.Text.Trim(),
-                    Password = BCryptRealization.PasswordHash(TextBoxOfPassword.Text.Trim()),
-                    UserRole = UserRole.Warehouseman,
+                    Surname = surname,
+                    Name = firstname,
+                    Patronymic = patronymic ?? null,
+                    Login = login,
+                    Password = BCryptRealization.PasswordHash(password),
                     CurrencyId = currencyByDefault.Currency_Id
                 };
 
-                db.Users.Add(user);
-                if (EH.DBSaveChangesUniversalErrorCheck(db))
-                    return;
+                try
+                {
+                    _userService.AddUser(user);
+                }
+                catch (Exception)
+                {
+                    EH.ShowError(Resources.UniversalErrorDatabase, true);
+                }
 
-                Hide();
-                var warehousemanPanel = new WarehousemanPanel(user.Login);
-                warehousemanPanel.ShowDialog();
-                Close();
+                var warehousemanMainMenu = new WarehousemanMainMenu(user.Login, _userService, _productService, _clientService);
+                FH.OpenForm(this, warehousemanMainMenu);
             }
             else if (!userLoginFree)
             {
@@ -117,24 +139,10 @@ namespace EnergeticProjectX.Forms
             }
         }
 
-        /// <summary>
-        /// Проверка, свободен ли указанный пользователем логин для регистрации.
-        /// </summary>
-        /// <param name="login">Логин нового пользователя.</param>
-        /// <param name="db">Контекст базы данных.</param>
-        public static bool IsUserLoginFree(string login, ApplicationContextDB db)
-        {
-            var logins = db.Users.Select(u => u.Login).ToList();
-
-            return (!logins.Contains(login));
-        }
-
         private void LabelOfAuthorization_Click(object sender, EventArgs e)
         {
-            Hide();
-            var authorizationForm = new AuthorizationForm();
-            authorizationForm.ShowDialog();
-            Close();
+            var authorizationForm = Program.ServiceProvider.GetRequiredService<AuthorizationForm>();
+            FH.OpenForm(this, authorizationForm);
         }
 
         private void TabSelection_Enter(object sender, EventArgs e)

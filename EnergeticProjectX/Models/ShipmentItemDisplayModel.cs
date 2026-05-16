@@ -24,11 +24,5 @@ namespace EnergeticProjectX.Models
         /// </summary>
         [DisplayName("Количество")]
         public int Quantity { get; set; }
-
-        /// <summary>
-        /// Клиент.
-        /// </summary>
-        [DisplayName("Получатель")]
-        public required string ClientName { get; set; }
     }
 }

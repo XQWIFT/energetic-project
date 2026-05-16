@@ -32,7 +32,7 @@ namespace EnergeticProjectX.Objects
         /// удаляется безвозвратно.
         /// </summary>
         [Column("status")]
-        public CategoryStatus Status { get; set; } = CategoryStatus.Active;
+        public Status Status { get; set; } = Status.Active;
 
         /// <summary>
         /// ID закреплённой единицы измерения.
